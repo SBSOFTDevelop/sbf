@@ -1,0 +1,187 @@
+package ${package};
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.annotation.Generated;
+import javax.annotation.security.PermitAll;
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import ru.sbsoft.dao.IFormDao;
+import ru.sbsoft.form.IDynFormProcessor;
+import ru.sbsoft.form.IFormProcessor;
+import ru.sbsoft.shared.FilterInfo;
+import ru.sbsoft.shared.FormContext;
+import ru.sbsoft.shared.exceptions.ApplicationException;
+import ru.sbsoft.shared.interfaces.FormType;
+import ru.sbsoft.shared.interfaces.SecurityItem;
+import ru.sbsoft.sbf.app.model.IFormModel;
+import ru.sbsoft.shared.interfaces.DynamicFormType;
+#parse( "commonImport.vm" )
+
+@Stateless
+@Remote(IFormDao.class)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
+@PermitAll
+@Generated(value="", date = "$now")
+public class FormManager implements IFormDao {
+
+#parse( "commonHead.vm" )
+#parse( "entityHolder.vm" )
+    
+#foreach  ($dynform in $dynforms)
+    @Generated(value="", date = "$now")
+    private $dynform.className create${dynform.createMethodName}(){
+        final $dynform.className processor = new ${dynform.className}();
+#foreach  ($field in $dynform.fields)
+        try {
+#setField( $dynform.className $dynform.unitName)
+        } catch (IllegalAccessException | SecurityException ex) {
+            throw new RuntimeException(ex);
+        }
+#end
+#if (${dynform.postConstructMethod})
+        callMethod(${dynform.className}.class, "${dynform.postConstructMethod}", processor);
+#end
+        return processor;
+    }
+
+#end
+    
+#foreach  ($form in $forms)
+    @Generated(value="", date = "$now")
+    private $form.className create${form.createMethodName}(){
+        final $form.className processor = new ${form.className}();
+#foreach  ($field in $form.fields)
+        try {
+#setField( $form.className $form.unitName)            
+        } catch (IllegalAccessException | SecurityException ex) {
+            throw new RuntimeException(ex);
+        }
+#end
+#if (${form.postConstructMethod})
+        callMethod(${form.className}.class, "${form.postConstructMethod}", processor);
+#end
+        return processor;
+    }
+
+#end
+    @Generated(value="", date = "$now")
+    private IFormProcessor getProcessorByType(final FormType formType) {
+#initEntityHolder( )
+#if (!$dynforms.isEmpty())
+        if (formType instanceof DynamicFormType) {
+            DynamicFormType dynType = (DynamicFormType) formType;
+            switch (dynType.getGroupCode()) {
+#foreach   ($dynform in $dynforms)    
+                case "$dynform.code":
+                    IDynFormProcessor processor${dynform.code} = create${dynform.createMethodName}();
+                    processor${dynform.code}.setFormType(dynType);
+                    return processor$dynform.code;
+#end
+                default:
+                    throw new IllegalArgumentException("Неизвестный тип формы: " + formType);                    
+            }
+        } else {
+#end
+            switch (formType.getCode()) {
+#foreach   ($form in $forms)
+                case "$form.code":
+                    return create${form.createMethodName}();
+#end
+                default:
+                    throw new IllegalArgumentException("Неизвестный тип формы: " + formType);
+            }
+#if (!$dynforms.isEmpty())
+        }
+#end
+    }
+
+    @Generated(value="", date = "$now")
+    private static Field getDeclaredField(Class clazz, String name) {
+        try {
+            return clazz.getDeclaredField(name);
+        } catch (NoSuchFieldException ex) {
+            if( null==clazz.getSuperclass() ){
+                throw new RuntimeException("Cannot find field " + name + " in class " + clazz.getName() + " for injection", ex);
+            }
+            return getDeclaredField(clazz.getSuperclass(), name);
+        }        
+    }
+
+    @Generated(value="", date = "$now")
+    private static <T> void callMethod(Class<? super T> clazz, String name, T obj) {
+        try {
+            Method m = clazz.getDeclaredMethod(name);
+            m.setAccessible(true);
+            m.invoke(obj);
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            if( null==clazz.getSuperclass() ){
+                throw new RuntimeException("Cannot call method " + name + " in class " + clazz.getName(), ex);
+            }
+            callMethod(clazz.getSuperclass(), name, obj);
+        }        
+    }
+
+    @Override
+    @Generated(value="", date = "$now")
+    public IFormModel getRecord(FormContext context, BigDecimal Id, final List<FilterInfo> parentFilters) {
+//        if (!canRead(context.getFormType().getCode())) {
+//            throw new ApplicationException("Нет прав на просмотр записи");
+//        }
+        final IFormProcessor processor = getProcessorByType(context.getFormType());
+        processor.setParentFilters(parentFilters);
+        return processor.getRecord(Id);
+    }
+
+    @Override
+    @Generated(value="", date = "$now")
+    public IFormModel newRecord(FormContext context, final List<FilterInfo> parentFilters, final BigDecimal clonableRecordID) {
+//        if (!canRead(context.getFormType())) {
+//            throw new ApplicationException("Нет прав на просмотр записи");
+//        }
+        final IFormProcessor processor = getProcessorByType(context.getFormType());
+        processor.setParentFilters(parentFilters);
+        return processor.newRecord(parentFilters, clonableRecordID);
+    }
+
+    @Override
+    @Generated(value="", date = "$now")
+    public IFormModel putRecord(FormContext context, IFormModel model, final List<FilterInfo> parentFilters) {
+        if (!canWrite(context.getFormType())) {
+            throw new ApplicationException("Нет прав на редактирование записи");
+        }
+        final IFormProcessor processor = getProcessorByType(context.getFormType());
+        processor.setParentFilters(parentFilters);
+        return processor.putRecord(model);
+    }
+
+    @Override
+    @Generated(value="", date = "$now")
+    public void delRecord(FormContext context, BigDecimal Id) {
+        if (!canWrite(context.getFormType())) {
+            throw new ApplicationException("Нет прав на удаление записи");
+        }
+        final IFormProcessor processor = getProcessorByType(context.getFormType());
+        processor.setParentFilters(null);
+        processor.delRecord(Id);
+    }
+
+    private boolean canRead(FormType formType) {
+        return canWrite(formType) || sessionContext.isCallerInRole(getCodeForType(formType) + ".VIEW");
+    }
+
+    private boolean canWrite(FormType formType) {
+        return sessionContext.isCallerInRole(getCodeForType(formType) + ".MODIFY");
+    }
+
+    private static String getCodeForType(FormType formType) {
+        return (formType instanceof SecurityItem)
+                ? ((SecurityItem) formType).getSecurityId()
+                : ((FormType) formType).getRights();
+    }
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>sbf-project</artifactId>
+        <groupId>ru.sbsoft</groupId>
+        <version>3.01.00-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>SBF</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>sbf-project</module>
+        <module>sbf-gxt-patch</module>
+
+        <module>sbf-common</module>
+        <module>sbf-query</module>
+        <module>sbf-gxt-api</module>
+        <module>sbf-gxt</module>
+        <module>sbf-ejb</module>
+        <module>sbf-system-ejb</module>
+        <module>sbf-system-persistence</module>
+        <module>sbf-system-war</module>
+        <module>sbf-ejb-generator</module>
+        <module>sbf-i18n</module>
+    </modules>
+	
+    <repositories>
+        <repository>
+            <id>ext-release-local</id>
+            <url>http://mavrepo.sbsoft:8081/artifactory/ext-release-local</url>
+        </repository>
+        <repository>
+            <id>libs-release-local</id>
+            <url>http://mavrepo.sbsoft:8081/artifactory/libs-release-local</url>
+        </repository>
+        <repository>
+            <id>libs-snapshot-local</id>
+            <url>http://mavrepo.sbsoft:8081/artifactory/libs-snapshot-local</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+</project>

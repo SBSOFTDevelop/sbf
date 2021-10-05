@@ -1,0 +1,130 @@
+package ru.sbsoft.common;
+
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Generated;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import ru.sbsoft.dao.IFormDao;
+import ru.sbsoft.form.IFormProcessor;
+import ru.sbsoft.shared.FilterInfo;
+import ru.sbsoft.shared.FormContext;
+import ru.sbsoft.shared.exceptions.ApplicationException;
+import ru.sbsoft.sbf.app.model.FormModel;
+    
+@Stateless
+@Remote(IFormDao.class)
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
+@DeclareRoles({
+    "user"
+    ,"admin"
+#foreach  ($right in $rights)
+    ,"$right"
+#end
+})
+@RolesAllowed({"user", "admin"})
+@Generated(value="",date = "$now")
+public class CommonFormDaoBean implements IFormDao {
+
+    private final Map<String, ProcessorHolder> processorHolders = new HashMap<>();
+
+#foreach  ($injection in $injections)
+    @$injection.annotation
+    private $injection.className $injection.varName;
+#end
+
+
+    private Field getDeclaredField(Class clazz, String name){
+            try {
+                return clazz.getDeclaredField(name);
+            } catch (NoSuchFieldException ex) {
+                if( null==clazz.getSuperclass() ){
+                    throw new RuntimeException(ex);
+                }
+                return getDeclaredField(clazz.getSuperclass(), name);
+            }        
+    }
+    
+#foreach  ($form in $forms)
+    private $form.className get${form.formType}(){
+        final $form.className processor = new ${form.className}();
+#foreach  ($field in $form.fields)
+        try {
+            final Field field = getDeclaredField(${form.className}.class, "$field.fieldName");
+            field.setAccessible(true);
+            field.set(processor, $field.varName);
+        } catch (IllegalAccessException | SecurityException ex) {
+            throw new RuntimeException(ex);
+        }
+#end
+        return processor;
+    }
+
+#end
+    @Override
+    public FormModel getRecord(FormContext context, BigDecimal Id) {
+        final ProcessorHolder processorHolder = getProcessorHolderByType(context.getFormTypeString());
+        return processorHolder.formProcessor.getRecord(Id);
+    }
+
+    @Override
+    public FormModel newRecord(FormContext context, final List<FilterInfo> parentFilters,
+        final BigDecimal clonableRecordID) {
+        final ProcessorHolder processorHolder = getProcessorHolderByType(context.getFormTypeString());
+        return processorHolder.formProcessor.newRecord(parentFilters, clonableRecordID);
+    }
+
+    @Override
+    public FormModel putRecord(FormContext context, FormModel model) {
+        final ProcessorHolder processorHolder = getProcessorHolderByType(context.getFormTypeString());
+        if (!sessionContext.isCallerInRole(processorHolder.rights)) {
+            throw new ApplicationException("Нет прав на редактирование записи");
+        }
+        return processorHolder.formProcessor.putRecord(model);
+    }
+
+    @Override
+    public void delRecord(FormContext context, BigDecimal Id) {
+        final ProcessorHolder processorHolder = getProcessorHolderByType(context.getFormTypeString());
+        if (!sessionContext.isCallerInRole(processorHolder.rights)) {
+            throw new ApplicationException("Нет прав на удаление записи");
+        }
+        processorHolder.formProcessor.delRecord(Id);
+    }
+
+    private ProcessorHolder getProcessorHolderByType(final String formType) {
+        if(processorHolders.containsKey(formType))
+            return processorHolders.get(formType);
+        
+        ProcessorHolder processorHolder = new ProcessorHolder();
+        processorHolder.formTypeString = formType;
+        
+
+        switch (formType) {
+#foreach  ($form in $forms)
+            case "$form.formType":
+                processorHolder.formProcessor = get${form.formType}();
+                processorHolder.rights = "${form.formRights}";
+                break;
+#end
+            default:
+                throw new IllegalArgumentException("Неизвестный тип формы: " + formType);
+        }
+
+        processorHolders.put(formType, processorHolder);
+        return processorHolder;
+    }
+
+    private static class ProcessorHolder {
+        String formTypeString;
+        String rights;
+        IFormProcessor formProcessor;
+    }
+}

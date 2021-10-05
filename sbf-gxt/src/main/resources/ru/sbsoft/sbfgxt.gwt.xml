@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="sbfgxt">
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
+    <inherits name="com.google.gwt.logging.Logging"/>
+    <inherits name="com.sencha.gxt.ui.GXT"/>
+    <stylesheet src="reset.css" />
+    <inherits name="com.sencha.gxt.theme.neptune.Theme" />
+    <!--inherits name="com.sencha.gxt.theme.triton.Theme" /-->
+    <inherits name="ru.sbsoft.sbfcommon"/>
+    <set-property name="gxt.device" value="desktop" />
+
+    
+    
+    <!--replace-with class="ru.sbsoft.client.theme.general.SBFGridAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.grid.GridView.GridAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFColumnHeaderAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.grid.ColumnHeader.ColumnHeaderAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFTreeAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.tree.Tree.TreeAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFButtonGroupAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.button.ButtonGroup.ButtonGroupAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFHeaderAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.Header.HeaderAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFContentPanelAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.ContentPanel.ContentPanelAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFMenuItemAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.menu.MenuItem.MenuItemAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFTabPanelAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.TabPanel.TabPanelAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFButtonCellAppearance">
+        <when-type-is class="com.sencha.gxt.cell.core.client.ButtonCell.ButtonCellAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFLabelToolItemAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.toolbar.LabelToolItem.LabelToolItemAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFWindowAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.Window.WindowAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFAccordionLayoutAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer.AccordionLayoutAppearance"/>
+    </replace-with>
+    <replace-with class="ru.sbsoft.client.theme.general.SBFFieldSetAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.form.FieldSet.FieldSetAppearance"/>
+    </replace-with-->
+
+    <source path="client"/>
+    <source path="shared"/>
+    <source path="sbf/app"/>
+    <source path="sbf/gxt"/>
+    <source includes="model/PageFilterInfo.java" />
+
+</module>

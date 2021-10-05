@@ -1,0 +1,28 @@
+#if( !$unitTemplates.isEmpty() )    
+    private EntityHolder entityHolder;
+    
+    @Generated(value="", date = "$now")
+    private class EntityHolder {
+
+        private final Map<String, javax.persistence.EntityManager> ctx = Stream.of(new Object[][]{
+#foreach ($unit in $unitTemplates)          
+            {"$unit", entityManager_$unit},
+#end    
+        
+        }).collect(Collectors.toMap(data -> (String) data[0], data -> (javax.persistence.EntityManager) data[1]));
+
+        public javax.persistence.EntityManager getEm(final String code) {
+
+            return ctx.get(code) == null ? entityManager : ctx.get(code);
+        }
+
+    }
+#end
+
+#macro( initEntityHolder )
+#if( !$unitTemplates.isEmpty() )    
+   if (entityHolder == null) {
+            entityHolder = new EntityHolder();
+    }
+#end
+#end

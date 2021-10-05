@@ -1,0 +1,113 @@
+package ${package};
+
+import java.lang.reflect.Field;
+import javax.annotation.Generated;
+import javax.annotation.security.PermitAll;
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.sbsoft.dao.IMultiOperationManagerDao;
+import ru.sbsoft.dao.AbstractMultiOperationManager;
+import ru.sbsoft.processor.IOperationProcessor;
+import ru.sbsoft.shared.interfaces.OperationType;
+import ru.sbsoft.shared.model.operation.NoSuchOperationCodeException;
+import ru.sbsoft.shared.model.operation.OperationException;
+#parse( "commonImport.vm" )
+
+@Stateless
+@Remote(IMultiOperationManagerDao.class)
+@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+@PermitAll
+@Generated(value="", date = "$now")
+public class MultiOperationManager extends AbstractMultiOperationManager {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MultiOperationManager.class);
+
+#parse( "commonHead.vm" )
+#parse( "entityHolder.vm" )
+
+#foreach($operation in $operations)
+    @Generated(value="", date = "$now")
+    private IOperationProcessor create${operation.createMethodName}() throws OperationException {
+        $operation.className processor = new ${operation.className}();
+#foreach($field in $operation.fields)
+        try {
+
+#setField( $operation.className $operation.unitName )            
+
+        } catch (IllegalAccessException | SecurityException ex) {
+            throw new OperationException(ex);
+        }
+#end
+#if (${operation.postConstructMethod})
+        processor.${operation.postConstructMethod}();
+#end
+        return processor;
+    }
+#end
+
+    @Generated(value="", date = "$now")
+    private static Field getDeclaredField(Class clazz, String name) throws OperationException {
+        try {
+            return clazz.getDeclaredField(name);
+        } catch (NoSuchFieldException ex) {
+            if (null == clazz.getSuperclass()) {
+                throw new OperationException("Cannot find field " + name + " in class " + clazz.getName() + " for injection", ex);
+            }
+            return getDeclaredField(clazz.getSuperclass(), name);
+        }
+    }
+
+    @Override
+    @Generated(value="", date = "$now")
+    protected IOperationProcessor getProcessorByType(String operationCode) throws NoSuchOperationCodeException, OperationException {
+#initEntityHolder( )
+        switch (operationCode) {
+#foreach($operation in $operations)
+            case "$operation.code":
+                return create${operation.createMethodName}();
+#end
+            default:
+                throw new NoSuchOperationCodeException("Неизвестный код операции[1]: " + operationCode);
+        }
+    }
+
+    @Override
+    @Generated(value="", date = "$now")
+    public OperationType getOperationTypeForCode(String operationCode) throws NoSuchOperationCodeException, OperationException {
+        
+#foreach($operationType in $operationTypes)
+        try{
+            return ${operationType}.valueOf(operationCode);
+        } catch(IllegalArgumentException ex){
+        }
+#end
+        throw new NoSuchOperationCodeException("Неизвестный код операции[2]: " + operationCode);
+        
+    }
+    
+    @Override
+    @Generated(value="", date = "$now")
+     protected void execute(IOperationProcessor processor, String operationCode) throws OperationException {
+        switch (operationCode) {
+    
+#foreach($operation in $operations)           
+#if( !$operation.transaction )
+#set($disable_trans = true) 
+            case "$operation.code":
+#end                
+#end
+#if ( $disable_trans )
+                processor.execute();
+                break;
+#end
+            default: {
+                utilEJB.runInNewTransactionE(() -> processor.execute());
+            }
+        }
+    }
+
+}

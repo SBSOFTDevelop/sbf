@@ -1,0 +1,21 @@
+.gridImageResourceCell div{
+    margin: 0px;
+    padding: 0px;
+    padding-top: 2px;
+    text-align: center;
+}
+
+.sbCell {
+  border-color: #bbb #bbb #ededed !important; 
+}
+
+.sbCellLast {
+  border-color: #bbb !important; 
+}
+
+.sbMarkCell {
+    color: white !important;
+    background-color: #2a6d9e !important;
+    border-color: #bbb #bbb #ededed !important; 
+    border-right:solid 1px black;
+}

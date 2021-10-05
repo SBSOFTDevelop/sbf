@@ -1,0 +1,99 @@
+package ${package};
+
+import java.lang.reflect.Field;
+import java.util.List;
+import javax.annotation.Generated;
+import javax.annotation.security.PermitAll;
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import ru.sbsoft.dao.ITreeDao;
+import ru.sbsoft.dao.IMutableTreeDao;
+import ru.sbsoft.shared.TreeContext;
+import ru.sbsoft.shared.TreeNode;
+import ru.sbsoft.shared.interfaces.TreeType;
+import ru.sbsoft.tree.ITreeProvider;
+import ru.sbsoft.tree.IMutableTreeProvider;
+#parse( "commonImport.vm" )
+
+@Stateless
+@Remote({ITreeDao.class, IMutableTreeDao.class})
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
+@PermitAll
+@Generated(value="", date = "$now")
+public class $genClassName implements IMutableTreeDao<Number> {
+
+#parse( "commonHead.vm" )
+#parse( "entityHolder.vm" )    
+
+#foreach  ($tree in $trees)
+    @Generated(value="", date = "$now")
+    private $tree.className create${tree.createMethodName}(){
+        final $tree.className processor = new ${tree.className}();
+#foreach  ($field in $tree.fields)
+        try {  
+#setField( $tree.className $tree.unitName )
+        } catch (IllegalAccessException | SecurityException ex) {
+            throw new RuntimeException(ex);
+        }
+#end
+        return processor;
+    }
+
+#end
+    @Generated(value="", date = "$now")
+    private ITreeProvider getProviderByType(final TreeType treeType) {
+#initEntityHolder( )
+        switch (treeType.getCode()) {
+#foreach  ($tree in $trees)
+            case "$tree.code":
+                return create${tree.createMethodName}();
+#end
+            default:
+                throw new IllegalArgumentException("Unknown tree type: " + treeType);
+        }
+    }
+
+    @Generated(value="", date = "$now")
+    private IMutableTreeProvider getMutableProviderByType(final TreeType treeType) {
+#initEntityHolder( )
+        ITreeProvider p = getProviderByType(treeType);
+        if(p instanceof IMutableTreeProvider){
+            return (IMutableTreeProvider)p;
+        }else{
+            throw new IllegalArgumentException("Tree is not editable: " + treeType);
+        }
+    }
+
+    @Generated(value="", date = "$now")
+    private static Field getDeclaredField(Class clazz, String name) {
+        try {
+            return clazz.getDeclaredField(name);
+        } catch (NoSuchFieldException ex) {
+            if( null==clazz.getSuperclass() ){
+                throw new RuntimeException("Cannot find field " + name + " in class " + clazz.getName() + " for injection", ex);
+            }
+            return getDeclaredField(clazz.getSuperclass(), name);
+        }        
+    }
+
+    @Override
+    @Generated(value="", date = "$now")
+    public List<TreeNode<Number>> getTreeItems(TreeContext context, TreeNode<Number> parent){
+       ITreeProvider prv = getProviderByType(context.getTreeType());
+       return prv.getTreeItems(parent, context);
+    }
+
+    @Override
+    @Generated(value="", date = "$now")
+    public void setParent(TreeContext context, List<TreeNode<Number>> nodes, TreeNode<Number> parent){
+        getMutableProviderByType(context.getTreeType()).setParent(nodes, parent);
+    }
+
+    @Override
+    @Generated(value="", date = "$now")
+    public TreeNode<Number> getTreeItem(TreeContext context, Number key){
+        return getMutableProviderByType(context.getTreeType()).getTreeItem(key);
+    }
+}
