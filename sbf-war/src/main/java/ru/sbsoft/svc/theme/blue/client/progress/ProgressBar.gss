@@ -1,0 +1,34 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.progressWrap {
+  border-color: #6593cf;
+}
+
+.progressInner {
+  gwt-sprite: "innerBar";
+  background-color: #e0e8f3;
+  height: auto;
+}
+
+.progressBar {
+  gwt-sprite: "bar";
+  background-color: #9cbfee;
+  background-repeat: repeat-x;
+  background-position: left center;
+  height: 18px;
+  border-top-color: #d1e4fd;
+  border-bottom-color: #7fa9e4;
+  border-right-color: #7fa9e4;
+}
+
+.progressText {
+  color: #fff;
+}
+
+.progressTextBack {
+  color: #396095 !important;
+}

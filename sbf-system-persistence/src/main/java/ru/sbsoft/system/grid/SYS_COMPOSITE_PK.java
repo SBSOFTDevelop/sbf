@@ -34,10 +34,7 @@ public class SYS_COMPOSITE_PK implements Serializable {
         if (this.SYS_OBJECT_STORAGE_RECORD_ID != other.SYS_OBJECT_STORAGE_RECORD_ID) {
             return false;
         }
-        if (this.NUM != other.NUM) {
-            return false;
-        }
-        return true;
+        return this.NUM == other.NUM;
     }
     
     public void setSYS_OBJECT_STORAGE_RECORD_ID(long SYS_OBJECT_STORAGE_RECORD_ID) {

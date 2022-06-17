@@ -34,7 +34,7 @@ public abstract class AbstractTemplateManager implements ITemplateManager{
         return f.createTemplate();
     }
     
-    protected static interface ITemplateFactory<T extends AbstractTemplate> {
+    protected interface ITemplateFactory<T extends AbstractTemplate> {
 
         T createTemplate() throws Exception;
     }
@@ -47,13 +47,14 @@ public abstract class AbstractTemplateManager implements ITemplateManager{
         @Override
         public T createTemplate() throws Exception {
             T t = createTemplateInstance();
-            if ((t instanceof AbstractTemplate) && modes.size() > 0) {
-                AbstractTemplate bt = (AbstractTemplate) t;
+            if ((t != null) && modes.size() > 0) {
+                //AbstractTemplate bt =  t;
                 for (Enum m : modes) {
-                    bt.addSysMode(m);
+                    t.addSysMode(m);
                 }
             }
-            if (params != null && params.length > 0) {
+            if (t != null && params != null && params.length > 0) {
+
                 t.init(params);
             }
             return t;

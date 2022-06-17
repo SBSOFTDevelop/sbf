@@ -6,12 +6,13 @@ package ru.sbsoft.operation;
  */
 public class ExceptionHelper {
 
+
 	public static String getExceptionMessage(final Throwable exception) {
 		if (null == exception.getCause()) {
 			if (null == exception.getMessage()) {
 				return exception.getClass().getCanonicalName();
 			} else {
-				return exception.getMessage();
+				return exception.getLocalizedMessage();//  getMessage();
 			}
 		} else {
 			return getExceptionMessage(exception.getCause());

@@ -1,6 +1,5 @@
 package ru.sbsoft.server.services;
 
-import ru.sbsoft.server.services.SBFRemoteServiceServlet;
 import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
 import ru.sbsoft.dao.IServiceDao;
@@ -31,4 +30,10 @@ public class ServiceService extends SBFRemoteServiceServlet implements IServiceS
     public ApplicationInfo getApplicationInfo() {
         return serviceDao.getApplicationInfo();
     }
+
+    @Override
+    public void saveApplicationInfo(ApplicationInfo appInfo) {
+        serviceDao.saveApplicationInfo(appInfo);
+    }
+    
 }

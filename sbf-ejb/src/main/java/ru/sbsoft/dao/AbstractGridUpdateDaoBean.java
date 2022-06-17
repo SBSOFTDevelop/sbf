@@ -1,18 +1,22 @@
 package ru.sbsoft.dao;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.sbsoft.common.jdbc.NamedParameterStatement;
@@ -20,8 +24,8 @@ import ru.sbsoft.sbf.app.model.YearMonthDay;
 import ru.sbsoft.server.utils.YearMonthDayConverter;
 import ru.sbsoft.session.SessionUtils;
 import ru.sbsoft.shared.exceptions.ApplicationException;
-import ru.sbsoft.shared.meta.UpdateInfo;
 import ru.sbsoft.shared.meta.Wrapper;
+import ru.sbsoft.shared.util.IdName;
 
 public abstract class AbstractGridUpdateDaoBean implements IGridUpdateDao {
 
@@ -56,70 +60,69 @@ public abstract class AbstractGridUpdateDaoBean implements IGridUpdateDao {
     }
 
     @Override
-    public List<BigDecimal> updateRows(Map<BigDecimal, Map<String, Wrapper>> rows, String table) {
-
+    public List<BigDecimal> updateRows(String table, Map<BigDecimal, Map<String, Wrapper>> rows) {
         if (!canWrite(table)) {
             throw new ApplicationException("Нет прав на редактирование таблицы");
         }
-
         final List<BigDecimal> res = new ArrayList<>();
-
-        final NamedParameterStatement statement
-                = prepareStatement(createQuery(table, new ArrayList<String>(rows.values().iterator().next().keySet())));
-
+        Map<Set<String>, Map<BigDecimal, Map<String, Wrapper>>> rowGroups = new HashMap<>();
+        rows.forEach((rowId, row) -> {
+            Map<BigDecimal, Map<String, Wrapper>> groupRow = rowGroups.computeIfAbsent(row.keySet(), groupId -> new HashMap<BigDecimal, Map<String, Wrapper>>());
+            groupRow.put(rowId, row);
+        });
         try {
-
-            for (Map.Entry<BigDecimal, Map<String, Wrapper>> row : rows.entrySet()) {
-                List<String> columns = new ArrayList<>(row.getValue().keySet());
-                List<Wrapper> values = new ArrayList<>(row.getValue().values());
-
-                //statement.getStatement().getConnection().setAutoCommit(false);
-                if (columns.isEmpty()) {
-                    continue;
-                }
-                res.add(row.getKey());
-
-                setParams(statement, table, row.getKey(),
-                        columns,
-                        values);
-                statement.addBatch();
-                statement.getStatement().clearParameters();
-
+            for (Map.Entry<Set<String>, Map<BigDecimal, Map<String, Wrapper>>> group : rowGroups.entrySet()) {
+                final String sql = createQuery(table, new ArrayList<>(group.getKey()));
+                jdbcWorkExecutor.executeJdbcWork((conn) -> {
+                    NamedParameterStatement statement = prepareStatement(conn, sql);
+                    try {
+                        for (Map.Entry<BigDecimal, Map<String, Wrapper>> row : group.getValue().entrySet()) {
+                            Map<String, Wrapper> colVals = row.getValue();
+                            List<String> columns = new ArrayList<>(colVals.size());
+                            List<Wrapper> values = new ArrayList<>(colVals.size());
+                            colVals.forEach((colName, val) -> {
+                                columns.add(colName);
+                                values.add(val);
+                            });
+                            res.add(row.getKey());
+                            setParams(statement, table, row.getKey(), columns, values);
+                            statement.addBatch();
+                            statement.getStatement().clearParameters();
+                        }
+                        statement.executeBatch();
+                    } finally {
+                        try {
+                            statement.close();
+                        } catch (SQLException ex) {
+                            LOGGER.error("Ошибка закрытия запроса", ex);
+                        }
+                    }
+                    return null;
+                });
             }
-            statement.executeBatch();
-            // statement.getStatement().getConnection().commit();
             return res;
         } catch (SQLException ex) {
             LOGGER.error("Ошибка запроса", ex);
             throw new ApplicationException("Ошибка запроса", ex);
-        } finally {
-            if (null != statement) {
-                try {
-                    statement.close();
-                } catch (SQLException ex) {
-                    LOGGER.error("Ошибка закрытия запроса", ex);
-                }
-            }
         }
     }
 
     private void setParams(final NamedParameterStatement statement, String table, BigDecimal primaryKey, List<String> columns, List<Wrapper> values) throws SQLException {
-
         for (int i = 0; i < columns.size(); i++) {
-
-            Object val = values.get(i).getValue();
+            Object val = i < values.size() ? values.get(i).getValue() : null;
+            if(val instanceof IdName){
+                val = ((IdName)val).getId();
+            }
             if (null == val) {
                 statement.setNull(columns.get(i), Types.NULL);
             } else {
                 if (val instanceof YearMonthDay) {
                     statement.setDate(columns.get(i), new Date(YearMonthDayConverter.convert((YearMonthDay) val).getTime()));
                 } else {
-                    statement.setObject(columns.get(i), val
-                    );
+                    statement.setObject(columns.get(i), val);
                 }
             }
         }
-
         ITableColumnNames names = getTableColumnNames(table);
         if (names.getUpdateDate() != null) {
             statement.setTimestamp(names.getUpdateDate(), new Timestamp(new java.util.Date().getTime()));
@@ -127,119 +130,14 @@ public abstract class AbstractGridUpdateDaoBean implements IGridUpdateDao {
         if (names.getUpdateUser() != null) {
             statement.setString(names.getUpdateUser(), getCurrentUserName());
         }
-
         statement.setBigDecimal(names.getKey(), primaryKey);
-
-    }
-
-    @Override
-    public List<BigDecimal> updateColumn(List<BigDecimal> primaryKeys, UpdateInfo info, Object value) {
-        String table = info.getTable();
-        String column = info.getColumn();
-
-        if (!canWrite(table)) {
-            throw new ApplicationException("Нет прав на редактирование записи");
-        }
-
-        StringBuilder sp = new StringBuilder();
-        sp.append(" in (");
-        for (BigDecimal v : primaryKeys) {
-            sp.append(v.longValue()).append(",");
-        }
-        sp.append("-1)");
-
-        final NamedParameterStatement statement = prepareStatement(createQuery(info.getTable(), column, sp.toString()));
-
-        try {
-            if (null == value) {
-                statement.setNull(column, Types.NULL);
-            } else {
-                if (value instanceof YearMonthDay) {
-                    statement.setDate(column, new Date(YearMonthDayConverter.convert((YearMonthDay) value).getTime()));
-                } else {
-                    statement.setObject(column, value);
-                }
-            }
-            ITableColumnNames names = getTableColumnNames(table);
-            if (names.getUpdateDate() != null) {
-                statement.setTimestamp(names.getUpdateDate(), new Timestamp(new java.util.Date().getTime()));
-            }
-            if (names.getUpdateUser() != null) {
-                statement.setString(names.getUpdateUser(), getCurrentUserName());
-            }
-            // statement.setBigDecimal(names.getKey(), primaryKey);
-
-            //statement.setString(names.getKey(), sp.toString());
-            // Connection conn = em.unwrap(Connection.class);
-            // Array array = conn.createArrayOf("VARCHAR", primaryKeys.toArray());
-            // statement.setArray(names.getKey(), array);
-            statement.executeUpdate();
-            return primaryKeys;
-        } catch (SQLException ex) {
-            LOGGER.error("Ошибка запроса", ex);
-            throw new ApplicationException("Ошибка запроса");
-        } finally {
-            if (null != statement) {
-                try {
-                    statement.close();
-                } catch (SQLException ex) {
-                    LOGGER.error("Ошибка закрытия запроса", ex);
-                }
-            }
-        }
-
-    }
-
-    @Override
-    public BigDecimal updateColumn(BigDecimal primaryKey, UpdateInfo info, Object value) {
-        String table = info.getTable();
-        String column = info.getColumn();
-
-        if (!canWrite(table)) {
-            throw new ApplicationException("Нет прав на редактирование записи");
-        }
-        final NamedParameterStatement statement = prepareStatement(createQuery(info.getTable(), column, null));
-        try {
-            if (null == value) {
-                statement.setNull(column, Types.NULL);
-            } else {
-                if (value instanceof YearMonthDay) {
-                    statement.setDate(column, new Date(YearMonthDayConverter.convert((YearMonthDay) value).getTime()));
-                } else {
-                    statement.setObject(column, value);
-                }
-            }
-            ITableColumnNames names = getTableColumnNames(table);
-            if (names.getUpdateDate() != null) {
-                statement.setTimestamp(names.getUpdateDate(), new Timestamp(new java.util.Date().getTime()));
-            }
-            if (names.getUpdateUser() != null) {
-                statement.setString(names.getUpdateUser(), getCurrentUserName());
-            }
-            statement.setBigDecimal(names.getKey(), primaryKey);
-            statement.executeUpdate();
-            return primaryKey;
-        } catch (SQLException ex) {
-            LOGGER.error("Ошибка запроса", ex);
-            throw new ApplicationException("Ошибка запроса");
-        } finally {
-            if (null != statement) {
-                try {
-                    statement.close();
-                } catch (SQLException ex) {
-                    LOGGER.error("Ошибка закрытия запроса", ex);
-                }
-            }
-        }
     }
 
     protected abstract boolean canWrite(String table);
 
-    protected NamedParameterStatement prepareStatement(final String query) {
+    protected NamedParameterStatement prepareStatement(Connection conn, final String query) {
         try {
-            return jdbcWorkExecutor.executeJdbcWork((conn) -> {
-                return new NamedParameterStatement(conn, query);
-            });
+            return new NamedParameterStatement(conn, query);
         } catch (SQLException ex) {
             LOGGER.error("Не удалось создать запрос", ex);
             throw new ApplicationException("Не удалось создать запрос");
@@ -302,7 +200,7 @@ public abstract class AbstractGridUpdateDaoBean implements IGridUpdateDao {
         return SessionUtils.getCurrentUserName(getSessionContext());
     }
 
-    public class QueryBuilder {
+    public static class QueryBuilder {
 
         private final StringBuilder buf = new StringBuilder();
 
@@ -344,7 +242,7 @@ public abstract class AbstractGridUpdateDaoBean implements IGridUpdateDao {
         }
     }
 
-    protected static interface ITableColumnNames {
+    protected interface ITableColumnNames {
 
         String getKey();
 

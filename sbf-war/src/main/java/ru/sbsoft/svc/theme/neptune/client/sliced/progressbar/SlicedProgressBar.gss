@@ -1,0 +1,62 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BORDER_WIDTH value('theme.progressbar.border.toString');
+@def BORDER_COLOR value('theme.progressbar.border.color');
+@def BORDER_STYLE value('theme.progressbar.border.style');
+@def GRADIENT value('theme.progressbar.backgroundGradient');
+@def TEXT_FAMILY value('theme.progressbar.text.family');
+@def TEXT_SIZE value('theme.progressbar.text.size');
+@def TEXT_WEIGHT value('theme.progressbar.text.weight');
+@def TEXT_COLOR value('theme.progressbar.text.color');
+@def BAR_TEXT_COLOR value('theme.progressbar.barTextColor');
+@def TEXT_ALIGN value('theme.progressbar.textAlign');
+@def TEXT_PADDING value('theme.progressbar.textPadding.toString');
+@def BAR_GRADIENT value('theme.progressbar.barGradient');
+@def BAR_BORDER_WIDTH value('theme.progressbar.barBorder.toString');
+@def BAR_BORDER_COLOR value('theme.progressbar.barBorder.color');
+@def BAR_BORDER_STYLE value('theme.progressbar.barBorder.style');
+
+.wrap {
+  gwt-sprite: "innerBar";
+  height: auto;
+  border-width: BORDER_WIDTH;
+  border-style: BORDER_STYLE;
+  border-color: BORDER_COLOR;
+  position: relative;
+  overflow: hidden;
+}
+
+.bar {
+  gwt-sprite: "bar";
+  height: auto;
+  z-index: 100;
+  width: 99%;
+  overflow: hidden;
+  position: relative;
+  top: 0;
+  border-width: BAR_BORDER_WIDTH;
+  border-style: BAR_BORDER_STYLE;
+  border-color: BAR_BORDER_COLOR;
+}
+
+.text {
+  font-family: TEXT_FAMILY;
+  font-weight: TEXT_WEIGHT;
+  font-size: TEXT_SIZE;
+  color: BAR_TEXT_COLOR;
+  text-align: TEXT_ALIGN;
+  padding: TEXT_PADDING;
+}
+
+.textBack {
+  overflow: hidden;
+  z-index: 99;
+  width: 100%;
+  color: TEXT_COLOR;
+  position: absolute;
+  left: 0;
+  top: 0;
+}

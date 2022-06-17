@@ -1,18 +1,19 @@
 package ru.sbsoft.dao;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.security.PermitAll;
-import javax.ejb.EJB;
 import ru.sbsoft.shared.api.i18n.consts.SBFGeneralStr;
 import ru.sbsoft.shared.exceptions.ApplicationException;
 import ru.sbsoft.shared.model.user.Group;
 import ru.sbsoft.shared.model.user.PasswordPolicy;
 import ru.sbsoft.shared.model.user.UserEnv;
+
+import javax.annotation.security.PermitAll;
+import javax.ejb.EJB;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Базовый абстрактный класс для работы с ролями пользователей приложения.
@@ -31,12 +32,14 @@ public abstract class AbstractSecurityDaoBean implements ISecurityDao {
         return getUserRoles(null);
     }
 
+    @Override
     public Set<String> getUserRoles(final String userName) {
 
         return getDSPrivileges(userName);
 
     }
 
+    @Override
     public boolean isAdmin(final String userName) {
 
         return getDSPrivileges(userName).contains("admin");
@@ -88,13 +91,13 @@ public abstract class AbstractSecurityDaoBean implements ISecurityDao {
         }
         try {
             java.security.MessageDigest md = java.security.MessageDigest.getInstance(getHashAlgorithm());
-            byte[] array = md.digest(input.getBytes("UTF-8"));
+            byte[] array = md.digest(input.getBytes(StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < array.length; i++) {
-                sb.append(String.format("%02x", array[i]));
+            for (byte b : array) {
+                sb.append(String.format("%02x", b));
             }
             return sb.toString();
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+        } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(AbstractSecurityDaoBean.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }

@@ -1,0 +1,11 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.active {
+  border-style: solid;
+  border-width: 1px;
+  padding: 0 !important;
+}

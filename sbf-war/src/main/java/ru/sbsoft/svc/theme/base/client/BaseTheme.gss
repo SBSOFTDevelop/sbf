@@ -1,0 +1,11 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+@if (is("user.agent", "safari")) {
+  :focus {
+    outline: none !important;
+  }
+}

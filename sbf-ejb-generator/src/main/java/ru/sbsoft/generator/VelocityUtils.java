@@ -2,6 +2,7 @@ package ru.sbsoft.generator;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 import javax.tools.JavaFileObject;
 import org.apache.velocity.Template;
@@ -24,7 +25,7 @@ public class VelocityUtils {
 
     public static void createSingleFile(JavaFileObject outFile, String templateName, VelocityContext context) throws Exception {
         final Template template = Velocity.getTemplate(templateName, "utf-8");
-        final OutputStreamWriter osw = new OutputStreamWriter(outFile.openOutputStream(), "utf-8");
+        final OutputStreamWriter osw = new OutputStreamWriter(outFile.openOutputStream(), StandardCharsets.UTF_8);
         final BufferedWriter bw = new BufferedWriter(osw);
         template.merge(context, bw);
         bw.flush();

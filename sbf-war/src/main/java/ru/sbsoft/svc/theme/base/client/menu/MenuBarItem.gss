@@ -1,0 +1,11 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.menuBarItem {
+  font: 12px arial, verdana, sans-serif;
+  padding: 1px 8px;
+  display: inline;
+}

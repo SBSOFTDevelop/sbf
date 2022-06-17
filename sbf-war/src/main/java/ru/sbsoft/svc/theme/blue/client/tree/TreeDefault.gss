@@ -1,0 +1,17 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.over {
+  background-color: #eee;
+}
+
+.drop {
+  background-color: #defadc;
+}
+
+.selected {
+  background-color: #d9e8fb !important;
+}

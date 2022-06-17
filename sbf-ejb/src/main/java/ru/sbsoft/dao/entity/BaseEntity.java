@@ -1,9 +1,8 @@
 package ru.sbsoft.dao.entity;
 
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.ejb.SessionContext;
-import javax.persistence.MappedSuperclass;
 
 /**
  * Базовый абстрактный класс для всех сущностей

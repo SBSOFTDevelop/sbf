@@ -1,0 +1,24 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.panel {
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  background-color: black;
+}
+
+@if (is("user.agent", "ie8")) {
+  .panel {
+    filter: alpha(opacity=10);
+  }
+}
+@else  {
+  .panel {
+    opacity: 0.2;
+  }
+}

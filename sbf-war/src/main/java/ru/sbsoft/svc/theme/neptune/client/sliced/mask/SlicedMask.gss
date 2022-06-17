@@ -1,0 +1,58 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def OPACITY value('theme.mask.opacity');
+@def BACKGROUND_COLOR value('theme.mask.backgroundColor');
+@def BOX_PADDING value('theme.mask.box.padding.toString');
+@def BOX_BACKGROUND_COLOR value('theme.mask.box.backgroundColor');
+@def BOX_TEXT_FAMILY value('theme.mask.box.text.family');
+@def BOX_TEXT_WEIGHT value('theme.mask.box.text.weight');
+@def BOX_TEXT_SIZE value('theme.mask.box.text.size');
+@def BOX_TEXT_COLOR value('theme.mask.box.text.color');
+@def BOX_TEXT_PADDING value('theme.mask.box.textPadding.toString');
+@def BOX_LOADING_IMAGE_POSITION value('theme.mask.box.loadingImagePosition');
+
+.mask {
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  zoom: 1;
+  position: absolute;
+  opacity: OPACITY;
+  background-color: BACKGROUND_COLOR;
+}
+
+.contentArea {
+  position: absolute;
+}
+
+.text {
+  gwt-sprite: "loading";
+  height: auto;
+  width: auto;
+  background-position: BOX_LOADING_IMAGE_POSITION;
+  margin: BOX_PADDING;
+  padding: BOX_TEXT_PADDING;
+  color: BOX_TEXT_COLOR;
+  font-family: BOX_TEXT_FAMILY;
+  font-weight: BOX_TEXT_WEIGHT;
+  font-size: BOX_TEXT_SIZE;
+}
+
+.positioned {
+  position: relative !important;
+}
+
+.masked {
+  overflow: hidden !important;
+}
+
+.masked select, 
+.masked object, 
+.masked embed {
+  visibility: hidden;
+}

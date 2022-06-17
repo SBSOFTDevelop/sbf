@@ -1,0 +1,25 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def TEXT_COLOR value('theme.window.font.color');
+@def FONT_SIZE value('theme.window.font.size');
+@def FONT_FAMILY value('theme.window.font.family');
+@def FONT_WEIGHT value('theme.window.font.weight');
+@def HEADER_PADDING value('theme.window.headerPadding.toString');
+
+.header {
+  gwt-sprite: "headerBackground";
+  padding: HEADER_PADDING;
+  height: auto;
+}
+
+.headerText {
+  color: TEXT_COLOR;
+  font-size: FONT_SIZE;
+  font-weight: FONT_WEIGHT;
+  font-family: FONT_FAMILY;
+  line-height: 15px;
+  text-transform: none;
+}

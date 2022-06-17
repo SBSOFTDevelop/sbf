@@ -17,9 +17,11 @@ import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
 import ru.sbsoft.common.IO;
 import ru.sbsoft.dao.IStorageDao;
 import ru.sbsoft.model.StorageItem;
+import ru.sbsoft.shared.exceptions.ApplicationException;
 import ru.sbsoft.system.common.StorageEntity;
 import ru.sbsoft.system.common.StorageEntity_;
 
@@ -142,6 +144,11 @@ public class StorageDaoBean implements IStorageDao {
     }
 
     private StorageItem createStorageItem(StorageEntity e) {
+
+        if (e == null) {
+            throw new ApplicationException("File has been deleted.");
+        }
+
         return new StorageItem(
                 e.getCREATE_USER(),
                 e.getALIAS(),

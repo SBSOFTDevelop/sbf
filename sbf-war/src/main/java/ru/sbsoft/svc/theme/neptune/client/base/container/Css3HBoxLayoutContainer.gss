@@ -1,0 +1,11 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@external x-toolbar-mark;
+@def MORE_ICON_TOOL_BAR value('moreIconToolBar.getSafeUri.asString', '');
+
+.x-toolbar-mark .moreIcon img {
+  background: url(MORE_ICON_TOOL_BAR) !important;
+}

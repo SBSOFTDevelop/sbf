@@ -1,0 +1,406 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BORDER_COLOR value('theme.tabs.borderColor');
+@def LAST_STOP_COLOR value('theme.tabs.lastStopColor');
+@def INACTIVE_LAST_STOP_COLOR value('theme.tabs.inactiveLastStopColor');
+@def HEADING_TEXT_COLOR value('theme.tabs.headingText.color');
+@def HEADING_TEXT_SIZE value('theme.tabs.headingText.size');
+@def HEADING_TEXT_WEIGHT value('theme.tabs.headingText.weight');
+@def HEADING_TEXT_FONT value('theme.tabs.headingText.family');
+@def ACTIVE_HEADING_TEXT_COLOR value('theme.tabs.activeHeadingText.color');
+@def ACTIVE_HEADING_TEXT_SIZE value('theme.tabs.activeHeadingText.size');
+@def ACTIVE_HEADING_TEXT_WEIGHT value('theme.tabs.activeHeadingText.weight');
+@def ACTIVE_HEADING_TEXT_FONT value('theme.tabs.activeHeadingText.family');
+@def TAB_LEFT_PADDING value('theme.tabs.padding.left', 'px');
+@def TAB_LEFT_PADDING_ICON value('theme.tabs.paddingWithIcon.left', 'px');
+@def TAB_RIGHT_PADDING value('theme.tabs.padding.right', 'px');
+@def TAB_RIGHT_PADDING_CLOSABLE value('theme.tabs.paddingWithClosable.right', 'px');
+@def TAB_BAR_BORDER value('theme.tabs.tabBarBorder');
+@def TAB_BAR_BOTTOM_HEIGHT value('theme.tabs.tabBarBottomHeight', 'px');
+@def TAB_STRIP_BOTTOM_BORDER value('theme.tabs.tabStripBottomBorder');
+@def TAB_ITEM_BORDER_LEFT value('theme.tabs.tabItemBorderLeft');
+@def TAB_ITEM_BORDER_TOP value('theme.tabs.tabItemBorderTop');
+@def TAB_ITEM_BORDER_RIGHT value('theme.tabs.tabItemBorderRight');
+@def TAB_BODY_BORDER value('theme.tabs.tabBodyBorder');
+@def TAB_TEXT_PADDING value('theme.tabs.tabTextPadding.toString');
+@def TAB_ICON_LEFT_OFFSET value('theme.tabs.iconLeftOffset', 'px');
+@def TAB_ICON_TOP_OFFSET value('theme.tabs.iconTopOffset', 'px');
+@def SCROLLER_WIDTH value('theme.tabs.scrollerWidth', 'px');
+@def TAB_HEIGHT value('theme.tabs.tabHeight', 'px');
+@def TAB_SPACING value('theme.tabs.tabSpacing', 'px');
+
+.tabRight {
+  gwt-sprite: "tabLeft";
+  padding-left: TAB_LEFT_PADDING;
+  background-position: bottom left;
+  width: auto;
+  height: TAB_HEIGHT;
+}
+
+.tabLeft {
+  gwt-sprite: "tabRight";
+  padding-right: TAB_RIGHT_PADDING;
+  width: auto;
+  height: TAB_HEIGHT;
+  background-position: bottom right;
+  background-repeat: no-repeat;
+}
+
+.tabItem {
+  height: TAB_HEIGHT;
+  margin-right: TAB_SPACING;
+  border-bottom: TAB_ITEM_BORDER_TOP;
+}
+
+.tabStripActive.tabItem {
+  border-top: 1px solid LAST_STOP_COLOR;
+}
+
+.tabStripClosable .tabLeft {
+  padding-right: TAB_RIGHT_PADDING_CLOSABLE;
+}
+
+.tabStripOver .tabRight {
+  gwt-sprite: "tabLeftOver";
+  width: auto;
+  height: auto;
+  background-position: bottom left;
+}
+
+.tabStripOver .tabLeft {
+  gwt-sprite: "tabRightOver";
+  width: auto;
+  height: auto;
+  background-position: bottom right;
+  background-repeat: no-repeat;
+}
+
+.tabStripOver .tabStripInner {
+  gwt-sprite: "tabCenterOver";
+  height: auto;
+  /* @alternate */ height: TAB_HEIGHT;
+}
+
+.tabStripActive .tabRight {
+  gwt-sprite: "tabLeftActive";
+  width: auto;
+  height: auto;
+  background-position: bottom left;
+}
+
+.tabStripActive .tabLeft {
+  gwt-sprite: "tabRightActive";
+  width: auto;
+  height: auto;
+  background-position: bottom right;
+  background-repeat: no-repeat;
+}
+
+.tabBar {
+  background-color: LAST_STOP_COLOR;
+  border: TAB_BAR_BORDER;
+  overflow: hidden;
+  padding-top: TAB_BAR_BOTTOM_HEIGHT;
+}
+
+.tabStrip {
+  gwt-sprite: "tabStripBackground";
+  background-position: bottom;
+  border-bottom-color: BORDER_COLOR;
+  height: auto;
+  overflow: visible;
+}
+
+.tabStrip span.tabStripText {
+  font: normal HEADING_TEXT_WEIGHT HEADING_TEXT_SIZE HEADING_TEXT_FONT;
+  color: HEADING_TEXT_COLOR;
+}
+
+.tabStripOver span.tabStripText {
+  color: HEADING_TEXT_COLOR;
+}
+
+.tabStripActive span.tabStripText {
+  color: HEADING_TEXT_COLOR;
+  font-weight: bold;
+}
+
+.tabStrip .tabStripClosable a.tabStripClose {
+  gwt-sprite: "tabClose";
+}
+
+.tabStrip .tabStripClosable a.tabStripClose:hover {
+  gwt-sprite: "tabClose";
+}
+
+.tabBody {
+  border: TAB_BODY_BORDER;
+  overflow: hidden;
+  border-bottom: none;
+}
+
+.tabScrollerLeft {
+  background: transparent no-repeat -scrollerWidth 0;
+  border-bottom: 1px solid;
+  position: absolute;
+  margin-top: 1px;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.tabScrollerLeft {
+  gwt-sprite: "scrollerLeft";
+  border-bottom-color: BORDER_COLOR;
+  width: SCROLLER_WIDTH;
+}
+
+.tabScrollerLeftOver {
+  gwt-sprite: "scrollerLeftOver";
+}
+
+.tabScrollerRight {
+  gwt-sprite: "scrollerRight";
+  border-bottom-color: BORDER_COLOR;
+}
+
+.tabScrollerRightOver {
+  gwt-sprite: "scrollerRightOver";
+}
+
+.tab {
+  overflow: hidden;
+  outline: none;
+}
+
+.tabStripWrap {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+@if (!is("user.agent", "ie8")) {
+  .tabStrip {
+    display: block;
+    width: 1000000px;
+  }
+}
+@else  {
+  .tabStrip {
+    display: block;
+    width: 65520px;
+  }
+}
+
+.tabStrip {
+  border-top: TAB_STRIP_BOTTOM_BORDER;
+  border-bottom: 0 none;
+}
+
+.tabStrip li {
+  float: left;
+  position: relative;
+}
+
+.tabStrip li.tabEdge {
+  float: left;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 none !important;
+  font-size: 1px !important;
+  line-height: 1px !important;
+  overflow: hidden;
+  background: transparent !important;
+  width: 1px;
+}
+
+.tabStrip a, 
+.tabStrip span, 
+.tabStrip em {
+  display: block;
+}
+
+.tabStrip a {
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.tabStrip a {
+  outline: none;
+}
+
+.tabStripInner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tabStrip .tabStripInner {
+  gwt-sprite: "tabCenter";
+  height: auto;
+  /* @alternate */ height: TAB_HEIGHT;
+  border-bottom: 1px solid INACTIVE_LAST_STOP_COLOR;
+  margin-bottom: -1px;
+  background-position: bottom;
+}
+
+.tabStrip .tabStripOver .tabStripInner {
+  gwt-sprite: "tabCenterOver";
+  height: auto;
+  /* @alternate */ height: TAB_HEIGHT;
+  border-bottom: 1px solid LAST_STOP_COLOR;
+  background-position: bottom;
+}
+
+.tabStripActive .tabStripInner {
+  gwt-sprite: "tabCenterActive";
+  height: auto;
+  /* @alternate */ height: TAB_HEIGHT !important;
+  background-position: bottom;
+  border-bottom-color: LAST_STOP_COLOR;
+}
+
+.tabStrip span.tabStripText {
+  white-space: nowrap;
+  cursor: pointer;
+  padding: TAB_TEXT_PADDING;
+}
+
+.tabWithIcon .tabRight {
+  padding-left: 6px;
+}
+
+.tabStripActive, 
+.tabStripActive a.tabRight {
+  cursor: default;
+}
+
+.tabStripActive span.tabStripText {
+  cursor: default;
+  font: normal ACTIVE_HEADING_TEXT_WEIGHT ACTIVE_HEADING_TEXT_SIZE ACTIVE_HEADING_TEXT_FONT;
+  color: ACTIVE_HEADING_TEXT_COLOR;
+}
+
+@if (is("user.agent", "ie8") || is("user.agent", "ie9")) {
+  .tabStrip .tabRight {
+    position: relative;
+  }
+}
+
+.tabStripActive .tabRight {
+}
+
+.tabStripActive .tabRight span.tabStripText {
+  padding: TAB_TEXT_PADDING;
+}
+
+.tabStrip .tabWithIcon span.tabStripText {
+  padding-left: 20px;
+  background-position: 0 3px;
+  background-repeat: no-repeat;
+}
+
+.tabStrip .tabStripClose {
+  display: none;
+}
+
+.tabStripClosable {
+  position: relative;
+}
+
+.tabStripClosable .tabLeft {
+  padding-right: 19px;
+}
+
+.tabStrip .tabStripClosable a.tabStripClose {
+  background-repeat: no-repeat;
+  display: block;
+  width: 11px;
+  height: 11px;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+@if (is("user.agent", "ie8")) {
+  .tabStrip .tabStripClosable a.tabStripClose {
+    filter: alpha(opacity=60);
+  }
+}
+@else  {
+  .tabStrip .tabStripClosable a.tabStripClose {
+    opacity: 0.6;
+  }
+}
+
+.tabStrip .tabStripActive a.tabStripClose {
+  opacity: 0.8;
+}
+
+.tabStrip .tabStripClosable a.tabStripClose:hover {
+  opacity: 1;
+}
+
+.tabScrollerLeftDisabled, 
+.tabScrollerRightDisabled {
+  cursor: default;
+}
+
+@if (is("user.agent", "ie8")) {
+  .tabScrollerLeftDisabled, 
+  .tabScrollerRightDisabled {
+    filter: alpha(opacity=50);
+  }
+}
+@else  {
+  .tabScrollerLeftDisabled, 
+  .tabScrollerRightDisabled {
+    opacity: 0.5;
+  }
+}
+
+.tabScrollerRight {
+  border-bottom: 1px solid;
+  width: SCROLLER_WIDTH;
+  position: absolute;
+  margin-top: 1px;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.tabScrolling .tabStripWrap {
+  margin-left: SCROLLER_WIDTH;
+  margin-right: SCROLLER_WIDTH;
+}
+
+.tabScrolling {
+  position: relative;
+}
+
+.tabStrip li .tabImage {
+  position: absolute;
+}
+
+@if (is("user.agent", "ie8")) {
+  .tabStrip li .tabImage {
+    top: 4px;
+    left: 6px;
+  }
+}
+@else  {
+  .tabStrip li .tabImage {
+    top: 3px;
+    left: 5px;
+  }
+}
+
+.tabRight {
+  top: 0;
+}

@@ -1,0 +1,89 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@external x-toolbar-mark;
+@def TBPADDING value('theme.toolbar.buttonOverride.padding.toString');
+@def TBFONT_SIZE value('theme.toolbar.buttonOverride.font.size');
+@def TBFONT_FAMILY value('theme.toolbar.buttonOverride.font.family');
+@def TBFONT_WEIGHT value('theme.toolbar.buttonOverride.font.weight');
+@def TBFONT_COLOR value('theme.toolbar.buttonOverride.font.color');
+@def TBSMALL_FONT_SIZE value('theme.toolbar.buttonOverride.smallFontSize', 'px');
+@def TBMEDIUM_FONT_SIZE value('theme.toolbar.buttonOverride.mediumFontSize', 'px');
+@def TBLARGE_FONT_SIZE value('theme.toolbar.buttonOverride.largeFontSize', 'px');
+@def TBSMALL_LINE_HEIGHT value('theme.toolbar.buttonOverride.smallLineHeight', 'px');
+@def TBMEDIUM_LINE_HEIGHT value('theme.toolbar.buttonOverride.mediumLineHeight', 'px');
+@def TBLARGE_LINE_HEIGHT value('theme.toolbar.buttonOverride.largeLineHeight', 'px');
+
+.x-toolbar-mark .text {
+  padding: TBPADDING;
+  text-align: center;
+  font-size: TBFONT_SIZE;
+  color: TBFONT_COLOR;
+  font-weight: TBFONT_WEIGHT;
+  font-family: TBFONT_FAMILY;
+}
+
+.x-toolbar-mark .small .text {
+  line-height: TBSMALL_LINE_HEIGHT;
+  font-size: TBSMALL_FONT_SIZE;
+}
+
+.x-toolbar-mark .medium .text {
+  line-height: TBMEDIUM_LINE_HEIGHT;
+  font-size: TBMEDIUM_FONT_SIZE;
+}
+
+.x-toolbar-mark .large .text {
+  line-height: TBLARGE_LINE_HEIGHT;
+  font-size: TBLARGE_FONT_SIZE;
+}
+
+.x-toolbar-mark .split {
+  gwt-sprite: "toolBarSplit";
+  width: auto;
+  height: auto;
+}
+
+.x-toolbar-mark .split {
+  background-position: right center;
+  padding-right: 14px;
+  background-repeat: no-repeat;
+}
+
+.x-toolbar-mark .splitBottom {
+  gwt-sprite: "toolBarSplitBottom";
+  width: auto;
+  height: auto;
+}
+
+.x-toolbar-mark .splitBottom {
+  background-position: center bottom;
+  padding-bottom: 14px;
+  background-repeat: no-repeat;
+}
+
+.x-toolbar-mark .arrow {
+  gwt-sprite: "toolBarArrow";
+  width: auto;
+  height: auto;
+}
+
+.x-toolbar-mark .arrow {
+  padding-right: 10px;
+  background-position: right center;
+  background-repeat: no-repeat;
+}
+
+.x-toolbar-mark .arrowBottom {
+  gwt-sprite: "toolBarArrowBottom";
+  width: auto;
+  height: auto;
+}
+
+.x-toolbar-mark .arrowBottom {
+  background-position: center bottom;
+  padding-bottom: 14px;
+  background-repeat: no-repeat;
+}

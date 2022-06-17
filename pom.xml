@@ -6,7 +6,7 @@
     <parent>
         <artifactId>sbf-project</artifactId>
         <groupId>ru.sbsoft</groupId>
-        <version>3.01.00-SNAPSHOT</version>
+        <version>3.20.00-SNAPSHOT</version>
     </parent>
 
     <artifactId>SBF</artifactId>
@@ -14,18 +14,18 @@
 
     <modules>
         <module>sbf-project</module>
-        <module>sbf-gxt-patch</module>
 
+        <module>sbf-api</module>
         <module>sbf-common</module>
         <module>sbf-query</module>
-        <module>sbf-gxt-api</module>
-        <module>sbf-gxt</module>
         <module>sbf-ejb</module>
         <module>sbf-system-ejb</module>
         <module>sbf-system-persistence</module>
         <module>sbf-system-war</module>
         <module>sbf-ejb-generator</module>
         <module>sbf-i18n</module>
+        <module>sbf-war</module>
+        <module>sbf-gwt-patch</module>
     </modules>
 	
     <repositories>

@@ -1,8 +1,10 @@
 package ru.sbsoft.operation;
 
 import java.io.File;
+
 import ru.sbsoft.processor.ServerOperationContext;
 import ru.sbsoft.processor.IOperationProcessor;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.SessionContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.sbsoft.dao.I18nResourceWrap;
@@ -36,7 +39,9 @@ import ru.sbsoft.shared.model.OperationEventType;
 import ru.sbsoft.shared.model.enums.MultiOperationStatus;
 import ru.sbsoft.shared.model.operation.OperationException;
 import ru.sbsoft.shared.model.operation.OperationInfo;
+
 import static ru.sbsoft.shared.model.operation.OperationInfo.FINISH_MARKS;
+
 import ru.sbsoft.shared.param.BigDecimalParamInfo;
 import ru.sbsoft.shared.param.BooleanParamInfo;
 import ru.sbsoft.shared.param.DateParamInfo;
@@ -190,7 +195,7 @@ public abstract class AbstractOperationRunner implements IOperationProcessor {
         if (progressPercent.compareTo(newProgressPercent) != 0) {
             progressPercent = newProgressPercent;
             try {
-                iMultiOperationDao.updateOperationProgress((long) getOperationId(), progressPercent, notes);
+                iMultiOperationDao.updateOperationProgress( getOperationId(), progressPercent, notes);
             } catch (OperationException ex) {
                 LOGGER.warn("Cannot update operation progess", ex);
             }
@@ -207,7 +212,7 @@ public abstract class AbstractOperationRunner implements IOperationProcessor {
 
     private void saveFile(OperationEventType type, String filename, File resultFile) throws RuntimeException {
         try {
-            Long fileId = storageDao.save(getOperationUsername(), getOperationCommand().getOperationType().toString(), null, filename, resultFile);
+            long fileId = storageDao.save(getOperationUsername(), getOperationCommand().getOperationType().toString(), null, filename, resultFile);
             final String fileString = "" + fileId + "|" + filename;
             getOperationLogger().log(fileString, null, type);
         } catch (Exception ex) {
@@ -249,7 +254,7 @@ public abstract class AbstractOperationRunner implements IOperationProcessor {
     }
 
     protected ParamInfo getParam(String name) {
-        final ParamInfo param = getParam(name, (ParamInfo) null);
+        final ParamInfo param = getParam(name, null);
         if (param == null) {
             throw new IllegalArgumentException(getLocaleResource(SBFExceptionStr.parameterNotDefined, name));
         }
@@ -263,7 +268,7 @@ public abstract class AbstractOperationRunner implements IOperationProcessor {
     public Map<String, ParamInfo> getParametersMap() {
         return parameters;
     }
-    
+
     protected boolean isExistsParam(String name) {
         return getParametersMap().get(name) != null;
     }
@@ -397,7 +402,7 @@ public abstract class AbstractOperationRunner implements IOperationProcessor {
         return params;
     }
 
-    public static ParamInfo convertParameter(OperationObject parameter) throws OperationException {
+    public static ParamInfo convertParameter(OperationObject parameter) {
         String name = parameter.getName();
 
         if (!Wrapper.class.isAssignableFrom(parameter.getDTO().getClass())) {
@@ -438,18 +443,18 @@ public abstract class AbstractOperationRunner implements IOperationProcessor {
         if (wrapper instanceof StringWrapper) {
             return new StringParamInfo(name, (String) value);
         }
-        if (wrapper instanceof Wrapper) {
-            ParamInfo paramInfo = new CustomParamInfo();
-            paramInfo.setName(name);
-            paramInfo.setValue(value);
-            return paramInfo;
-        }
 
-        throw new OperationException("Parameter '" + wrapper.getClass().getName() + "' has unknown type '" + wrapper.getClass().getSimpleName() + "'");
+        ParamInfo paramInfo = new CustomParamInfo();
+        paramInfo.setName(name);
+        paramInfo.setValue(value);
+        return paramInfo;
+
+
+        // throw new OperationException("Parameter '" + wrapper.getClass().getName() + "' has unknown type '" + wrapper.getClass().getSimpleName() + "'");
     }
     //</editor-fold>
 
-    private MultiOperationSessionContext createSessionContext(String runUser) throws OperationException {
+    private MultiOperationSessionContext createSessionContext(String runUser) {
         MultiOperationSessionContext scontext = new MultiOperationSessionContext();
         scontext.setName(runUser);
         return scontext;

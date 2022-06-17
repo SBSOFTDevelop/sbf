@@ -1,20 +1,20 @@
 package ru.sbsoft.meta.columns.style.condition;
 
+import org.junit.Test;
+import ru.sbsoft.meta.ColumnsInfo;
+import ru.sbsoft.meta.columns.ColumnInfo;
+import ru.sbsoft.shared.grid.condition.IGridCondition;
+import ru.sbsoft.shared.meta.IColumns;
+import ru.sbsoft.shared.meta.Row;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import ru.sbsoft.operation.kladr.DBFReader;
-import java.util.Map;
 import java.util.Set;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import ru.sbsoft.meta.ColumnsInfo;
-import ru.sbsoft.meta.columns.ColumnInfo;
+
+import static org.junit.Assert.assertEquals;
 import static ru.sbsoft.meta.columns.consts.ColumnDefinitions.*;
-import ru.sbsoft.shared.grid.condition.IGridCondition;
-import ru.sbsoft.shared.meta.Columns;
-import ru.sbsoft.shared.meta.Row;
 
 public class ConditionTest {
 
@@ -23,7 +23,7 @@ public class ConditionTest {
     private final ColumnInfo<String> colStr1;
     private final ColumnInfo<Long> colInt2;
     private final ColumnInfo<String> colStr2;
-    private final Columns columns;
+    private final IColumns columns;
 
     private final Row r1;
     private final Row r2;

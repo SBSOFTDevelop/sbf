@@ -1,44 +1,34 @@
 package ru.sbsoft.system.dao.common;
 
+import ru.sbsoft.common.CronExpression;
+import ru.sbsoft.common.DBType;
+import ru.sbsoft.common.ServerConfig;
+import ru.sbsoft.dao.IApplicationDao;
+import ru.sbsoft.dao.IJdbcWorkExecutor;
+import ru.sbsoft.dao.IMultiOperationManagerDao;
+import ru.sbsoft.dao.JdbcWorkExecutor;
+import ru.sbsoft.dao.operations.IMultiOperationDao;
+import ru.sbsoft.dao.operations.ISchedulerDao;
+import ru.sbsoft.shared.interfaces.OperationType;
+import ru.sbsoft.shared.model.enums.SchedulerStatus;
+import ru.sbsoft.shared.model.operation.IllegalOperationStatusException;
+import ru.sbsoft.shared.model.operation.OperationException;
+import ru.sbsoft.shared.model.operation.SchedulerContext;
+import ru.sbsoft.system.common.MultiOperationEntity;
+import ru.sbsoft.system.common.SchedulerEntity;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.security.PermitAll;
+import javax.ejb.*;
+import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
+import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
-import javax.annotation.PostConstruct;
-import javax.annotation.security.PermitAll;
-import javax.ejb.EJB;
-import javax.ejb.Remote;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-import javax.persistence.PersistenceContext;
-import ru.sbsoft.common.CronExpression;
-import ru.sbsoft.dao.IApplicationDao;
-import ru.sbsoft.dao.IMultiOperationManagerDao;
-import ru.sbsoft.common.DBType;
-import ru.sbsoft.common.ServerConfig;
-import ru.sbsoft.dao.operations.IMultiOperationDao;
-import ru.sbsoft.dao.operations.ISchedulerDao;
-import ru.sbsoft.shared.model.operation.SchedulerContext;
-import ru.sbsoft.shared.OperationObject;
-import ru.sbsoft.shared.interfaces.OperationType;
-import ru.sbsoft.shared.model.enums.MultiOperationStatus;
-import ru.sbsoft.shared.model.enums.SchedulerStatus;
-import ru.sbsoft.shared.model.operation.IllegalOperationStatusException;
-import ru.sbsoft.shared.model.operation.OperationException;
-import ru.sbsoft.shared.model.operation.OperationInfo;
-import ru.sbsoft.system.common.MultiOperationEntity;
-import ru.sbsoft.system.common.SchedulerEntity;
-import ru.sbsoft.dao.IJdbcWorkExecutor;
-import ru.sbsoft.dao.JdbcWorkExecutor;
+import java.util.*;
 
 @Stateless
 @Remote(ISchedulerDao.class)
@@ -126,7 +116,7 @@ public class SchedulerDaoBean implements ISchedulerDao {
         }
     }
 
-    private class ScheduleInfo {
+    private static class ScheduleInfo {
 
         private final Long id;
         private final Date scheduleDate;
@@ -175,7 +165,7 @@ public class SchedulerDaoBean implements ISchedulerDao {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     @Override
-    public void changeSchedulerStatus(Long schedulerId, SchedulerStatus oldStatus, SchedulerStatus newStatus) throws OperationException, IllegalOperationStatusException {
+    public void changeSchedulerStatus(Long schedulerId, SchedulerStatus oldStatus, SchedulerStatus newStatus) throws OperationException {
         try {
             SchedulerEntity scheduler = get(schedulerId);
             em.lock(scheduler, LockModeType.PESSIMISTIC_READ);

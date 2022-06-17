@@ -1,0 +1,36 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def PADDING value('theme.info.padding.toString');
+@def MARGIN value('theme.info.margin.toString');
+@def OPACITY value('theme.info.opacity');
+@def IE_FILTER_OPACITY eval('ru.sbsoft.svc.themebuilder.base.client.CssResourceThemeUtils.opacityToIe8Filter(theme().info().opacity())');
+@def BACKGROUND_COLOR value('theme.info.backgroundColor');
+@def CSS3_BORDER_WIDTH value('theme.info.border.toString');
+
+.contentArea {
+  margin: MARGIN;
+}
+
+.content {
+  background-image: none;
+  background-color: BACKGROUND_COLOR;
+}
+
+@if (is("user.agent", "ie8")) {
+  .content {
+    -ms-filter: IE_FILTER_OPACITY;
+  }
+}
+@else  {
+  .content {
+    opacity: OPACITY;
+  }
+}
+
+.info {
+  padding: PADDING;
+  overflow: hidden;
+}

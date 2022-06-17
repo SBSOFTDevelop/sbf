@@ -173,16 +173,16 @@ public abstract class ConfigCommand {
             this.user = user;
         }
 
-        public final StoreQueryBuilder setType(StorageObjectType... type) {
+        public StoreQueryBuilder setType(StorageObjectType... type) {
             this.type = type != null && type.length > 0 ? type : null;
             return this;
         }
 
-        public final StoreQueryBuilder setStoreName(String storeName) {
+        public StoreQueryBuilder setStoreName(String storeName) {
             return this.setStoreName(storeName, true);
         }
 
-        public final StoreQueryBuilder setStoreName(String storeName, boolean eq) {
+        public StoreQueryBuilder setStoreName(String storeName, boolean eq) {
             this.storeName = storeName;
             this.storeNameEq = eq;
             return this;

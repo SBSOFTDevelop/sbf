@@ -1,0 +1,25 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def SUMMARY_TEXT_FAMILY value('theme.grid.group.summary.text.family');
+@def SUMMARY_TEXT_SIZE value('theme.grid.group.summary.text.size');
+@def SUMMARY_TEXT_WEIGHT value('theme.grid.group.summary.text.weight');
+@def SUMMARY_TEXT_COLOR value('theme.grid.group.summary.text.color');
+@def SUMMARY_BG_COLOR value('theme.grid.group.summary.backgroundColor');
+
+.hideSummaries .summaryRow {
+  display: none;
+}
+
+.summaryRow .grid-cell {
+  background-color: SUMMARY_BG_COLOR;
+}
+
+.summaryRow .grid-cellInner {
+  font-family: SUMMARY_TEXT_FAMILY;
+  font-size: SUMMARY_TEXT_SIZE;
+  font-weight: SUMMARY_TEXT_WEIGHT;
+  color: SUMMARY_TEXT_COLOR;
+}

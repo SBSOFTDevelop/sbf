@@ -1,14 +1,23 @@
 package ru.sbsoft.form;
 
-import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
+import ru.sbsoft.dao.entity.*;
+import ru.sbsoft.generator.api.Lookup;
+import ru.sbsoft.meta.lookup.ILookupEntity;
+import ru.sbsoft.meta.lookup.ILookupModelProvider;
+import ru.sbsoft.sbf.app.model.IFormModel;
+import ru.sbsoft.sbf.app.model.YearMonthDay;
+import ru.sbsoft.server.utils.AppException;
+import ru.sbsoft.server.utils.SrvConst;
+import ru.sbsoft.server.utils.YearMonthDayConverter;
+import ru.sbsoft.shared.FilterInfo;
+import ru.sbsoft.shared.TreeNode;
+import ru.sbsoft.shared.api.i18n.I18nResourceInfo;
+import ru.sbsoft.shared.api.i18n.Ii18nDao;
+import ru.sbsoft.shared.api.i18n.consts.SBFExceptionStr;
+import ru.sbsoft.shared.exceptions.ApplicationException;
+import ru.sbsoft.shared.model.*;
+import ru.sbsoft.shared.util.NameValuePair;
+
 import javax.ejb.SessionContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
@@ -17,36 +26,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.SingularAttribute;
-import ru.sbsoft.dao.entity.ActRangeFields;
-import ru.sbsoft.dao.entity.ActRangeFields_;
-import ru.sbsoft.dao.entity.CreateInfoFields;
-import ru.sbsoft.dao.entity.IActRangeEntity;
-import ru.sbsoft.dao.entity.IBaseEntity;
-import ru.sbsoft.shared.FilterInfo;
-import ru.sbsoft.shared.exceptions.ApplicationException;
-import ru.sbsoft.dao.entity.IEntityConverter;
-import ru.sbsoft.dao.entity.IFormEntity;
-import ru.sbsoft.dao.entity.UpdateInfoFields;
-import ru.sbsoft.meta.lookup.ILookupEntity;
-import ru.sbsoft.meta.lookup.ILookupModelProvider;
-import ru.sbsoft.sbf.app.model.IFormModel;
-import ru.sbsoft.shared.api.i18n.consts.SBFExceptionStr;
-import ru.sbsoft.shared.model.LookupInfoModel;
-import ru.sbsoft.dao.entity.ICreateInfoEntity;
-import ru.sbsoft.dao.entity.IUpdateInfoEntity;
-import ru.sbsoft.generator.api.Lookup;
-import ru.sbsoft.sbf.app.model.YearMonthDay;
-import ru.sbsoft.server.utils.AppException;
-import ru.sbsoft.server.utils.SrvConst;
-import ru.sbsoft.server.utils.YearMonthDayConverter;
-import ru.sbsoft.shared.TreeNode;
-import ru.sbsoft.shared.api.i18n.I18nResourceInfo;
-import ru.sbsoft.shared.api.i18n.Ii18nDao;
-import ru.sbsoft.shared.model.IActRange;
-import ru.sbsoft.shared.model.IActRangeModel;
-import ru.sbsoft.shared.model.ICreateInfoModel;
-import ru.sbsoft.shared.model.IUpdateInfoModel;
-import ru.sbsoft.shared.util.NameValuePair;
+import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.function.Function;
 
 public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntity> extends FormProcessorBase<M> implements IEntityConverter<M, E> {
 
@@ -62,6 +46,17 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
         this.entityClass = entityClass;
         this.modelClass = modelClass;
     }
+    
+    public void setI18n(Ii18nDao i18n){
+        if(this.i18n != null){
+            throw new AssertionError("Can't replace i18n");
+        }
+        this.i18n = i18n;
+    }
+
+    protected Ii18nDao getI18n() {
+        return i18n;
+    }
 
     protected final void setTemporalConfig(TemporalCheckInfo<E> temporalConfig) {
         if (!IActRangeEntity.class.isAssignableFrom(entityClass)) {
@@ -71,6 +66,7 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
     }
 
     //=========== IFormProcessor ================
+
     /**
      * Метод возвращает запись в виде сериализуемой модели из сущности по id
      *
@@ -84,7 +80,7 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
             entity = getEm().find(getEntityClass(), id);
         }
         if (entity == null) {
-            throw new ApplicationException(SBFExceptionStr.objectNotFound, getEntityClass().getSimpleName(), String.valueOf(id.longValue()));
+            throw new ApplicationException(SBFExceptionStr.objectNotFound, getEntityClass().getSimpleName(), String.valueOf(id != null ? id.longValue() : 0));
         }
         return entityToModel(entity);
     }
@@ -138,8 +134,8 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
         getEm().flush();
         onAfterSave(entity, oldE);
         onAfterSave(entity, oldE, model);
-        M m = entityToModel(entity);
-        return m;
+
+        return entityToModel(entity);
     }
 
     //===================================================
@@ -198,16 +194,15 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
     }
 
     protected final M entityToModel(E e, M modelToFill) {
-        M m = modelToFill;
-        m.setId(e.getId());
-        if ((m instanceof IActRangeModel) && (e instanceof IActRangeEntity)) {
+        modelToFill.setId(e.getId());
+        if ((modelToFill instanceof IActRangeModel) && (e instanceof IActRangeEntity)) {
             ActRangeFields af = ((IActRangeEntity) e).getActRangeFields();
             if (af != null) {
-                ((IActRangeModel) m).setBegDate(af.getBegDate());
-                ((IActRangeModel) m).setEndDate(SrvConst.FAR_FUTURE.equals(af.getEndDate()) ? null : af.getEndDate());
+                ((IActRangeModel) modelToFill).setBegDate(af.getBegDate());
+                ((IActRangeModel) modelToFill).setEndDate(SrvConst.FAR_FUTURE.equals(af.getEndDate()) ? null : af.getEndDate());
             }
         }
-        fillModel(m, e);
+        fillModel(modelToFill, e);
         Date createDate = null;
         String createUser = null;
         Date updateDate = null;
@@ -226,15 +221,15 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
                 updateUser = cu.getUpdateUser();
             }
         }
-        if (m instanceof ICreateInfoModel) {
-            ((ICreateInfoModel) m).setCreateDate(createDate);
-            ((ICreateInfoModel) m).setCreateUser(createUser);
+        if (modelToFill instanceof ICreateInfoModel) {
+            ((ICreateInfoModel) modelToFill).setCreateDate(createDate);
+            ((ICreateInfoModel) modelToFill).setCreateUser(createUser);
         }
-        if (m instanceof IUpdateInfoModel) {
-            ((IUpdateInfoModel) m).setUpdateDate(updateDate);
-            ((IUpdateInfoModel) m).setUpdateUser(updateUser);
+        if (modelToFill instanceof IUpdateInfoModel) {
+            ((IUpdateInfoModel) modelToFill).setUpdateDate(updateDate);
+            ((IUpdateInfoModel) modelToFill).setUpdateUser(updateUser);
         }
-        return m;
+        return modelToFill;
     }
 
     @Override
@@ -245,9 +240,7 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
     public final List<M> toModel(List<E> es) {
         List<M> res = new ArrayList<>();
         if (es != null) {
-            es.forEach((e) -> {
-                res.add(toModel(e));
-            });
+            es.forEach((e) -> res.add(toModel(e)));
         }
         return res;
     }
@@ -259,9 +252,7 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
     public final List<E> toEntity(List<M> ms) {
         List<E> res = new ArrayList<>();
         if (ms != null) {
-            ms.forEach((m) -> {
-                res.add(modelToEntity(m));
-            });
+            ms.forEach((m) -> res.add(modelToEntity(m)));
         }
         return res;
     }
@@ -380,7 +371,7 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
         if (where != null) {
             p.add(where);
         }
-        q.where((Predicate[]) p.toArray(new Predicate[p.size()]));
+        q.where(p.toArray(new Predicate[p.size()]));
 
         List<E> res = getEm().createQuery(q).getResultList();
         if (res != null && !res.isEmpty()) {
@@ -400,10 +391,11 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
     private void validateActRange(M m) {
         if (m instanceof IActRange) {
             IActRange ar = (IActRange) m;
-            if (ar == null) {
-                throw appErr(SBFExceptionStr.actRangeUndefined);
-            }
+            // if (ar == null) {
+            //     throw appErr(SBFExceptionStr.actRangeUndefined);
+            // }
             YearMonthDay beg = ar.getBegDate();
+
             YearMonthDay end = ar.getEndDate() != null ? ar.getEndDate() : SrvConst.FAR_FUTURE;
             if (beg == null) {
                 throw appErr(SBFExceptionStr.actRangeBeginUndefined);
@@ -469,6 +461,7 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
         return getIntersection(rs.toArray(new IActRange[rs.size()]));
     }
 
+    @SafeVarargs
     protected final <R extends IActRange> IActRange getIntersection(R... rs) {
         if (rs == null || rs.length == 0) {
             return null;
@@ -531,7 +524,7 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
                 } else {
                     rm.setBegDate(parent.getBegDate() != null ? parent.getBegDate() : getMinDate());
                     YearMonthDay ed = parent.getEndDate();
-                    rm.setEndDate(ed != null && SrvConst.FAR_FUTURE.equals(ed) ? null : ed);
+                    rm.setEndDate(SrvConst.FAR_FUTURE.equals(ed) ? null : ed);
                 }
             }
         }
@@ -555,8 +548,8 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
 
     //==============================================
     //=============== Class methods ================
+
     /**
-     *
      * @return класс сущности
      */
     protected final Class<E> getEntityClass() {
@@ -585,7 +578,7 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
 
     //==============================================
     //================== Utility methods ===========
-    protected static final LookupInfoModel toLookup(ILookupEntity e) {
+    protected static LookupInfoModel toLookup(ILookupEntity e) {
         return e != null ? e.toLookupModel() : null;
     }
 
@@ -601,7 +594,7 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
         return toEntity(n != null ? n.getKey() : null, eClass);
     }
 
-    private final <T extends IBaseEntity> T toEntity(BigDecimal id, Class<T> eClass) {
+    private <T extends IBaseEntity> T toEntity(BigDecimal id, Class<T> eClass) {
         T res = id != null ? getEm().find(eClass, id) : null;
         if (res == null && id != null) {
             throw new PersistenceException(eClass.getName() + " with ID=" + id + " is not found.");
@@ -609,11 +602,11 @@ public abstract class AbstractFormDao<M extends IFormModel, E extends IFormEntit
         return res;
     }
 
-    protected static final LocalDate toDate(YearMonthDay ymd) {
+    public static LocalDate toDate(YearMonthDay ymd) {
         return ymd != null ? YearMonthDayConverter.toLocalDate(ymd) : null;
     }
 
-    protected static final YearMonthDay toYmd(LocalDate d) {
+    public static YearMonthDay toYmd(LocalDate d) {
         return d != null ? YearMonthDayConverter.convert(d) : null;
     }
 

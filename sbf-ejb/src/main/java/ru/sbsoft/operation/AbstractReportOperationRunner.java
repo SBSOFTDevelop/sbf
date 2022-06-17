@@ -48,7 +48,7 @@ public abstract class AbstractReportOperationRunner extends BaseOperationRunner 
     private final String JASPER_SERVER_USR = "ru.sbsoft.jasperserver.user";
     private final String JASPER_SERVER_PWD = "ru.sbsoft.jasperserver.password";
     private final String JASPER_API_URL = "rest_v2/reports";
-    private final String PARAM_ROW_ID = "ROW_ID";
+//    private final String PARAM_ROW_ID = "ROW_ID";
     private final String PARAM_USER = "j_username";
     private final String PARAM_PWD = "j_password";
 
@@ -86,9 +86,9 @@ public abstract class AbstractReportOperationRunner extends BaseOperationRunner 
         }
 
         final List<ReportParameter> params = new ArrayList<>();
-        BigDecimal idRow = getSelectedRecord();
+        BigDecimal idRow = getBigDecimalParam(ParamInfo.ROW_ID);
         if (idRow != null) {
-            params.add(new ReportParameter(PARAM_ROW_ID, idRow.toString()));
+            params.add(new ReportParameter(ParamInfo.ROW_ID, idRow.toString()));
         }
 
         if (reportInfo.getParams() != null) {
@@ -177,13 +177,17 @@ public abstract class AbstractReportOperationRunner extends BaseOperationRunner 
                 if (rs.next()) {
                     ResultSetMetaData metaData = rs.getMetaData();
                     for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                        if (metaData.getColumnType(i) == Types.DATE) {
-                            result.add(new ReportParameter(metaData.getColumnName(i).toUpperCase(), dateFormat.format(rs.getDate(metaData.getColumnName(i)))));
+                        switch (metaData.getColumnType(i)) {
+                            case Types.DATE:
+                                result.add(new ReportParameter(metaData.getColumnName(i).toUpperCase(), dateFormat.format(rs.getDate(metaData.getColumnName(i)))));
+                                break;
+                            case Types.TIMESTAMP:
+                                result.add(new ReportParameter(metaData.getColumnName(i).toUpperCase(), dateTimeFormat.format(rs.getDate(metaData.getColumnName(i)))));
+                                break;
+                            default:
+                                result.add(new ReportParameter(metaData.getColumnName(i).toUpperCase(), rs.getString(metaData.getColumnName(i))));
+                                break;
                         }
-                        if (metaData.getColumnType(i) == Types.TIMESTAMP) {
-                            result.add(new ReportParameter(metaData.getColumnName(i).toUpperCase(), dateTimeFormat.format(rs.getDate(metaData.getColumnName(i)))));
-                        }
-                        result.add(new ReportParameter(metaData.getColumnName(i).toUpperCase(), rs.getString(metaData.getColumnName(i))));
                     }
                 }
                 return result;
@@ -194,7 +198,7 @@ public abstract class AbstractReportOperationRunner extends BaseOperationRunner 
     }
 
     private Object getParameterValue(String paramName, CustomReportInfo reportInfo, BigDecimal idRow) {
-        if (PARAM_ROW_ID.equalsIgnoreCase(paramName)) {
+        if (ParamInfo.ROW_ID.equalsIgnoreCase(paramName)) {
             return idRow;
         }
         return getParameterValue(paramName, reportInfo);

@@ -1,0 +1,27 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.container {
+  overflow: hidden;
+}
+
+.inner {
+  overflow: hidden;
+}
+
+.child {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+@if (is("user.agent", "ie8") || is("user.agent", "ie9")) {
+  .container, 
+  .inner, 
+  .child {
+    zoom: 1;
+  }
+}

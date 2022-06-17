@@ -76,11 +76,7 @@ public class InjectionInfo implements Comparable<InjectionInfo> {
             return false;
         }
 
-        if (!Objects.equals(this.resourceName, other.resourceName)) {
-            return false;
-        }
-
-        return true;
+        return Objects.equals(this.resourceName, other.resourceName);
     }
 
     @Override

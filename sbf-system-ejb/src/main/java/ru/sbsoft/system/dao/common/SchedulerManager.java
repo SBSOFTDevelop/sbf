@@ -96,7 +96,7 @@ public class SchedulerManager {
             schedulerDao.changeSchedulerStatus(schedulerId, SchedulerStatus.READY, SchedulerStatus.PROCESS);
             try {
                 boolean actualState = false;
-                while (!actualState && isScheduleActive(schedulerId)) {
+                while (isScheduleActive(schedulerId)) {
                     schedulerDao.createOperationWithScheduler(schedulerId);
                 }
                 schedulerDao.changeSchedulerStatus(schedulerId, SchedulerStatus.PROCESS, SchedulerStatus.READY);

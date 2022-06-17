@@ -1,0 +1,88 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def RADIUS value('theme.tip.borderRadius', 'px');
+@def BORDER_STYLE value('theme.tip.border.style');
+@def BORDER_COLOR value('theme.tip.border.color');
+@def BORDER_WIDTH value('theme.tip.border.toString');
+@def CSS3_LEFTOVER value('theme.tip.radiusMinusBorderWidth.toString');
+@def PADDING value('theme.tip.padding.toString');
+@def MARGIN value('theme.tip.margin.toString');
+@def OPACITY value('theme.tip.opacity');
+@def BACKGROUND_COLOR value('theme.tip.backgroundColor');
+@def HEADER_COLOR value('theme.tip.headerText.color');
+@def HEADER_SIZE value('theme.tip.headerText.size');
+@def HEADER_WEIGHT value('theme.tip.headerText.weight');
+@def HEADER_FAMILY value('theme.tip.headerText.family');
+@def MESSAGE_COLOR value('theme.tip.messageText.color');
+@def MESSAGE_SIZE value('theme.tip.messageText.size');
+@def MESSAGE_WEIGHT value('theme.tip.messageText.weight');
+@def MESSAGE_FAMILY value('theme.tip.messageText.family');
+@def HEADER_PADDING value('theme.tip.headerPadding.toString');
+@def MESSAGE_PADDING value('theme.tip.messagePadding.toString');
+
+.tipWrap {
+  border-color: BORDER_COLOR;
+  border-style: BORDER_STYLE;
+  border-width: BORDER_WIDTH;
+  border-radius: RADIUS;
+  background-color: BACKGROUND_COLOR;
+  opacity: OPACITY;
+  margin: MARGIN;
+  padding: CSS3_LEFTOVER;
+}
+
+.tip {
+  padding: PADDING;
+}
+
+.tools {
+  float: right;
+}
+
+.heading {
+  color: HEADER_COLOR;
+  font-size: HEADER_SIZE;
+  font-weight: HEADER_WEIGHT;
+  font-family: HEADER_FAMILY;
+}
+
+.headingWrap {
+  padding: HEADER_PADDING;
+}
+
+.text {
+  color: MESSAGE_COLOR;
+  font-size: MESSAGE_SIZE;
+  font-weight: MESSAGE_WEIGHT;
+  font-family: MESSAGE_FAMILY;
+}
+
+.textWrap {
+  padding: MESSAGE_PADDING;
+}
+
+.anchor {
+}
+
+.anchorBottom {
+  gwt-sprite: "anchorBottom";
+  position: absolute;
+}
+
+.anchorRight {
+  gwt-sprite: "anchorRight";
+  position: absolute;
+}
+
+.anchorLeft {
+  gwt-sprite: "anchorLeft";
+  position: absolute;
+}
+
+.anchorTop {
+  gwt-sprite: "anchorTop";
+  position: absolute;
+}

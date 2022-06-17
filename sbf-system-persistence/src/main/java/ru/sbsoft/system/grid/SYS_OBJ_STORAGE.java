@@ -103,9 +103,6 @@ public class SYS_OBJ_STORAGE implements Serializable {
             return false;
         }
         final SYS_OBJ_STORAGE other = (SYS_OBJ_STORAGE) obj;
-        if (!Objects.equals(this.RECORD_ID, other.RECORD_ID)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.RECORD_ID, other.RECORD_ID);
     }
 }

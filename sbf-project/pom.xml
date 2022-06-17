@@ -5,7 +5,7 @@
 
     <artifactId>sbf-project</artifactId>
     <groupId>ru.sbsoft</groupId>
-    <version>3.01.00-SNAPSHOT</version>
+    <version>3.20.00-SNAPSHOT</version>
     <packaging>pom</packaging>
 	
     <distributionManagement>
@@ -24,13 +24,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
-        <gwt.version>2.8.2</gwt.version>
-        <gwt.elemental2.version>1.0.0-RC1</gwt.elemental2.version>
-        <gxt.version>4.0.0</gxt.version>
+        <gwt.version>2.9.0</gwt.version>
+        <gwt.elemental2.version>1.1.0</gwt.elemental2.version>
 
         <gson.version>2.8.6</gson.version>
 
-        <sbf.version>3.01.00-SNAPSHOT</sbf.version>
+        <sbf.version>3.20.00-SNAPSHOT</sbf.version>
         <sbf.groupId>ru.sbsoft</sbf.groupId>
 
         <javaee.version>7.0</javaee.version>
@@ -121,16 +120,6 @@
                 <version>${gwt.elemental2.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.sencha.gxt</groupId>
-                <artifactId>gxt</artifactId>
-                <version>${gxt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sencha.gxt</groupId>
-                <artifactId>gxt-theme-neptune</artifactId>
-                <version>${gxt.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
@@ -139,7 +128,7 @@
             
             <dependency>
                 <groupId>${sbf.groupId}</groupId>
-                <artifactId>sbf-gxt-patch</artifactId>
+                <artifactId>sbf-gwt-patch</artifactId>
                 <version>${sbf.version}</version>
             </dependency>
             <dependency>
@@ -165,7 +154,7 @@
             </dependency>
             <dependency>
                 <groupId>${sbf.groupId}</groupId>
-                <artifactId>sbf-gxt</artifactId>
+                <artifactId>sbf-war</artifactId>
                 <version>${sbf.version}</version>
             </dependency>
             <dependency>
@@ -175,7 +164,7 @@
             </dependency>
             <dependency>
                 <groupId>${sbf.groupId}</groupId>
-                <artifactId>sbf-gxt-api</artifactId>
+                <artifactId>sbf-api</artifactId>
                 <version>${sbf.version}</version>
             </dependency>
             <dependency>

@@ -4,9 +4,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.reflections.Reflections;
 import ru.sbsoft.sbf.app.model.YearMonthDay;
+import ru.sbsoft.shared.WeekDay;
 import ru.sbsoft.shared.api.i18n.I18nResourceInfo;
 import ru.sbsoft.shared.api.i18n.consts.SBFExceptionStr;
 import ru.sbsoft.shared.consts.Month;
@@ -89,13 +92,13 @@ public class SrvUtl {
     }
 
     public static Date getDate(final YearMonth ym, final int day) {
-        return getDate(ym.getYear(), ym.getMonth(), day);
+        return getDate(ym.getYear(), ym.getMonthNum(), day);
     }
 
     public static Date getDate(final int year, final int month, final int day) {
         Calendar c = Calendar.getInstance();
-        c.set(year, month - 1, day, 0, 0, 0);
-        c.set(Calendar.MILLISECOND, 0);
+        c.set(year, month - 1, day);
+        truncToDate(c);
         return c.getTime();
     }
 
@@ -105,8 +108,8 @@ public class SrvUtl {
         return c.getTime();
     }
 
-    public static boolean isLastMonthDay(Calendar c){
-        Calendar w = (Calendar)c.clone();
+    public static boolean isLastMonthDay(Calendar c) {
+        Calendar w = (Calendar) c.clone();
         truncToMonth(w);
         w.add(Calendar.MONTH, 1);
         w.add(Calendar.DAY_OF_MONTH, -1);
@@ -118,14 +121,14 @@ public class SrvUtl {
         truncToMonth(c = getCalendar(d));
         return c.getTime();
     }
-    
+
     public static void truncToYear(final Calendar c) {
-        c.set(Calendar.MONTH, Calendar.JANUARY);
+        c.set(Calendar.MONTH, c.getActualMinimum(Calendar.MONTH));
         truncToMonth(c);
     }
-    
+
     public static void truncToMonth(final Calendar c) {
-        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH));
         truncToDate(c);
     }
 
@@ -136,10 +139,10 @@ public class SrvUtl {
     }
 
     public static void truncToDate(final Calendar c) {
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);
+        c.set(Calendar.HOUR_OF_DAY, c.getActualMinimum(Calendar.HOUR_OF_DAY));
+        c.set(Calendar.MINUTE, c.getActualMinimum(Calendar.MINUTE));
+        c.set(Calendar.SECOND, c.getActualMinimum(Calendar.SECOND));
+        c.set(Calendar.MILLISECOND, c.getActualMinimum(Calendar.MILLISECOND));
     }
 
     public static BigDecimal roundPay(BigDecimal pay) {
@@ -179,19 +182,18 @@ public class SrvUtl {
         c.setTime(d);
         return getYearMonth(c);
     }
-    
-    public static YearMonthDay getYearMonthDay(Date d){
+
+    public static YearMonthDay getYearMonthDay(Date d) {
         return YearMonthDayConverter.convert(d);
     }
 
     public static Date toDate(YearMonth ym) {
-        return getDate(ym.getYear(), ym.getMonth(), 1);
+        return getDate(ym.getYear(), ym.getMonthNum(), 1);
     }
-    
-    public static Date toDate(YearMonthDay ymd){
+
+    public static Date toDate(YearMonthDay ymd) {
         return YearMonthDayConverter.convert(ymd);
     }
-    
 
     public static int getDay(Date d) {
         Calendar c = Calendar.getInstance();
@@ -287,7 +289,8 @@ public class SrvUtl {
         notNull(check1, SBFExceptionStr.compareMustValue);
         Set<E> s = EnumSet.of(check1, otherChecks);
         if (e == null || !s.contains(e)) {
-            throw new ApplicationException(SBFExceptionStr.valueNotIncuded, e.name(), s.toString());
+
+            throw new ApplicationException(SBFExceptionStr.valueNotIncuded, e != null ? e.name() : null, s.toString());
         }
     }
 
@@ -319,12 +322,85 @@ public class SrvUtl {
         }
         return store;
     }
-    
-    public static boolean isOverlaps(Date start1, Date end1, Date start2, Date end2){
+
+    public static boolean isOverlaps(Date start1, Date end1, Date start2, Date end2) {
         return start1.compareTo(end2) <= 0 && start2.compareTo(end1) <= 0;
     }
-    
-    public static boolean isOverlaps(YearMonthDay start1, YearMonthDay end1, YearMonthDay start2, YearMonthDay end2){
+
+    public static boolean isOverlaps(YearMonthDay start1, YearMonthDay end1, YearMonthDay start2, YearMonthDay end2) {
         return start1.compareTo(end2) <= 0 && start2.compareTo(end1) <= 0;
+    }
+
+    public static BigDecimal toBigDecimal(Number n) {
+        if (n == null || (n instanceof BigDecimal)) {
+            return (BigDecimal) n;
+        } else if (n instanceof BigInteger) {
+            return new BigDecimal((BigInteger) n);
+        } else if ((n instanceof Integer) || (n instanceof Long) || (n instanceof Short)) {
+            return BigDecimal.valueOf(n.longValue());
+        } else if (n instanceof Float) {
+            if (((Float) n).isInfinite() || ((Float) n).isNaN()) {
+                return null;
+            } else {
+                return BigDecimal.valueOf(n.doubleValue());
+            }
+        } else if (n instanceof Double) {
+            if (((Double) n).isInfinite() || ((Double) n).isNaN()) {
+                return null;
+            } else {
+                return BigDecimal.valueOf(n.doubleValue());
+            }
+        } else {
+            return new BigDecimal(n.toString());
+        }
+    }
+
+    public static BigDecimal toBigDecimal(Object n) {
+        if (n instanceof Number) {
+            return toBigDecimal((Number) n);
+        }
+        throw new IllegalArgumentException("Not a number type (for BigDecimal): " + n.getClass().getName());
+    }
+
+    public static WeekDay toWeekDay(DayOfWeek wd) {
+        switch (wd) {
+            case MONDAY:
+                return WeekDay.MONDAY;
+            case TUESDAY:
+                return WeekDay.TUESDAY;
+            case WEDNESDAY:
+                return WeekDay.WEDNESDAY;
+            case THURSDAY:
+                return WeekDay.THURSDAY;
+            case FRIDAY:
+                return WeekDay.FRIDAY;
+            case SATURDAY:
+                return WeekDay.SATURDAY;
+            case SUNDAY:
+                return WeekDay.SUNDAY;
+            default:
+                throw new IllegalArgumentException("No instance of WeekDay matches to DayOfWeek's " + wd.toString());
+        }
+    }
+
+    public static DayOfWeek toDayOfWeek(WeekDay wd) {
+        switch (wd) {
+            case MONDAY:
+                return DayOfWeek.MONDAY;
+            case TUESDAY:
+                return DayOfWeek.TUESDAY;
+            case WEDNESDAY:
+                return DayOfWeek.WEDNESDAY;
+            case THURSDAY:
+                return DayOfWeek.THURSDAY;
+            case FRIDAY:
+                return DayOfWeek.FRIDAY;
+            case SATURDAY:
+                return DayOfWeek.SATURDAY;
+            case SUNDAY:
+                return DayOfWeek.SUNDAY;
+            default:
+                throw new IllegalArgumentException("No instance of DayOfWeek matches to WeekDay's " + wd.toString());
+        }
     }
 }

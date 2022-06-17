@@ -1,0 +1,72 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def UP_ICON url( value('upBtn.getSafeUri.asString', ''));
+@def ALL_RIGHT_ICON url( value('allRightBtn.getSafeUri.asString', ''));
+@def RIGHT_ICON url( value('rightBtn.getSafeUri.asString', ''));
+@def LEFT_ICON url( value('leftBtn.getSafeUri.asString', ''));
+@def ALL_LEFT_ICON url( value('allLeftBtn.getSafeUri.asString', ''));
+@def DOWN_ICON url( value('downBtn.getSafeUri.asString', ''));
+@def WIDTH value('upBtn.getWidth', 'px');
+@def HEIGHT value('upBtn.getHeight', 'px');
+@def BORDER_RADIUS value('theme.toolbar.buttonOverride.borderRadius', 'px');
+@def BORDER_COLOR value('theme.toolbar.buttonOverride.border.color');
+@def BORDER_STYLE value('theme.toolbar.buttonOverride.border.style');
+@def BORDER_WIDTH value('theme.toolbar.buttonOverride.border.toString');
+@def GRADIENT value('theme.toolbar.buttonOverride.gradient');
+
+.up, 
+.allRight, 
+.right, 
+.left, 
+.allLeft, 
+.down {
+  border-radius: BORDER_RADIUS;
+  border-width: BORDER_WIDTH;
+  border-style: BORDER_STYLE;
+  border-color: BORDER_COLOR;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-position: center center, left top;
+  width: WIDTH;
+  height: HEIGHT;
+}
+
+.up {
+  background-image: UP_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: UP_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: UP_ICON, linear-gradient(to bottom, GRADIENT);
+}
+
+.allRight {
+  background-image: ALL_RIGHT_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: ALL_RIGHT_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: ALL_RIGHT_ICON, linear-gradient(to bottom, GRADIENT);
+}
+
+.right {
+  background-image: RIGHT_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: RIGHT_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: RIGHT_ICON, linear-gradient(to bottom, GRADIENT);
+}
+
+.left {
+  background-image: LEFT_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: LEFT_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: LEFT_ICON, linear-gradient(to bottom, GRADIENT);
+}
+
+.allLeft {
+  background-image: ALL_LEFT_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: ALL_LEFT_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: ALL_LEFT_ICON, linear-gradient(to bottom, GRADIENT);
+}
+
+.down {
+  background-image: DOWN_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: DOWN_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: DOWN_ICON, linear-gradient(to bottom, GRADIENT);
+}

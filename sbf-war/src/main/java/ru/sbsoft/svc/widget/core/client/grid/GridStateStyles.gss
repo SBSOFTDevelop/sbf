@@ -1,0 +1,15 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.rowSelected, 
+.cellSelected, 
+.cell, 
+.row, 
+.cellInner, 
+.rowBody, 
+.rowBodyRow, 
+.rowWrap {
+}

@@ -1,0 +1,75 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BACKGROUND_COLOR value('theme.field.backgroundColor');
+@def FIELD_COLOR value('theme.field.text.color');
+@def FONT_SIZE value('theme.field.text.size');
+@def FONT_FAMILY value('theme.field.text.family');
+@def FONT_WEIGHT value('theme.field.text.weight');
+@def EMPTY_TEXT_COLOR value('theme.field.emptyTextColor');
+@def HEIGHT value('theme.field.height', 'px');
+@def LINE_HEIGHT value('theme.field.lineHeight');
+@def BORDER_COLOR value('theme.field.borderColor');
+@def BORDER_WIDTH value('theme.field.borderWidth', 'px');
+@def FOCUS_COLOR value('theme.field.focusBorderColor');
+@def INVALID_BACKGROUND_COLOR value('theme.field.invalidBackgroundColor');
+@def INVALID_BORDER_COLOR value('theme.field.invalidBorderColor');
+@def INVALID_BORDER_WIDTH value('theme.field.invalidBorderWidth', 'px');
+
+.focus {
+}
+
+.invalid {
+}
+
+.focus .wrap {
+  border-color: FOCUS_COLOR;
+}
+
+.invalid .wrap {
+  background-color: INVALID_BACKGROUND_COLOR;
+  border: solid INVALID_BORDER_COLOR;
+  border-width: INVALID_BORDER_WIDTH;
+}
+
+.wrap {
+  zoom: 1;
+  white-space: nowrap;
+  text-align: left;
+  width: auto;
+  position: relative;
+  background-color: BACKGROUND_COLOR;
+  border-color: BORDER_COLOR;
+  border-width: BORDER_WIDTH;
+  border-style: solid;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.field {
+  color: FIELD_COLOR;
+  font-size: FONT_SIZE;
+  font-family: FONT_FAMILY;
+  font-weight: FONT_WEIGHT;
+  border: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.field::-ms-clear {
+  display: none;
+}
+
+.empty {
+  color: EMPTY_TEXT_COLOR;
+}
+
+.readonly {
+}

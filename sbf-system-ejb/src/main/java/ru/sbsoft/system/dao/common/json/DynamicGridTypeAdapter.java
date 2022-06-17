@@ -18,7 +18,7 @@ import ru.sbsoft.shared.interfaces.IDynamicGridType;
  */
 public class DynamicGridTypeAdapter implements JsonSerializer<IDynamicGridType>, JsonDeserializer<IDynamicGridType> {
 
-    private static enum Field {
+    private enum Field {
         groupCode, id, code, itemName, securityId
     }
 

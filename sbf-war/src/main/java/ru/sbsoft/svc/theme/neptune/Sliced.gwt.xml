@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2022 SBSOFT.
+    All rights reserved.
+-->
+
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.7.0//EN"
+    "http://gwtproject.org/doctype/2.7.0/gwt-module.dtd">
+<module>
+  <inherits name="ru.sbsoft.svc.theme.neptune.Css3"/>
+
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.button.SlicedButtonCellAppearance">
+    <when-type-is class="ru.sbsoft.svc.cell.core.client.ButtonCell.ButtonCellAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.container.SlicedAccordionLayoutAppearance">
+    <when-type-is
+        class="ru.sbsoft.svc.widget.core.client.container.AccordionLayoutContainer.AccordionLayoutAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.tabs.SlicedTabPanelAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.TabPanel.TabPanelAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.tabs.SlicedPlainTabPanelAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.PlainTabPanel.PlainTabPanelAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.tabs.SlicedPlainTabPanelBottomAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.PlainTabPanel.PlainTabPanelBottomAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.tabs.SlicedTabPanelBottomAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.TabPanel.TabPanelBottomAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.toolbar.SlicedToolBarAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.toolbar.ToolBar.ToolBarAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.toolbar.SlicedSeparatorToolItemAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.toolbar.SeparatorToolItem.SeparatorToolItemAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.panel.SlicedContentPanelAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.ContentPanel.ContentPanelAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.panel.SlicedFramedPanelAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.FramedPanel.FramedPanelAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.info.SlicedInfoAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.info.Info.InfoAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.window.SlicedWindowAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.Window.WindowAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.tips.SlicedTipAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.tips.Tip.TipAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.field.SlicedDualListFieldAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.form.DualListField.DualListFieldAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.field.SlicedErrorTipAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.form.error.SideErrorHandler.SideErrorTooltipAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.grid.SlicedColumnHeaderAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.grid.ColumnHeader.ColumnHeaderAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.field.SlicedHorizontalSliderAppearance">
+    <any>
+      <when-type-is class="ru.sbsoft.svc.cell.core.client.SliderCell.SliderAppearance"/>
+      <when-type-is class="ru.sbsoft.svc.cell.core.client.SliderCell.HorizontalSliderAppearance"/>
+    </any>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.field.SlicedVerticalSliderAppearance">
+    <when-type-is class="ru.sbsoft.svc.cell.core.client.SliderCell.VerticalSliderAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.menu.SlicedMenuAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.Menu.MenuAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.menu.SlicedMenuItemAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.MenuItem.MenuItemAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.menu.SlicedCheckMenuItemAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.CheckMenuItem.CheckMenuItemAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.menu.SlicedMenuBarItemAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.MenuBarItem.MenuBarItemAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.menu.SlicedMenuBarAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.MenuBar.MenuBarAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.listview.SlicedListViewAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.ListView.ListViewAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.mask.SlicedMaskAppearance">
+    <when-type-is class="ru.sbsoft.svc.core.client.dom.Mask.MaskAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.neptune.client.sliced.progressbar.SlicedProgressBarAppearance">
+    <when-type-is class="ru.sbsoft.svc.cell.core.client.ProgressBarCell.ProgressBarAppearance"/>
+    <when-property-is name="svc.css3.enabled" value="false"/>
+    <when-property-is name="svc.theme" value="neptune"/>
+  </replace-with>
+
+</module>

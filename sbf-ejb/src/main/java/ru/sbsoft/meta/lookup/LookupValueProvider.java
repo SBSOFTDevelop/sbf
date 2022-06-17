@@ -32,7 +32,7 @@ public abstract class LookupValueProvider {
     protected final String semanticKeyColumn;
     private Class<? extends LookupInfoModel> lookupModelClass;
     //
-    private boolean nameCaseSensitive = true;
+    private boolean nameCaseSensitive = false;
 
     public abstract LookupInfoModel createLookupModel(Row row, EntityManager entityManager);
 
@@ -64,19 +64,21 @@ public abstract class LookupValueProvider {
         if (type == null) {
             throw new IllegalArgumentException();
         }
-
+        
         switch (type) {
             case LOOKUP_CODE:
                 return createKeyLookupFilter(lookupInfo.getValue());
             case LOOKUP_NAME:
                 return createNameLookupFilter(lookupInfo.getValue());
-        };
+        }
 
         throw new IllegalArgumentException("unexpected cellType = " + type);
     }
 
     protected FilterInfo createKeyLookupFilter(String query) {
-        return new StringFilterInfo(codeColumn, ComparisonEnum.startswith, query);
+        final StringFilterInfo filterInfo = new StringFilterInfo(codeColumn, ComparisonEnum.startswith, query);
+        filterInfo.setCaseSensitive(nameCaseSensitive);
+        return filterInfo;
     }
 
     protected FilterInfo createNameLookupFilter(String query) {

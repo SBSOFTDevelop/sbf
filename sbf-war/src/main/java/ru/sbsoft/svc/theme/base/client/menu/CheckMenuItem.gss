@@ -1,0 +1,10 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.menuItemChecked {
+  border: 1px dotted !important;
+  padding: 0;
+}

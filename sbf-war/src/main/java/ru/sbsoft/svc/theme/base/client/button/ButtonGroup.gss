@@ -1,0 +1,22 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.group {
+  padding: 1px;
+}
+
+.header {
+}
+
+.body {
+}
+
+.text {
+  font: 11px arial, tahoma, helvetica, sans-serif;
+  color: #3e6aaa;
+  padding: 2px;
+  text-align: center;
+}

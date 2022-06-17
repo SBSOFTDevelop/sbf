@@ -1,0 +1,75 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def TEXT_FAMILY value('theme.field.sideLabel.text.family');
+@def TEXT_WEIGHT value('theme.field.sideLabel.text.weight');
+@def TEXT_SIZE value('theme.field.sideLabel.text.size');
+@def TEXT_COLOR value('theme.field.sideLabel.text.color');
+@def TOP_TEXT_FAMILY value('theme.field.topLabel.text.family');
+@def TOP_TEXT_WEIGHT value('theme.field.topLabel.text.weight');
+@def TOP_TEXT_SIZE value('theme.field.topLabel.text.size');
+@def TOP_TEXT_COLOR value('theme.field.topLabel.text.color');
+@def PADDING value('theme.field.sideLabel.padding');
+@def LABEL_PADDING value('theme.field.sideLabel.labelPadding');
+@def FIELD_PADDING value('theme.field.sideLabel.fieldPadding');
+@def TEXT_ALIGN value('theme.field.sideLabel.textAlign');
+@def TOP_PADDING value('theme.field.topLabel.padding');
+@def TOP_LABEL_PADDING value('theme.field.topLabel.labelPadding');
+@def TOP_FIELD_PADDING value('theme.field.topLabel.fieldPadding');
+@def TOP_TEXT_ALIGN value('theme.field.topLabel.textAlign');
+
+.fieldItem {
+  display: block;
+  padding: PADDING;
+  position: relative;
+}
+
+.fieldItemLabelTop {
+  padding: TOP_PADDING;
+}
+
+.fieldLabel {
+  font-family: TEXT_FAMILY;
+  font-size: TEXT_SIZE;
+  font-weight: TEXT_WEIGHT;
+  color: TEXT_COLOR;
+  text-align: TEXT_ALIGN;
+  clear: left;
+  display: block;
+  float: left;
+  padding: LABEL_PADDING;
+  position: relative;
+  z-index: 2;
+  -moz-user-select: none;
+}
+
+.fieldItemLabelTop .fieldLabel {
+  font-family: TOP_TEXT_FAMILY;
+  font-size: TOP_TEXT_SIZE;
+  font-weight: TOP_TEXT_WEIGHT;
+  color: TOP_TEXT_COLOR;
+  width: auto !important;
+  float: none !important;
+  clear: none;
+  position: static;
+  text-align: TOP_TEXT_ALIGN;
+  padding: TOP_LABEL_PADDING;
+}
+
+.fieldElement {
+  padding: FIELD_PADDING;
+}
+
+.fieldItemLabelTop .fieldElement {
+  padding: TOP_FIELD_PADDING;
+}
+
+.clearLeft {
+  clear: left;
+  font-size: 0;
+  height: 0;
+  line-height: 0;
+  overflow: hidden;
+}

@@ -1,0 +1,35 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.panel {
+  border-style: solid;
+  border-width: 0;
+  outline: 0 none;
+}
+
+.noHeader {
+  border-top-width: 1px;
+}
+
+.header {
+  position: relative;
+}
+
+.body {
+  border-bottom: 1px solid;
+  border-left: 1px solid;
+  border-right: 1px solid;
+  border-top: 0 none;
+  overflow: hidden;
+  position: relative;
+}
+
+.footer {
+  position: relative;
+}
+
+.bodyWrap {
+}

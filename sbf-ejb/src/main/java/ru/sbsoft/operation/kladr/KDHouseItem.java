@@ -11,7 +11,7 @@ public class KDHouseItem {
     public enum HouseType {
 
         SINGLE, MULTY, EVEN, ODD, ERROR
-    };
+    }
     private String text;
     private int begNumber = 0;
     private int endNumber = 0;
@@ -32,7 +32,7 @@ public class KDHouseItem {
                 type = HouseType.ERROR;
             }
             try {
-                endNumber = getHouseNumber(this.text.substring(posSpace + 1, this.text.length()));
+                endNumber = getHouseNumber(this.text.substring(posSpace + 1));
             } catch (NumberFormatException ex) {
                 type = HouseType.ERROR;
             }

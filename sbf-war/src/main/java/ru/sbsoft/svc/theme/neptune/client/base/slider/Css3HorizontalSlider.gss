@@ -1,0 +1,82 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def TRACK_BACKGROUND value('theme.field.slider.trackBackgroundColor');
+@def TRACK_HEIGHT value('theme.field.slider.trackHeight', 'px');
+@def TRACK_BORDER_COLOR value('theme.field.slider.trackBorder.color');
+@def TRACK_BORDER_STYLE value('theme.field.slider.trackBorder.style');
+@def TRACK_BORDER_WIDTH value('theme.field.slider.trackBorder.toString');
+@def TRACK_RADIUS value('theme.field.slider.trackRadius', 'px');
+@def THUMB_WIDTH value('theme.field.slider.thumbWidth', 'px');
+@def THUMB_HEIGHT value('theme.field.slider.thumbHeight', 'px');
+@def THUMB_RADIUS value('theme.field.slider.thumbRadius', 'px');
+@def THUMB_BACKGROUND_COLOR value('theme.field.slider.thumbBackgroundColor');
+@def THUMB_BORDER_COLOR value('theme.field.slider.thumbBorder.color');
+@def THUMB_BORDER_STYLE value('theme.field.slider.thumbBorder.style');
+@def THUMB_BORDER_WIDTH value('theme.field.slider.thumbBorder.toString');
+
+.slider {
+  outline: 0 none;
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+.track {
+  background: TRACK_BACKGROUND;
+  border-radius: TRACK_RADIUS;
+  border-style: TRACK_BORDER_STYLE;
+  border-color: TRACK_BORDER_COLOR;
+  border-width: TRACK_BORDER_WIDTH;
+  width: 200px;
+  height: TRACK_HEIGHT;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.thumb {
+  background: THUMB_BACKGROUND_COLOR;
+  border-style: THUMB_BORDER_STYLE;
+  border-color: THUMB_BORDER_COLOR;
+  border-width: THUMB_BORDER_WIDTH;
+  border-radius: THUMB_RADIUS;
+  cursor: pointer;
+  height: THUMB_HEIGHT;
+  position: absolute;
+  width: THUMB_WIDTH;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.thumbCenter {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: THUMB_BORDER_COLOR;
+  border-radius: THUMB_RADIUS;
+  position: absolute;
+  height: 50%;
+  width: 50%;
+  left: 25%;
+  top: 25%;
+  z-index: 3;
+}
+
+.over .thumb {
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.drag .thumb {
+  -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+  -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+}

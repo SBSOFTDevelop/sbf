@@ -1,0 +1,9 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.textWrap {
+  color: #15428b;
+}

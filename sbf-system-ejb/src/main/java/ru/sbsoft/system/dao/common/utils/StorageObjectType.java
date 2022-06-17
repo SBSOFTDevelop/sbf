@@ -16,7 +16,7 @@ public enum StorageObjectType {
     private final char discriminator;
     private final StorageObjectKind kind;
 
-    private StorageObjectType(char discriminator, StorageObjectKind kind) {
+    StorageObjectType(char discriminator, StorageObjectKind kind) {
         this.discriminator = discriminator;
         this.kind = kind;
     }

@@ -1,0 +1,27 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BACKGROUND_COLOR value('theme.menu.header.backgroundColor');
+@def BORDER_COLOR value('theme.menu.header.border.color');
+@def BORDER_STYLE value('theme.menu.header.border.style');
+@def BORDER_WIDTH value('theme.menu.header.border.toString');
+@def PADDING value('theme.menu.header.itemPadding.toString');
+@def TEXT_COLOR value('theme.menu.header.itemText.color');
+@def TEXT_FAMILY value('theme.menu.header.itemText.family');
+@def TEXT_SIZE value('theme.menu.header.itemText.size');
+@def TEXT_WEIGHT value('theme.menu.header.itemText.weight');
+
+.menuText {
+  background-color: BACKGROUND_COLOR;
+  border-color: BORDER_COLOR;
+  border-style: BORDER_STYLE;
+  border-width: BORDER_WIDTH;
+  color: TEXT_COLOR;
+  display: block;
+  font-family: TEXT_FAMILY;
+  font-size: TEXT_SIZE;
+  font-weight: TEXT_WEIGHT;
+  padding: PADDING;
+}

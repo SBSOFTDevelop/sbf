@@ -12,10 +12,6 @@ public class JdbcWorkExecutor implements IJdbcWorkExecutor {
         this.em = em;
     }
 
-    public JdbcWorkExecutor() {
-
-    }
-
     @Override
     public <T> T executeJdbcWork(IJdbcWork<T> work) throws SQLException {
         Connection conn = em.unwrap(Connection.class);

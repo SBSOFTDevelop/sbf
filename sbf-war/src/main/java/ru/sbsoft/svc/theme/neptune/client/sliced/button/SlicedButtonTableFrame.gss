@@ -1,0 +1,119 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.over .content {
+  gwt-sprite: "backgroundOverBorder";
+  height: 100%;
+  width: 100%;
+}
+
+.over .topLeft {
+  gwt-sprite: "topLeftOverBorder";
+}
+
+.over .top {
+  gwt-sprite: "topOverBorder";
+}
+
+.over .topRight {
+  gwt-sprite: "topRightOverBorder";
+}
+
+.over .bottomLeft {
+  gwt-sprite: "bottomLeftOverBorder";
+}
+
+.over .bottom {
+  gwt-sprite: "bottomOverBorder";
+}
+
+.over .right {
+  gwt-sprite: "rightOverBorder";
+}
+
+.over .bottomRight {
+  gwt-sprite: "bottomRightOverBorder";
+}
+
+.over .left {
+  gwt-sprite: "leftOverBorder";
+}
+
+.focus .content {
+  gwt-sprite: "backgroundOverBorder";
+  height: 100%;
+  width: 100%;
+}
+
+.focus .topLeft {
+  gwt-sprite: "topLeftOverBorder";
+}
+
+.focus .top {
+  gwt-sprite: "topOverBorder";
+}
+
+.focus .topRight {
+  gwt-sprite: "topRightOverBorder";
+}
+
+.focus .bottomLeft {
+  gwt-sprite: "bottomLeftOverBorder";
+}
+
+.focus .bottom {
+  gwt-sprite: "bottomOverBorder";
+}
+
+.focus .right {
+  gwt-sprite: "rightOverBorder";
+}
+
+.focus .bottomRight {
+  gwt-sprite: "bottomRightOverBorder";
+}
+
+.focus .left {
+  gwt-sprite: "leftOverBorder";
+}
+
+.pressed .content {
+  gwt-sprite: "backgroundPressedBorder";
+  height: 100%;
+  width: 100%;
+}
+
+.pressed .topLeft {
+  gwt-sprite: "topLeftPressedBorder";
+}
+
+.pressed .top {
+  gwt-sprite: "topPressedBorder";
+}
+
+.pressed .topRight {
+  gwt-sprite: "topRightPressedBorder";
+}
+
+.pressed .bottomLeft {
+  gwt-sprite: "bottomLeftPressedBorder";
+}
+
+.pressed .bottom {
+  gwt-sprite: "bottomPressedBorder";
+}
+
+.pressed .right {
+  gwt-sprite: "rightPressedBorder";
+}
+
+.pressed .bottomRight {
+  gwt-sprite: "bottomRightPressedBorder";
+}
+
+.pressed .left {
+  gwt-sprite: "leftPressedBorder";
+}

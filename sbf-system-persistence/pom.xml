@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.sbsoft</groupId>
         <artifactId>SBF</artifactId>
-        <version>3.01.00-SNAPSHOT</version>
+        <version>3.20.00-SNAPSHOT</version>
     </parent>
     
     <artifactId>sbf-system-persistence</artifactId>

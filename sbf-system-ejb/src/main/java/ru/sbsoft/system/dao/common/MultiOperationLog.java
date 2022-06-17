@@ -27,7 +27,7 @@ public final class MultiOperationLog {
         StringBuilder buf = new StringBuilder(sql.length() + 50).append('\n').append(sql).append("\n\tbind => [");
         if (params != null && params.length > 0) {
             for (Object o : params) {
-                buf.append(String.valueOf(o)).append(", ");
+                buf.append(o).append(", ");
             }
         }
         return buf.append(']').toString();

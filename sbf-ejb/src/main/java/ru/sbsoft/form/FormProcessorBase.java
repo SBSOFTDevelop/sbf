@@ -56,7 +56,7 @@ abstract class FormProcessorBase<M extends IFormModel> implements IFormProcessor
     }
 
     FormProcessorBase<M> init(EntityManager em, SessionContext scontext) {
-        checkSingle(this.em, this.scontext);
+        checkNonInitialized(this.em, this.scontext);
         this.em = em;
         this.scontext = scontext;
         return this;
@@ -73,11 +73,11 @@ abstract class FormProcessorBase<M extends IFormModel> implements IFormProcessor
         return obj;
     }
 
-    private static void checkSingle(Object... oo) {
+    protected static void checkNonInitialized(Object... oo) {
         if (oo != null) {
             for (Object o : oo) {
                 if (o != null) {
-                    throw new IllegalStateException(o.getClass().getSimpleName() + " is already set");
+                    throw new IllegalStateException(o.getClass().getSimpleName() + " is already initialized");
                 }
             }
         }

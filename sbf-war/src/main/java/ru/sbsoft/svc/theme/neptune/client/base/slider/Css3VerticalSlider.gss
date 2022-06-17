@@ -1,0 +1,34 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def TRACK_HEIGHT value('theme.field.slider.trackHeight', 'px');
+@def THUMB_WIDTH value('theme.field.slider.thumbHeight', 'px');
+@def THUMB_HEIGHT value('theme.field.slider.thumbWidth', 'px');
+@def TRACK_BORDER_TOP value('theme.field.slider.trackBorder.left', 'px');
+@def TRACK_BORDER_RIGHT value('theme.field.slider.trackBorder.top', 'px');
+@def TRACK_BORDER_BOTTOM value('theme.field.slider.trackBorder.right', 'px');
+@def TRACK_BORDER_LEFT value('theme.field.slider.trackBorder.bottom', 'px');
+@def THUMB_BORDER_TOP value('theme.field.slider.thumbBorder.left', 'px');
+@def THUMB_BORDER_RIGHT value('theme.field.slider.thumbBorder.top', 'px');
+@def THUMB_BORDER_BOTTOM value('theme.field.slider.thumbBorder.right', 'px');
+@def THUMB_BORDER_LEFT value('theme.field.slider.thumbBorder.bottom', 'px');
+
+.track {
+  width: TRACK_HEIGHT;
+  border-top-width: TRACK_BORDER_TOP;
+  border-right-width: TRACK_BORDER_RIGHT;
+  border-bottom-width: TRACK_BORDER_BOTTOM;
+  border-left-width: TRACK_BORDER_LEFT;
+  height: 200px;
+}
+
+.thumb {
+  border-top-width: THUMB_BORDER_TOP;
+  border-right-width: THUMB_BORDER_RIGHT;
+  border-bottom-width: THUMB_BORDER_BOTTOM;
+  border-left-width: THUMB_BORDER_LEFT;
+  height: THUMB_HEIGHT;
+  width: THUMB_WIDTH;
+}

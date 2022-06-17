@@ -188,7 +188,7 @@ public class FilterHelper {
         return getParentEntity(em, parentFilters, c, filterName);
     }
 
-    public static final <E extends IBaseEntity> E getParentEntity(EntityManager em, final List<FilterInfo> parentFilters, Class<E> c, final String filterName) {
+    public static <E extends IBaseEntity> E getParentEntity(EntityManager em, final List<FilterInfo> parentFilters, Class<E> c, final String filterName) {
         BigDecimal parentId = filterName == null || filterName.trim().isEmpty() ? getParentId(parentFilters) : getParentId(parentFilters, filterName);
         return parentId != null ? em.find(c, parentId) : null;
     }

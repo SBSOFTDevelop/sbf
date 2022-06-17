@@ -1,0 +1,10 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.menuSep {
+  background-color: #e0e0e0;
+  border-bottom-color: #fff;
+}

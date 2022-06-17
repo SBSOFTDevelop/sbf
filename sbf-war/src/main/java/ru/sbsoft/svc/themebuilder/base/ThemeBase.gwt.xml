@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2022 SBSOFT.
+    All rights reserved.
+-->
+
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.7.0//EN"
+    "http://gwtproject.org/doctype/2.7.0/gwt-module.dtd">
+<module>
+  <inherits name="ru.sbsoft.svc.widget.core.Core"/>
+  <inherits name="ru.sbsoft.svc.theme.base.Base"/>
+
+
+  <define-property name="svc.css3.enabled" values="true,false"/>
+  <set-property name="svc.css3.enabled" value="true" />
+
+  <!-- Only enable the css3 theme when requested explicitly in ff and recent webkit for now -->
+  <!-- This can be customized further after the inherits statement that lists this module -->
+  <set-property name="svc.css3.enabled" value="false">
+    <any>
+      <when-property-is name="svc.user.agent" value="ie8" />
+      <when-property-is name="svc.user.agent" value="ie9" />
+      <when-property-is name="svc.user.agent" value="gecko1_8" />
+      <when-property-is name="svc.user.agent" value="safari3" />
+      <when-property-is name="svc.user.agent" value="safari4" />
+    </any>
+  </set-property>
+
+  <replace-with class="ru.sbsoft.svc.themebuilder.base.client.config.ThemeDetailsNoOpImpl">
+    <when-type-is class="ru.sbsoft.svc.themebuilder.base.client.config.ThemeDetails"/>
+  </replace-with>
+
+</module>

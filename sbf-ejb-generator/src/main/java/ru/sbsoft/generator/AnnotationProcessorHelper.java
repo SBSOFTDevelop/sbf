@@ -60,7 +60,7 @@ public class AnnotationProcessorHelper {
         }
         if (contexts.isEmpty()) {
             if (defaultClassName != null) {
-                return new UtilClassInfo(defaultClassName, Collections.<LookupFieldInfo>emptySet(), Collections.<InjectionInfo>emptySet());
+                return new UtilClassInfo(defaultClassName, Collections.emptySet(), Collections.emptySet());
             } else {
                 return null;
             }

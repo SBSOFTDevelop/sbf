@@ -1,0 +1,27 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.bar {
+  position: absolute;
+  z-index: 99999;
+}
+
+.bar td {
+  line-height: 1px;
+  font-size: 1px;
+}
+
+.left {
+  gwt-sprite: "left";
+}
+
+.mid {
+  gwt-sprite: "mid";
+}
+
+.right {
+  gwt-sprite: "right";
+}

@@ -1,0 +1,40 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BACKGROUND_COLOR value('theme.window.backgroundColor');
+
+.panel {
+  background-color: BACKGROUND_COLOR;
+  border-style: solid;
+  border-width: 0;
+  outline: none;
+}
+
+.noHeader {
+}
+
+.header {
+  position: relative;
+}
+
+.body {
+  border-width: 0;
+  overflow: hidden;
+  position: relative;
+  background-color: BACKGROUND_COLOR;
+}
+
+.footer {
+  position: relative;
+  background-color: BACKGROUND_COLOR;
+}
+
+.bodyWrap {
+}
+
+.ghost ul {
+  background-color: #cdd9e8;
+  border-color: #90a4c4;
+}

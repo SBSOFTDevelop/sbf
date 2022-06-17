@@ -42,15 +42,15 @@ public class UtilEJB<T extends Runnable, E extends Exception> implements IUtilEJ
         runner.run();
     }
 
-    private <T extends RunnableThrow<E>> void runInNewTransaction(T runner) throws E {
+    private <TT extends RunnableThrow<E>> void runInNewTransaction(TT runner) throws E {
         runner.run();
     }
 
     @Override
-    public <T extends RunnableThrow<E>> void runInNewTransactionE(T runner) {
+    public <TT extends RunnableThrow<E>> void runInNewTransactionE(TT runner) {
 
         try {
-            runInNewTransaction(() -> runner.run());
+            runInNewTransaction(runner);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

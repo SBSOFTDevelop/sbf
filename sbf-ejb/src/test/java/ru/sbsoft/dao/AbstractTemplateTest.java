@@ -7,8 +7,8 @@ import java.sql.Statement;
 import java.util.List;
 import javax.ejb.SessionContext;
 import javax.persistence.EntityManager;
-import junit.framework.Assert;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.sbsoft.meta.ColumnsInfo;
@@ -17,9 +17,9 @@ import ru.sbsoft.meta.columns.style.condition.CEq;
 import ru.sbsoft.meta.context.DefaultGlobalQueryContextFactory;
 import ru.sbsoft.model.ApplicationMenuModel;
 import ru.sbsoft.model.IOperationSettings;
-import ru.sbsoft.shared.grid.style.ColorConst;
 import ru.sbsoft.shared.grid.style.CStyle;
-import ru.sbsoft.shared.meta.Columns;
+import ru.sbsoft.shared.grid.style.ColorConst;
+import ru.sbsoft.shared.meta.IColumns;
 
 /**
  *
@@ -38,7 +38,7 @@ public class AbstractTemplateTest {
             st.execute("INSERT INTO test123(col1, col2) VALUES('test3', 3)");
             st.execute("INSERT INTO test123(col1, col2) VALUES('test4', 4)");
             st.execute("INSERT INTO test123(col1, col2) VALUES('test5', 5)");
-        };
+        }
     }
 
     private Connection getConnection() throws ClassNotFoundException, SQLException {
@@ -50,7 +50,7 @@ public class AbstractTemplateTest {
     public void testGridStyles() {
         TestTemplate templ = new TestTemplate();
         TemplateBuilder b = new TemplateBuilder(templ);
-        Columns c = b.getMeta();
+        IColumns c = b.getMeta();
         Assert.assertNotNull(c);
         Assert.assertEquals(c.getColumns().size(), templ.getColumnsInfo().getItems().size());
     }
@@ -60,7 +60,7 @@ public class AbstractTemplateTest {
         try (Connection dbc = getConnection()) {
             Statement st = dbc.createStatement();
             st.execute("DROP TABLE test123");
-        };
+        }
     }
 
     private class TestTemplate extends AbstractTemplate {

@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.sbsoft</groupId>
         <artifactId>SBF</artifactId>
-        <version>3.01.00-SNAPSHOT</version>
+        <version>3.20.00-SNAPSHOT</version>
     </parent>
 
     <artifactId>sbf-query</artifactId>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
-            <version>1.7</version>
+            <version>1.6.4</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

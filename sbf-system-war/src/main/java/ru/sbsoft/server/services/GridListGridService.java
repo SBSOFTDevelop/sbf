@@ -11,7 +11,7 @@ import ru.sbsoft.model.PageFilterInfo;
 import ru.sbsoft.shared.GridContext;
 import ru.sbsoft.shared.PageList;
 import ru.sbsoft.shared.exceptions.FilterRequireException;
-import ru.sbsoft.shared.meta.Columns;
+import ru.sbsoft.shared.meta.IColumns;
 import ru.sbsoft.shared.meta.aggregate.IAggregateDef;
 import ru.sbsoft.shared.meta.filter.FilterBox;
 import ru.sbsoft.shared.model.CustomReportInfo;
@@ -36,7 +36,7 @@ public class GridListGridService extends SBFRemoteServiceServlet implements IGri
     private IConfigDao configDao;
 
     @Override
-    public Columns getMeta(GridContext context) {
+    public IColumns getMeta(GridContext context) {
         return gridListDao.getMeta(context);
     }
 

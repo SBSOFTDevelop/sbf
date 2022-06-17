@@ -1,0 +1,51 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.up, 
+.allRight, 
+.right, 
+.left, 
+.allLeft, 
+.down {
+  gwt-sprite: "background";
+  position: relative;
+}
+
+.up:after, 
+.allRight:after, 
+.right:after, 
+.left:after, 
+.allLeft:after, 
+.down:after {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+}
+
+.up:after {
+  gwt-sprite: "upBtn";
+}
+
+.allRight:after {
+  gwt-sprite: "allRightBtn";
+}
+
+.right:after {
+  gwt-sprite: "rightBtn";
+}
+
+.left:after {
+  gwt-sprite: "leftBtn";
+}
+
+.allLeft:after {
+  gwt-sprite: "allLeftBtn";
+}
+
+.down:after {
+  gwt-sprite: "downBtn";
+}

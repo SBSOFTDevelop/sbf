@@ -1,0 +1,47 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def SIZE value('theme.colorpalette.itemSize', 'px');
+@def ITEM_PADDING value('theme.colorpalette.itemPadding.toString');
+@def BACKGROUND_COLOR value('theme.colorpalette.backgroundColor');
+@def BORDER_WIDTH value('theme.colorpalette.itemBorder.toString');
+@def BORDER_STYLE value('theme.colorpalette.itemBorder.style');
+@def BORDER_COLOR value('theme.colorpalette.itemBorder.color');
+@def SELECTED_BACKGROUND_COLOR value('theme.colorpalette.selectedBackgroundColor');
+@def SELECTED_BORDER_WIDTH value('theme.colorpalette.selectedBorder.toString');
+@def SELECTED_BORDER_STYLE value('theme.colorpalette.selectedBorder.style');
+@def SELECTED_BORDER_COLOR value('theme.colorpalette.selectedBorder.color');
+
+.colorPalette {
+  background-color: BACKGROUND_COLOR;
+  border-collapse: collapse;
+}
+
+.anchor {
+  border-color: BACKGROUND_COLOR;
+  border-style: SELECTED_BORDER_STYLE;
+  border-width: SELECTED_BORDER_WIDTH;
+  padding: ITEM_PADDING;
+}
+
+.inner {
+  height: SIZE;
+  width: SIZE;
+  line-height: SIZE;
+}
+
+.wrapper {
+  border-color: BORDER_COLOR;
+  border-style: BORDER_STYLE;
+  border-width: BORDER_WIDTH;
+}
+
+.hover, 
+.selected {
+  border-color: SELECTED_BORDER_COLOR;
+  border-style: SELECTED_BORDER_STYLE;
+  border-width: SELECTED_BORDER_WIDTH;
+  background-color: SELECTED_BACKGROUND_COLOR;
+}

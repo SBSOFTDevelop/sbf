@@ -1,0 +1,166 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def FONT_FAMILY value('theme.grid.columnHeader.text.family');
+@def FONT_SIZE value('theme.grid.columnHeader.text.size');
+@def TEXT_COLOR value('theme.grid.columnHeader.text.color');
+@def FONT_WEIGHT value('theme.grid.columnHeader.text.weight');
+@def LINE_HEIGHT value('theme.grid.columnHeader.lineHeight');
+@def PADDING value('theme.grid.columnHeader.padding');
+@def GRADIENT value('theme.grid.columnHeader.gradient');
+@def OVER_GRADIENT value('theme.grid.columnHeader.overGradient');
+@def BORDER_WIDTH value('theme.grid.columnHeader.borderWidth', 'px');
+@def BORDER_COLOR value('theme.grid.columnHeader.borderColor');
+@def BORDER_STYLE value('theme.grid.columnHeader.borderStyle');
+@def MENU_WIDTH value('theme.grid.columnHeader.menuButtonWidth', 'px');
+@def MENU_BORDER_WIDTH value('theme.grid.columnHeader.menuBorder.toString');
+@def MENU_BORDER_STYLE value('theme.grid.columnHeader.menuBorder.style');
+@def MENU_BORDER_COLOR value('theme.grid.columnHeader.menuBorder.color');
+@def MENU_HOVER_BORDER_WIDTH value('theme.grid.columnHeader.menuHoverBorder.toString');
+@def MENU_HOVER_BORDER_STYLE value('theme.grid.columnHeader.menuHoverBorder.style');
+@def MENU_HOVER_BORDER_COLOR value('theme.grid.columnHeader.menuHoverBorder.color');
+@def MENU_ACTIVE_BORDER_WIDTH value('theme.grid.columnHeader.menuActiveBorder.toString');
+@def MENU_ACTIVE_BORDER_STYLE value('theme.grid.columnHeader.menuActiveBorder.style');
+@def MENU_ACTIVE_BORDER_COLOR value('theme.grid.columnHeader.menuActiveBorder.color');
+
+.headerInner {
+}
+
+.header {
+  gwt-sprite: "columnHeader";
+  background-position: left bottom;
+  height: auto;
+  cursor: default;
+  padding: 0 0 0 0;
+  border-style: BORDER_STYLE;
+  border-width: BORDER_WIDTH 0 0;
+  border-color: BORDER_COLOR;
+}
+
+.headRow .head {
+  line-height: LINE_HEIGHT;
+  vertical-align: middle;
+  -moz-outline: none;
+  -moz-user-focus: normal;
+  outline: 0 none;
+  font-family: FONT_FAMILY;
+  font-size: FONT_SIZE;
+  font-weight: FONT_WEIGHT;
+  color: TEXT_COLOR;
+  border-style: BORDER_STYLE;
+  border-color: BORDER_COLOR;
+  border-width: 0 BORDER_WIDTH BORDER_WIDTH 0;
+}
+
+.headInner {
+  overflow: hidden;
+  zoom: 1;
+  float: left;
+  padding: PADDING;
+  cursor: inherit;
+  position: relative;
+  vertical-align: middle;
+  /* @alternate */ overflow: hidden;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.head {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: ignore;
+}
+
+.headButton {
+  gwt-sprite: "columnHeaderBtnBg";
+  background-position: center center;
+  border-width: MENU_BORDER_WIDTH;
+  border-style: MENU_BORDER_STYLE;
+  border-color: MENU_BORDER_COLOR;
+  display: none;
+  position: absolute;
+  width: MENU_WIDTH;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  cursor: pointer;
+  outline: none;
+}
+
+.headButton:after {
+  gwt-sprite: "columnHeaderBtn";
+  height: auto;
+  width: MENU_WIDTH;
+  content: "";
+  background-position: center center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+  outline: none;
+}
+
+.headOver .headButton, 
+.headMenuOpen .headButton {
+  display: block;
+}
+
+.headOver .headButton {
+  gwt-sprite: "columnHeaderBtnBgOver";
+  width: MENU_WIDTH;
+  height: auto;
+  border-width: MENU_HOVER_BORDER_WIDTH;
+  border-style: MENU_HOVER_BORDER_STYLE;
+  border-color: MENU_HOVER_BORDER_COLOR;
+}
+
+.headMenuOpen .headButton {
+  gwt-sprite: "columnHeaderBtnBgOpen";
+  width: MENU_WIDTH;
+  height: auto;
+  border-width: MENU_ACTIVE_BORDER_WIDTH;
+  border-style: MENU_ACTIVE_BORDER_STYLE;
+  border-color: MENU_ACTIVE_BORDER_COLOR;
+}
+
+.headOver .headInner, 
+.headMenuOpen .headInner {
+  gwt-sprite: "columnHeaderOver";
+  background-position: left bottom;
+  height: auto;
+}
+@def MAX eval('ru.sbsoft.svc.themebuilder.base.client.CssResourceThemeUtils.maxPxSize(sortAscHeaderIcon().getHeight(),sortDescHeaderIcon().getHeight())');
+
+.sortIcon {
+  background-repeat: no-repeat;
+  display: none;
+  height: MAX;
+  margin-left: 3px;
+  vertical-align: middle;
+}
+
+.sortAsc .sortIcon, 
+.sortDesc .sortIcon {
+  display: inline;
+}
+
+.sortAsc .sortIcon {
+  gwt-sprite: "sortAscHeaderIcon";
+}
+
+.sortDesc .sortIcon {
+  gwt-sprite: "sortDescHeaderIcon";
+}
+
+.columnMoveTop {
+  gwt-sprite: "columnMoveTop";
+}
+
+.columnMoveBottom {
+  gwt-sprite: "columnMoveBottom";
+}

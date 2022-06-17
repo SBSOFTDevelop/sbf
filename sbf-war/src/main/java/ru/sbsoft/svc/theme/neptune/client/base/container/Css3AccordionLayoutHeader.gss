@@ -1,0 +1,28 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def TEXT_COLOR value('theme.accordionLayout.font.color');
+@def FONT_SIZE value('theme.accordionLayout.font.size');
+@def FONT_FAMILY value('theme.accordionLayout.font.family');
+@def FONT_WEIGHT value('theme.accordionLayout.font.weight');
+@def HEADER_BAR_MARGIN value('theme.accordionLayout.headerBarMargin.toString');
+
+.header {
+  padding: 0;
+}
+
+.headerText, 
+.header {
+  color: TEXT_COLOR;
+  font-size: FONT_SIZE;
+  font-weight: FONT_WEIGHT;
+  font-family: FONT_FAMILY;
+  line-height: 15px;
+  text-transform: none;
+}
+
+.headerBar {
+  margin: HEADER_BAR_MARGIN;
+}

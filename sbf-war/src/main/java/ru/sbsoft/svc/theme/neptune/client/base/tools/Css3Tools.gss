@@ -1,0 +1,62 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def PRIMARY_OPACITY value('theme.tools.primaryOpacity');
+@def OVER_OPACITY value('theme.tools.primaryOverOpacity');
+
+.close,
+.collapse,
+.doubleDown,
+.doubleLeft,
+.doubleRight,
+.doubleUp,
+.down,
+.expand,
+.gear,
+.left,
+.maximize,
+.minimize,
+.minus,
+.pin,
+.unpin,
+.plus,
+.print,
+.question,
+.refresh,
+.restore,
+.right,
+.save,
+.search,
+.up {
+  opacity: PRIMARY_OPACITY;
+}
+
+.closeOver,
+.collapseOver,
+.doubleDownOver,
+.doubleLeftOver,
+.doubleRightOver,
+.doubleUpOver,
+.downOver,
+.expandOver,
+.gearOver,
+.leftOver,
+.maximizeOver,
+.minimizeOver,
+.minusOver,
+.pinOver,
+.unpinOver,
+.plusOver,
+.printOver,
+.questionOver,
+.refreshOver,
+.restoreOver,
+.rightOver,
+.saveOver,
+.searchOver,
+.upOver {
+  opacity: OVER_OPACITY;
+}
+

@@ -1,0 +1,14 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.fieldSet {
+  border-color: #b8b8b8;
+}
+
+.fieldSet legend {
+  font: bold 11px tahoma, arial, helvetica, sans-serif;
+  color: #3c3c3c;
+}

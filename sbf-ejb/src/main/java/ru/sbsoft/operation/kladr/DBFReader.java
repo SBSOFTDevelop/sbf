@@ -57,7 +57,7 @@ public class DBFReader implements Closeable {
     public static class Header extends ArrayList<Field> {
 
         private final long recordsCount;
-        private int headerLength;
+        private final int headerLength;
         private final int recordLength;
 
         private Header(long recordsCount, int headerLength, int recordLength) {
@@ -166,7 +166,7 @@ public class DBFReader implements Closeable {
                 case 'C':
                 case 'D':
                 case 'N':
-                    byte buffer[] = new byte[field.getLength()];
+                    byte[] buffer = new byte[field.getLength()];
                     stream.read(buffer);
                     result.put(field.getName(), new String(buffer, CHARSET).trim());
                     break;

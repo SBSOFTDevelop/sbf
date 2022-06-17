@@ -2,6 +2,7 @@ package ru.sbsoft.system.common;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -122,9 +123,6 @@ public class StorageEntity implements Serializable {
             return false;
         }
         final StorageEntity other = (StorageEntity) obj;
-        if (this.STORAGE_ID != other.STORAGE_ID && (this.STORAGE_ID == null || !this.STORAGE_ID.equals(other.STORAGE_ID))) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.STORAGE_ID, other.STORAGE_ID);
     }
 }

@@ -1,0 +1,59 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BORDER_COLOR value('theme.tabs.borderColor');
+@def FRAME_BG_COLOR value('theme.tabs.lastStopColor');
+@def PLAIN_TAB_STRIP_SPACER_HEIGHT value('theme.tabs.plainTabStripSpacerHeight', 'px');
+@def PLAIN_ACTIVE_HEADING_TEXT_COLOR value('theme.tabs.plainActiveHeadingText.color');
+@def PLAIN_ACTIVE_HEADING_TEXT_SIZE value('theme.tabs.plainActiveHeadingText.size');
+@def PLAIN_ACTIVE_HEADING_TEXT_WEIGHT value('theme.tabs.plainActiveHeadingText.weight');
+@def PLAIN_ACTIVE_HEADING_TEXT_FONT value('theme.tabs.plainActiveHeadingText.family');
+@def PLAIN_HEADING_TEXT_COLOR value('theme.tabs.plainHeadingText.color');
+@def PLAIN_HEADING_TEXT_SIZE value('theme.tabs.plainHeadingText.size');
+@def PLAIN_HEADING_TEXT_WEIGHT value('theme.tabs.plainHeadingText.weight');
+@def PLAIN_HEADING_TEXT_FONT value('theme.tabs.plainHeadingText.family');
+@def PLAIN_HOVER_HEADING_TEXT_COLOR value('theme.tabs.plainHoverHeadingText.color');
+@def PLAIN_HOVER_HEADING_TEXT_SIZE value('theme.tabs.plainHoverHeadingText.size');
+@def PLAIN_HOVER_HEADING_TEXT_WEIGHT value('theme.tabs.plainHoverHeadingText.weight');
+@def PLAIN_HOVER_HEADING_TEXT_FONT value('theme.tabs.plainHoverHeadingText.family');
+
+.tabStrip {
+  background: transparent;
+  padding-top: 0;
+}
+
+.tabBar {
+  padding-bottom: 0;
+}
+
+.tabBar {
+  background: transparent;
+  border-width: 0;
+}
+
+.tabStripSpacer {
+  border: 1px solid;
+  height: PLAIN_TAB_STRIP_SPACER_HEIGHT;
+  font-size: 1px;
+  line-height: 1px;
+  border-color: BORDER_COLOR;
+  background-color: FRAME_BG_COLOR;
+  border-top: 0 none;
+}
+
+.tabStrip .tabStripText {
+  font: normal PLAIN_HEADING_TEXT_WEIGHT PLAIN_HEADING_TEXT_SIZE PLAIN_HEADING_TEXT_FONT;
+  color: PLAIN_HEADING_TEXT_COLOR;
+}
+
+.tabStripOver .tabStripText {
+  font: normal PLAIN_HOVER_HEADING_TEXT_WEIGHT PLAIN_HOVER_HEADING_TEXT_SIZE PLAIN_HOVER_HEADING_TEXT_FONT;
+  color: PLAIN_HOVER_HEADING_TEXT_COLOR;
+}
+
+.tabStripActive .tabStripText {
+  font: normal PLAIN_ACTIVE_HEADING_TEXT_WEIGHT PLAIN_ACTIVE_HEADING_TEXT_SIZE PLAIN_ACTIVE_HEADING_TEXT_FONT;
+  color: PLAIN_ACTIVE_HEADING_TEXT_COLOR;
+}

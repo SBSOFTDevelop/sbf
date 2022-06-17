@@ -1,0 +1,33 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def SPECIAL_COLUMN_GRADIENT value('theme.grid.specialColumnGradient');
+@def SPECIAL_COLUMN_GRADIENT_SELECTED value('theme.grid.specialColumnGradientSelected');
+@def TEXT_FAMILY value('theme.grid.rowNumberer.text.family');
+@def TEXT_WEIGHT value('theme.grid.rowNumberer.text.weight');
+@def TEXT_SIZE value('theme.grid.rowNumberer.text.size');
+@def TEXT_COLOR value('theme.grid.rowNumberer.text.color');
+@def PADDING value('theme.grid.rowNumberer.padding.toString');
+
+.numberer {
+  padding: PADDING;
+  text-align: center;
+  font-family: TEXT_FAMILY;
+  font-size: TEXT_SIZE;
+  color: TEXT_COLOR;
+  font-weight: TEXT_WEIGHT;
+}
+
+.grid-row .cell {
+  background: -webkit-linear-gradient(top, SPECIAL_COLUMN_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(top, SPECIAL_COLUMN_GRADIENT);
+  /* @alternate */ background: linear-gradient(to bottom, SPECIAL_COLUMN_GRADIENT);
+}
+
+.grid-rowSelected .cell {
+  background: -webkit-linear-gradient(top, SPECIAL_COLUMN_GRADIENT_SELECTED);
+  /* @alternate */ background: -ms-linear-gradient(top, SPECIAL_COLUMN_GRADIENT_SELECTED);
+  /* @alternate */ background: linear-gradient(to bottom, SPECIAL_COLUMN_GRADIENT_SELECTED);
+}

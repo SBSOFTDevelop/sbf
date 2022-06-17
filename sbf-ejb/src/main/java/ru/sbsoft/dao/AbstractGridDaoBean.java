@@ -1,17 +1,5 @@
 package ru.sbsoft.dao;
 
-import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
-import javax.ejb.EJB;
-import javax.ejb.EJBException;
-import javax.ejb.SessionContext;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import ru.sbsoft.common.Defs;
 import ru.sbsoft.meta.columns.ColumnInfo;
 import ru.sbsoft.model.PageFilterInfo;
@@ -22,14 +10,25 @@ import ru.sbsoft.shared.exceptions.FilterRequireException;
 import ru.sbsoft.shared.interfaces.DynamicGridType;
 import ru.sbsoft.shared.interfaces.GridType;
 import ru.sbsoft.shared.interfaces.ObjectType;
-import ru.sbsoft.shared.meta.Columns;
+import ru.sbsoft.shared.meta.IColumns;
 import ru.sbsoft.shared.meta.aggregate.IAggregateDef;
 import ru.sbsoft.shared.model.CustomReportFilterInfo;
-import ru.sbsoft.shared.model.CustomReportInfo;
 import ru.sbsoft.shared.model.LookupInfoModel;
 import ru.sbsoft.shared.model.MarkModel;
 import ru.sbsoft.shared.model.enums.GridTypeEnum;
-import ru.sbsoft.shared.param.StringParamInfo;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+import javax.ejb.EJB;
+import javax.ejb.EJBException;
+import javax.ejb.SessionContext;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -105,7 +104,7 @@ public abstract class AbstractGridDaoBean implements IGridDao, GridSupport {
     }
 
     @Override
-    public Columns getMeta(GridContext context) {
+    public IColumns getMeta(GridContext context) {
         DefaultTemplateBuilder builder = getTemplateBuilder(context);
         builder.setTemplateState(TemplateStateMode.META);
         return builder.getMeta();
@@ -171,20 +170,10 @@ public abstract class AbstractGridDaoBean implements IGridDao, GridSupport {
         GridType gridType;
         switch (gridTypeEnum) {
             case NORM:
-                gridType = new GridType() {
-                    @Override
-                    public String getCode() {
-                        return gridCode;
-                    }
-                };
+                gridType = () -> gridCode;
                 break;
             case DYN:
-                gridType = new DynamicGridType(new ObjectType() {
-                    @Override
-                    public String getCode() {
-                        return gridCode;
-                    }
-                }, null, "");
+                gridType = new DynamicGridType((ObjectType) () -> gridCode, null, "");
                 break;
             default:
             throw new IllegalArgumentException("Unknown grid type: " + gridTypeEnum.name());    

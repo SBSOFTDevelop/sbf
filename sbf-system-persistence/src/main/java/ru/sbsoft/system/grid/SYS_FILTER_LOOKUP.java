@@ -47,10 +47,7 @@ public class SYS_FILTER_LOOKUP implements Serializable {
             if (this.SYS_FILTER_NUM != other.SYS_FILTER_NUM) {
                 return false;
             }
-            if (this.NUM != other.NUM) {
-                return false;
-            }
-            return true;
+            return this.NUM == other.NUM;
         }
     }
 
@@ -149,9 +146,6 @@ public class SYS_FILTER_LOOKUP implements Serializable {
         if (this.SYS_FILTER_NUM != other.SYS_FILTER_NUM) {
             return false;
         }
-        if (this.NUM != other.NUM) {
-            return false;
-        }
-        return true;
+        return this.NUM == other.NUM;
     }
 }

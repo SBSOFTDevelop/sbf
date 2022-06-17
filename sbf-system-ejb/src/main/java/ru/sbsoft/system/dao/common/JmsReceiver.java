@@ -32,7 +32,7 @@ public class JmsReceiver implements MessageListener {
     @EJB
     private IMultiOperationManagerDao operationManagerDao;
 
-    private Logger LOG = Logger.getLogger(JmsReceiver.class.getName());
+    private final Logger logger = Logger.getLogger(JmsReceiver.class.getName());
 
     // public static List<String> messages = new ArrayList<String>();
     @Override
@@ -47,7 +47,7 @@ public class JmsReceiver implements MessageListener {
 
             //rcvMessage.acknowledge();
         } catch (JMSException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
 

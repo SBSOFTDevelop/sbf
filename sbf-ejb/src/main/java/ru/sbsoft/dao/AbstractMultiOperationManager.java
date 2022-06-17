@@ -61,7 +61,7 @@ public abstract class AbstractMultiOperationManager implements IMultiOperationMa
     //  @EJB
     //  private ILockDao lockDao;
     @EJB
-    protected IUtilEJB utilEJB;
+    protected IUtilEJB<Runnable,Exception> utilEJB;
 
     @Resource
     private javax.ejb.SessionContext sc;
@@ -252,6 +252,8 @@ public abstract class AbstractMultiOperationManager implements IMultiOperationMa
 
     }
 
+
+
     private boolean handleException(Exception ex, Long operationId, String operationCode, IOperationProcessor processor) {
         if ((ex instanceof OperationException) && (ex.getCause() instanceof InterruptedException)) {
             //Пользователь отменил операцию, без паники
@@ -262,7 +264,7 @@ public abstract class AbstractMultiOperationManager implements IMultiOperationMa
             //Прочие ошибки
             LOGGER.error("Operation #" + operationId + " (" + operationCode + ") execution error", ex);
             try {
-
+                operationDao.changeOperationStatus(operationId, checkAndGetCurrentStatus(processor, operationId), ERROR);
                 OperationEvent event = new OperationEvent();
                 event.setType(OperationEventType.ERROR);
                 event.setCreateDate(new Date());
@@ -270,8 +272,7 @@ public abstract class AbstractMultiOperationManager implements IMultiOperationMa
                 event.setTrace(new ThrowableWrapper(ex).generateTrace());
                 operationDao.writeLog(operationId, event);
                 //
-                final MultiOperationStatus currentStatus = checkAndGetCurrentStatus(processor, operationId);
-                operationDao.changeOperationStatus(operationId, currentStatus, ERROR);
+                //final MultiOperationStatus currentStatus = checkAndGetCurrentStatus(processor, operationId);
             } catch (OperationException ex1) {
                 LOGGER.error("Cannot make operation #" + operationId + " (" + operationCode + ") erorred", ex1);
             }

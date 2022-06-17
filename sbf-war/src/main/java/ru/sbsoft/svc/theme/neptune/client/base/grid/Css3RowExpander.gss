@@ -1,0 +1,48 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def SPECIAL_COLUMN_GRADIENT value('theme.grid.specialColumnGradient');
+@def SPECIAL_COLUMN_GRADIENT_SELECTED value('theme.grid.specialColumnGradientSelected');
+
+.hasExpander .grid-cell, 
+.hasExpander .grid-cellInner {
+  background: none repeat scroll 0 0 transparent;
+  border-width: 0;
+}
+
+.grid-row .cell {
+  vertical-align: top;
+  background: -webkit-linear-gradient(top, SPECIAL_COLUMN_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(top, SPECIAL_COLUMN_GRADIENT);
+  /* @alternate */ background: linear-gradient(to bottom, SPECIAL_COLUMN_GRADIENT);
+}
+
+.grid-rowSelected .cell {
+  vertical-align: top;
+  background: -webkit-linear-gradient(top, SPECIAL_COLUMN_GRADIENT_SELECTED);
+  /* @alternate */ background: -ms-linear-gradient(top, SPECIAL_COLUMN_GRADIENT_SELECTED);
+  /* @alternate */ background: linear-gradient(to bottom, SPECIAL_COLUMN_GRADIENT_SELECTED);
+}
+
+.rowExpander {
+  cursor: pointer;
+  margin: 5px 3px 3px 3px;
+}
+
+.rowCollapsed .rowExpander {
+  gwt-sprite: "expand";
+}
+
+.rowExpanded .rowExpander {
+  gwt-sprite: "collapse";
+}
+
+.rowCollapsed .grid-rowBodyRow {
+  display: none;
+}
+
+.rowExpanded .grid-rowBodyRow {
+  display: table-row;
+}

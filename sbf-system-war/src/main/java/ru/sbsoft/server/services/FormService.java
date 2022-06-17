@@ -57,9 +57,9 @@ public class FormService extends SBFRemoteServiceServlet implements IFormService
 
         if (ex instanceof javax.ejb.EJBTransactionRolledbackException) {
             final Throwable cause1 = ex.getCause();
-            if ((cause1 != null) && (cause1 instanceof javax.ejb.TransactionRolledbackLocalException)) {
+            if ((cause1 instanceof javax.ejb.TransactionRolledbackLocalException)) {
                 final Throwable cause2 = cause1.getCause();
-                if ((cause2 != null) && (cause2 instanceof javax.persistence.OptimisticLockException)) {
+                if ((cause2 instanceof javax.persistence.OptimisticLockException)) {
                     throw new OptimisticLockException(cause2.getMessage());
                 }
             }

@@ -11,13 +11,12 @@ import javax.jms.Message;
 import javax.jms.Queue;
 
 /**
- *
  * @author sychugin
  */
 @ApplicationScoped
 public class JmsSender {
 
-    private Logger LOG = Logger.getLogger(JmsSender.class.getName());
+    private final Logger logger = Logger.getLogger(JmsSender.class.getName());
 
     @Resource(mappedName = ru.sbsoft.common.jdbc.Const.JMS_QUEUE)
     private Queue queue;
@@ -25,17 +24,19 @@ public class JmsSender {
     @Inject
     private JMSContext context;
 
-    
+
     public void sendMessage(long operId, String opCode) {
 
         try {
-            
+
             Message message = context.createMessage();
             message.setLongProperty(ru.sbsoft.common.jdbc.Const.OPER_ID, operId);
             message.setStringProperty(ru.sbsoft.common.jdbc.Const.OPER_CODE, opCode);
+            message.setStringProperty("_AMQ_DUPL_ID", "" + operId);
+
             context.createProducer().send(queue, message);
         } catch (JMSException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
 }

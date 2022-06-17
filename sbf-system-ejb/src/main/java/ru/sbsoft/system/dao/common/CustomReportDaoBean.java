@@ -72,10 +72,12 @@ public class CustomReportDaoBean implements ICustomReportDao {
             return false;
         }
         for (CustomRepfilterEntity re : reportEntity.getFilters()) {
-            if (!filters.stream().filter(f -> re.getCode().equals(f.getName()) && re.getValue().equals(f.getValue())).findFirst().isPresent()) {
+
+           // if (!filters.stream().anyMatch(f -> re.getCode().equals(f.getName()) && re.getValue().equals(f.getValue())))
+            if (filters.stream().noneMatch(f -> re.getCode().equals(f.getName()) && re.getValue().equals(f.getValue()))) {
                 return false;
             }
-        };
+        }
         return true;
     }
 
@@ -87,7 +89,7 @@ public class CustomReportDaoBean implements ICustomReportDao {
         reportInfo.setIncudeIdRow(entity.isIncludeIdRow());
         reportInfo.setHeaderSQL(entity.getHeaderSQL());
         if (entity.getParams() != null) {
-            reportInfo.setParams(entity.getParams().stream().map(pe -> paramToModel(pe)).collect(Collectors.toList()));
+            reportInfo.setParams(entity.getParams().stream().map(this::paramToModel).collect(Collectors.toList()));
         }
         return reportInfo;
     }

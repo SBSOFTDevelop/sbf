@@ -1,0 +1,47 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def TEXT_SIZE value('theme.fieldset.text.size');
+@def TEXT_COLOR value('theme.fieldset.text.color');
+@def TEXT_FAMILY value('theme.fieldset.text.family');
+@def TEXT_WEIGHT value('theme.fieldset.text.weight');
+@def BORDER_WIDTH value('theme.fieldset.border.toString');
+@def BORDER_COLOR value('theme.fieldset.border.color');
+@def BORDER_STYLE value('theme.fieldset.border.style');
+@def BACKGROUND_COLOR value('theme.fieldset.backgroundColor');
+@def FIELDSET_PADDING value('theme.fieldset.padding');
+@def LEGEND_PADDING value('theme.fieldset.legendPadding');
+
+.fieldSet {
+  border-color: BORDER_COLOR;
+  border-style: BORDER_STYLE;
+  border-width: BORDER_WIDTH;
+  background-color: BACKGROUND_COLOR;
+  padding: FIELDSET_PADDING !important;
+}
+
+.fieldSet legend {
+  font-size: TEXT_SIZE;
+  font-family: TEXT_FAMILY;
+  font-weight: TEXT_WEIGHT;
+  color: TEXT_COLOR;
+  padding: LEGEND_PADDING;
+}
+
+.collapseIcon {
+  gwt-sprite: "collapseIcon";
+}
+
+.collapseOverIcon {
+  gwt-sprite: "collapseOverIcon";
+}
+
+.expandIcon {
+  gwt-sprite: "expandIcon";
+}
+
+.expandOverIcon {
+  gwt-sprite: "expandOverIcon";
+}

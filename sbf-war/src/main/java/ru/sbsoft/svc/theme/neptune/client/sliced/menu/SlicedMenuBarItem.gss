@@ -1,0 +1,31 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def ITEM_PADDING value('theme.menu.bar.itemPadding.toString');
+@def TEXT_COLOR value('theme.menu.bar.itemText.color');
+@def TEXT_FAMILY value('theme.menu.bar.itemText.family');
+@def TEXT_SIZE value('theme.menu.bar.itemText.size');
+@def TEXT_WEIGHT value('theme.menu.bar.itemText.weight');
+@def TEXT_LINE_HEIGHT value('theme.menu.bar.itemLineHeight');
+
+.over {
+  gwt-sprite: "itemOver";
+  height: auto;
+}
+
+.active {
+  gwt-sprite: "itemActive";
+  height: auto;
+}
+
+.menuBarItem {
+  font-size: TEXT_SIZE;
+  font-family: TEXT_FAMILY;
+  font-weight: TEXT_WEIGHT;
+  color: TEXT_COLOR;
+  line-height: TEXT_LINE_HEIGHT;
+  padding: ITEM_PADDING;
+  float: left;
+}

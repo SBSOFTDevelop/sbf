@@ -1,0 +1,19 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.icon {
+  float: left;
+  width: 47px;
+  height: 32px;
+  display: none;
+}
+
+.message {
+  padding: 3px 0;
+}
+
+.content {
+}

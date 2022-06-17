@@ -1,0 +1,59 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BORDER_COLOR value('theme.borderColor');
+@def DISABLED_TEXT_COLOR value('theme.disabledTextColor');
+@def DISABLED_OPACITY value('theme.disabledOpacity');
+@def IE_DISABLED_OPACITY eval('ru.sbsoft.svc.themebuilder.base.client.CssResourceThemeUtils.opacityToIe8Filter(theme().disabledOpacity())');
+
+@if (is("user.agent", "safari")) {
+  :focus {
+    outline: none !important;
+  }
+}
+
+.border {
+  border: 1px solid BORDER_COLOR !important;
+}
+
+.borderLeft {
+  border: none;
+  border-left: 1px solid BORDER_COLOR !important;
+}
+
+.borderRight {
+  border: none;
+  border-right: 1px solid BORDER_COLOR !important;
+}
+
+.borderTop {
+  border: none;
+  border-top: 1px solid BORDER_COLOR !important;
+}
+
+.borderBottom {
+  border: none;
+  border-bottom: 1px solid BORDER_COLOR !important;
+}
+
+.disabled {
+  color: DISABLED_TEXT_COLOR !important;
+  cursor: default !important;
+}
+
+.disabled * {
+  cursor: default !important;
+}
+
+@if (is("user.agent", "ie8")) {
+  .disabled {
+    filter: IE_DISABLED_OPACITY;
+  }
+}
+@else  {
+  .disabled {
+    opacity: DISABLED_OPACITY;
+  }
+}

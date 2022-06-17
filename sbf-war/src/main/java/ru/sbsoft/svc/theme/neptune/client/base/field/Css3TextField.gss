@@ -1,0 +1,39 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def HEIGHT value('theme.field.height', 'px');
+@def LINE_HEIGHT value('theme.field.lineHeight');
+@def PADDING value('theme.field.padding.toString');
+
+.text {
+  height: auto;
+}
+
+.text, 
+.area {
+  padding: PADDING;
+  resize: none;
+}
+
+.area {
+  overflow: visible;
+}
+
+@if (is("user.agent", "gecko1_8") || is("user.agent", "gecko")) {
+  .area {
+    padding: 0;
+  }
+  .text {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.text {
+  height: HEIGHT;
+}
+
+.file {
+}

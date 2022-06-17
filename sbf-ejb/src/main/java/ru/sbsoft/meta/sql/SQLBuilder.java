@@ -290,7 +290,7 @@ public class SQLBuilder {
 
                 FilterInfoGroup usr = filters.getUserFilters();
                 FilterInfo tmp = info.getTempFilter();
-                if (tmp != null) {
+                if (tmp != null && ! usr.getChildFilters().contains(tmp)) {
                     usr = new FilterInfoGroup(BooleanOperator.AND, usr.getChildFilters());
                     usr.getChildFilters().add(tmp);
                 }

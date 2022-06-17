@@ -1,8 +1,10 @@
 package ru.sbsoft.meta.context;
 
 import ru.sbsoft.common.jdbc.QueryContext;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import ru.sbsoft.common.jdbc.QueryParam;
 
 /**
@@ -39,10 +41,12 @@ public abstract class AbstractQueryContext implements QueryContext {
     @Override
     public final QueryParam get(String name) {
         QueryParam qp = getParam(name);
-        if(qp != null){
+        if (qp != null) {
+
+
             return qp;
         }
-        if(getParent() != null){
+        if (getParent() != null) {
             return getParent().get(name);
         }
         return null;
@@ -50,6 +54,7 @@ public abstract class AbstractQueryContext implements QueryContext {
 
     @Override
     public QueryParam put(String name, QueryParam param) {
+
         return getParams().put(name, param);
     }
 
@@ -61,13 +66,8 @@ public abstract class AbstractQueryContext implements QueryContext {
     }
 
     protected QueryParam getParam(String name) {
-        if (params != null) {
-            final QueryParam param = params.get(name);
-            if (param != null) {
-                return param;
-            }
-        }
-        return null;
+        return params != null ? params.get(name) : null;
+
     }
 
 }

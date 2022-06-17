@@ -1,5 +1,20 @@
 package ru.sbsoft.operation.kladr;
 
+import net.sf.sevenzipjbinding.ArchiveFormat;
+import net.sf.sevenzipjbinding.SevenZipException;
+import ru.sbsoft.common.IO;
+import ru.sbsoft.dao.IStorageDao;
+import ru.sbsoft.generator.api.Lookup;
+import ru.sbsoft.model.StorageItem;
+import ru.sbsoft.operation.AbstractOperationRunner;
+import ru.sbsoft.processor.ServerOperationContext;
+import ru.sbsoft.shared.kladr.KLADRItem;
+import ru.sbsoft.shared.model.operation.OperationException;
+import ru.sbsoft.system.Parameters;
+import ru.sbsoft.transaction.SQLBatch;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,21 +22,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import net.sf.sevenzipjbinding.ArchiveFormat;
-import net.sf.sevenzipjbinding.SevenZipException;
-import ru.sbsoft.common.IO;
-import ru.sbsoft.dao.IStorageDao;
-import ru.sbsoft.model.StorageItem;
-import ru.sbsoft.operation.AbstractOperationRunner;
-import ru.sbsoft.operation.ProgressCallback;
-import ru.sbsoft.processor.ServerOperationContext;
-import ru.sbsoft.shared.kladr.KLADRItem;
-import ru.sbsoft.shared.model.operation.OperationException;
-import ru.sbsoft.system.Parameters;
-import ru.sbsoft.transaction.SQLBatch;
-import ru.sbsoft.generator.api.Lookup;
 
 /**
  * Класс, представляющий методы импорта справочника КЛАДР из таблиц DBF в таблицы СУБД <code>KD_DOMAIN, KD_STREET, KD_HOUSE</code>.
@@ -37,8 +37,8 @@ import ru.sbsoft.generator.api.Lookup;
  */
 public abstract class AbstractKLADRImportRunner extends AbstractOperationRunner {
 
-    private static String _7Z_EXTENSION = "7Z";
-    private static String _ARJ_EXTENSION = "ARJ";
+    private static final String _7Z_EXTENSION = "7Z";
+    private static final String _ARJ_EXTENSION = "ARJ";
     //
     private KLADRStore store;
     @Lookup
@@ -57,6 +57,9 @@ public abstract class AbstractKLADRImportRunner extends AbstractOperationRunner 
     public void run() throws Exception {
         Long storageId = (Long) getParametersMap().get("file").getValue();
         final StorageItem file = storageDao.getStorageItem(storageId);
+
+
+
         processFile(file);
     }
 
@@ -102,10 +105,10 @@ public abstract class AbstractKLADRImportRunner extends AbstractOperationRunner 
                     q.setParameter(nextParamIndex(), code.substring(2, 5));
                     q.setParameter(nextParamIndex(), code.substring(5, 8));
                     q.setParameter(nextParamIndex(), code.substring(8, 11));
-                    q.setParameter(nextParamIndex(), (String) record.get("SOCR"));
-                    q.setParameter(nextParamIndex(), (String) record.get("NAME"));
-                    q.setParameter(nextParamIndex(), (String) record.get("STATUS"));
-                    q.setParameter(nextParamIndex(), (String) record.get("INDEX"));
+                    q.setParameter(nextParamIndex(), record.get("SOCR"));
+                    q.setParameter(nextParamIndex(), record.get("NAME"));
+                    q.setParameter(nextParamIndex(), record.get("STATUS"));
+                    q.setParameter(nextParamIndex(), record.get("INDEX"));
                     q.setParameter(nextParamIndex(), code.substring(11, 13));
                 }
             };
@@ -122,9 +125,9 @@ public abstract class AbstractKLADRImportRunner extends AbstractOperationRunner 
                     q.setParameter(nextParamIndex(), code.substring(5, 8));
                     q.setParameter(nextParamIndex(), code.substring(8, 11));
                     q.setParameter(nextParamIndex(), code.substring(11, 15));
-                    q.setParameter(nextParamIndex(), (String) record.get("SOCR"));
-                    q.setParameter(nextParamIndex(), (String) record.get("NAME"));
-                    q.setParameter(nextParamIndex(), (String) record.get("INDEX"));
+                    q.setParameter(nextParamIndex(), record.get("SOCR"));
+                    q.setParameter(nextParamIndex(), record.get("NAME"));
+                    q.setParameter(nextParamIndex(), record.get("INDEX"));
                     q.setParameter(nextParamIndex(), code.substring(15, 17));
                 }
             };
@@ -142,9 +145,9 @@ public abstract class AbstractKLADRImportRunner extends AbstractOperationRunner 
                     q.setParameter(nextParamIndex(), code.substring(8, 11));
                     q.setParameter(nextParamIndex(), code.substring(11, 15));
                     q.setParameter(nextParamIndex(), code.substring(15, 19));
-                    q.setParameter(nextParamIndex(), (String) record.get("SOCR"));
-                    q.setParameter(nextParamIndex(), (String) record.get("NAME"));
-                    q.setParameter(nextParamIndex(), (String) record.get("INDEX"));
+                    q.setParameter(nextParamIndex(), record.get("SOCR"));
+                    q.setParameter(nextParamIndex(), record.get("NAME"));
+                    q.setParameter(nextParamIndex(), record.get("INDEX"));
                 }
             };
             load(archiveReader, batch, "DOMA.DBF", "Загрузка справочника домов");
@@ -184,11 +187,9 @@ public abstract class AbstractKLADRImportRunner extends AbstractOperationRunner 
         info("Создание полнотекстового индекса");
         initProgress(indexBuilder.total());
         final File indexDirectory = KLADRManager.getDirectory(parameters, store);
-        indexBuilder.build(indexDirectory, new ProgressCallback() {
-            public void work(int done) throws InterruptedException {
-                updateProgress(done);
-                checkInterruptedLazy();
-            }
+        indexBuilder.build(indexDirectory, done -> {
+            updateProgress(done);
+            checkInterruptedLazy();
         });
 
         parameters.setInt(KLADRManager.KLADR_INSTANCE_NUMBER_PARAM, store.getIndex());

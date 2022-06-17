@@ -41,7 +41,7 @@ public class EMailDaoBean implements IEMailDao {
     Because of unability to config mail jndi-name for ear on wildfly. 
     ServerConfig need ru.sbsoft.mail.full_jndi-name environment parameter to be set.
      */
-    private Session sessionMail;
+    private final Session sessionMail;
 
     @EJB
     private Ii18nDao i18nDao;

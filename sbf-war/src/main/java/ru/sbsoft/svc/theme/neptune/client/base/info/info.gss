@@ -1,0 +1,30 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def RADIUS value('theme.info.borderRadius', 'px');
+@def BORDER_STYLE value('theme.info.border.style');
+@def BORDER_COLOR value('theme.info.border.color');
+@def BORDER_WIDTH value('theme.info.border.toString');
+@def CSS3_LEFTOVER value('theme.info.radiusMinusBorderWidth.toString');
+@def PADDING value('theme.info.padding.toString');
+@def MARGIN value('theme.info.margin.toString');
+@def OPACITY value('theme.info.opacity');
+@def BACKGROUND_COLOR value('theme.info.backgroundColor');
+
+.infoWrap {
+  border-color: BORDER_COLOR;
+  border-style: BORDER_STYLE;
+  border-width: BORDER_WIDTH;
+  border-radius: RADIUS;
+  overflow: hidden;
+  background-color: BACKGROUND_COLOR;
+  opacity: OPACITY;
+  margin: MARGIN;
+  padding: CSS3_LEFTOVER;
+}
+
+.info {
+  padding: PADDING;
+}

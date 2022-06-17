@@ -1,0 +1,12 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.button {
+  overflow: hidden;
+  margin-left: 2px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}

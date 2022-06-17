@@ -1,0 +1,10 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BACKGROUND_COLOR value('theme.borderLayout.panelBackgroundColor');
+
+.container {
+  background-color: BACKGROUND_COLOR;
+}

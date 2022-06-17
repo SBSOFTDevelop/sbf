@@ -1,0 +1,21 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.invalid {
+}
+
+.editor {
+  background-color: white;
+}
+
+.editor textarea, 
+.editor .focus textarea {
+  border: 0 !important;
+}
+
+.frame {
+  border: none;
+}

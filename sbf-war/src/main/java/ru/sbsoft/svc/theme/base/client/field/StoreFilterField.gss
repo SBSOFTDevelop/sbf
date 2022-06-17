@@ -1,0 +1,11 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+@if (is("svc.user.agent", "ie10")) {
+  .text::-ms-clear {
+    display: none;
+  }
+}

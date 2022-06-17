@@ -1,0 +1,42 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BACKGROUND_COLOR value('theme.accordionLayout.backgroundColor');
+@def BORDER_COLOR value('theme.accordionLayout.border.color');
+@def BORDER_STYLE value('theme.accordionLayout.border.style');
+@def BORDER_WIDTH value('theme.accordionLayout.border.toString');
+@def HEADER_BACKGROUND_COLOR value('theme.accordionLayout.headerBackgroundColor');
+@def PADDING value('theme.accordionLayout.headerPadding');
+@def HEADER_PADDING value('theme.accordionLayout.headerPadding');
+@def HEADER_GRADIENT value('theme.accordionLayout.headerGradient');
+
+.panel {
+  outline: 0 none;
+  border-style: BORDER_STYLE;
+  border-width: BORDER_WIDTH;
+  border-color: BORDER_COLOR;
+}
+
+.header {
+  gwt-sprite: "headerBackground";
+  height: auto;
+  position: relative;
+  overflow: visible;
+  padding: PADDING;
+}
+
+.body {
+  background-color: BACKGROUND_COLOR;
+  border: none;
+  overflow: hidden;
+  position: relative;
+}
+
+.footer {
+  position: relative;
+}
+
+.bodyWrap {
+}

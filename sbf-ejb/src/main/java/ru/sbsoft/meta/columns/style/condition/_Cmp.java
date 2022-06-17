@@ -33,7 +33,7 @@ abstract class _Cmp<V extends Comparable<V>> {
 
     public IGridCondition createCondition() {
         IGridExpression<V> e1 = new SimpleGridExpression<>(col.getAlias());
-        IGridExpression<V> e2 = col2 != null ? new SimpleGridExpression<V>(col2.getAlias()) : new ConstGridExpression<>(val);
+        IGridExpression<V> e2 = col2 != null ? new SimpleGridExpression<>(col2.getAlias()) : new ConstGridExpression<>(val);
         return new ComparationGridCondition(e1, e2, cmp);
     }
 

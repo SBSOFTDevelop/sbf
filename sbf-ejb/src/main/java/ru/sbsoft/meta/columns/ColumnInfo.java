@@ -25,17 +25,19 @@ import ru.sbsoft.shared.interfaces.NamedItem;
 import ru.sbsoft.shared.api.i18n.NonLocalizedString;
 import ru.sbsoft.shared.grid.format.IExpCellFormat;
 import ru.sbsoft.shared.interfaces.NumeratedItem;
+import ru.sbsoft.shared.interfaces.ObjectType;
 import ru.sbsoft.shared.meta.Aggregate;
 import ru.sbsoft.shared.meta.CodebaseField;
 import ru.sbsoft.shared.meta.Column;
 import ru.sbsoft.shared.meta.ColumnGroup;
 import ru.sbsoft.shared.meta.ColumnType;
 import ru.sbsoft.shared.meta.ColumnWrapType;
+import ru.sbsoft.shared.meta.IColumn;
 import ru.sbsoft.shared.meta.IColumnCustomInfo;
+import ru.sbsoft.shared.meta.IValueSelectorConfig;
 import ru.sbsoft.shared.meta.LookupGridInfo;
 import ru.sbsoft.shared.meta.LookupKeyType;
 import ru.sbsoft.shared.meta.Style;
-import ru.sbsoft.shared.meta.UpdateInfo;
 import ru.sbsoft.shared.meta.filter.Dictionary;
 import ru.sbsoft.shared.model.ImageBase64;
 
@@ -69,6 +71,7 @@ public abstract class ColumnInfo<T> {
     protected String alias;
     protected ILocalizedString caption;
     protected int width;
+    protected String nameClause;
     //
     protected boolean visible = true;
     protected boolean hidden = false;
@@ -88,20 +91,33 @@ public abstract class ColumnInfo<T> {
     private AbstractColumnFooter footer;
     private List<Style> styles;
     private final List<ConditionalCellStyle> gridStyles = new ArrayList<>();
+    private IValueSelectorConfig<ObjectType> valueSelectorConfig;
     //
     private Map<T, URL> iconMap = null;
 
     private final Map<Object, ILocalizedString> valSet = new HashMap<>();
 
-    private UpdateInfo updateInfo;
+//    private UpdateInfo updateInfo;
+    private boolean forUpdate = false;
+    private Integer maxLength;
     //
     private IGridCondition editCondition;
+    private IGridCondition signAllCondition;
+    private IGridCondition signPositiveCondition;
 
 //
     private IColumnCustomInfo customInfo;
     private IExpCellFormat expCellFormat;
 //
     private ColumnWrapType wordWrap;
+
+    public ColumnInfo(ColumnType type) {
+        this.type = type;
+    }
+
+    public final ColumnType getType() {
+        return type;
+    }
 
     public ColumnWrapType getWordWrap() {
         return wordWrap;
@@ -128,15 +144,6 @@ public abstract class ColumnInfo<T> {
     public ColumnInfo<T> setExpCellFormat(IExpCellFormat expCellFormat) {
         this.expCellFormat = expCellFormat;
         return this;
-    }
-
-    public ColumnInfo(ColumnType type) {
-        super();
-        this.type = type;
-    }
-
-    public final ColumnType getType() {
-        return type;
     }
 
     public String getClause() {
@@ -175,6 +182,15 @@ public abstract class ColumnInfo<T> {
         this.width = width;
     }
 
+    public String getNameClause() {
+        return nameClause;
+    }
+
+    public ColumnInfo<T> setNameClause(String nameClause) {
+        this.nameClause = nameClause;
+        return this;
+    }
+
     /**
      * Метод вызывается построителем запросов экземпляром класса
      * {@link ru.sbsoft.meta.sql.SQLBuilder}.
@@ -191,8 +207,9 @@ public abstract class ColumnInfo<T> {
         sb.append(alias);
     }
 
-    public Column getColumn() {
+    public IColumn getColumn(int index) {
         Column result = new Column();
+        result.setIndex(index);
         result.setCaption(caption);
         result.setDescription(toolTip);
         result.setAlias(alias);
@@ -222,15 +239,19 @@ public abstract class ColumnInfo<T> {
             result.setIconMap(ico);
         }
         result.setGridStyles(gridStyles.isEmpty() ? null : gridStyles);
-        if (valSet != null && !valSet.isEmpty()) {
+        if (!valSet.isEmpty()) {
             result.setValueSet(valSet);
         }
-        result.setUpdateInfo(updateInfo);
+        result.setForUpdate(forUpdate);
+        result.setMaxLength(maxLength);
         result.setCustomInfo(customInfo);
         result.setExpCellFormat(expCellFormat);
         result.setEditCondition(editCondition);
+        result.setSignAllCondition(signAllCondition);
+        result.setSignPositiveCondition(signPositiveCondition);
         result.setWordWrap(wordWrap);
         result.setCombo(combo);
+        result.setValueSelectorConfig(valueSelectorConfig);
 
         return result;
     }
@@ -329,8 +350,9 @@ public abstract class ColumnInfo<T> {
         return footer;
     }
 
-    public void setFooter(Aggregate aggregates) {
+    public ColumnInfo<T> setFooter(Aggregate aggregates) {
         this.footer = new AggregateColumnFooter(aggregates, aggregates.getFormat() != null ? aggregates.getFormat() : format);
+        return this;
     }
 
     public void setFooter(String expression) {
@@ -573,22 +595,10 @@ public abstract class ColumnInfo<T> {
         }
         return true;
     }
-
-    public UpdateInfo getUpdateInfo() {
-        return updateInfo;
-    }
-
-    public ColumnInfo<T> setUpdateInfo(UpdateInfo updateInfo) {
-        this.updateInfo = updateInfo;
+    
+    public ColumnInfo<T> forUpdate(){
+        forUpdate = true;
         return this;
-    }
-
-    public ColumnInfo<T> setUpdateInfo(String tableName) {
-        return setUpdateInfo(new UpdateInfo(tableName, clause.substring(clause.lastIndexOf(".") + 1)));
-    }
-
-    public ColumnInfo<T> setUpdateInfo(String tableName, int length) {
-        return setUpdateInfo(new UpdateInfo(tableName, clause.substring(clause.lastIndexOf(".") + 1), length));
     }
 
     public IGridCondition getEditCondition() {
@@ -599,7 +609,7 @@ public abstract class ColumnInfo<T> {
         this.editCondition = editCondition;
         return this;
     }
-
+    
     public ColumnInfo<T> setEditCondition(IGridConditionFactory conditionFactory) {
         return setEditCondition(conditionFactory != null ? conditionFactory.createCondition() : null);
     }
@@ -609,6 +619,46 @@ public abstract class ColumnInfo<T> {
             conditionFactory.setColumn(this);
         }
         return setEditCondition(conditionFactory != null ? conditionFactory.createCondition() : null);
+    }
+    
+    public IGridCondition getSignAllCondition() {
+        return signAllCondition;
+    }
+
+    public ColumnInfo<T> setSignAllCondition(IGridCondition signAllCondition) {
+        this.signAllCondition = signAllCondition;
+        return this;
+    }
+    
+    public ColumnInfo<T> setSignAllCondition(IGridConditionFactory conditionFactory) {
+        return setSignAllCondition(conditionFactory != null ? conditionFactory.createCondition() : null);
+    }    
+    
+    public ColumnInfo<T> setSignAllCondition(IColumnConditionFactory<T> conditionFactory) {
+        if (conditionFactory != null) {
+            conditionFactory.setColumn(this);
+        }
+        return setSignAllCondition(conditionFactory != null ? conditionFactory.createCondition() : null);        
+    }
+
+    public IGridCondition getSignPositiveCondition() {
+        return signPositiveCondition;
+    }
+
+    public ColumnInfo<T> setSignPositiveCondition(IGridCondition signPositiveCondition) {
+        this.signPositiveCondition = signPositiveCondition;
+        return this;
+    }
+
+    public ColumnInfo<T> setSignPositiveCondition(IGridConditionFactory conditionFactory) {
+        return setSignPositiveCondition(conditionFactory != null ? conditionFactory.createCondition() : null);
+    }    
+    
+    public ColumnInfo<T> setSignPositiveCondition(IColumnConditionFactory<T> conditionFactory) {
+        if (conditionFactory != null) {
+            conditionFactory.setColumn(this);
+        }
+        return setSignPositiveCondition(conditionFactory != null ? conditionFactory.createCondition() : null);        
     }
 
     public IColumnCustomInfo getCustomInfo() {
@@ -622,6 +672,20 @@ public abstract class ColumnInfo<T> {
     
     public ColumnInfo<T> setCombo(List<String> combo) {
         this.combo = combo;
+        return this;
+    }
+
+    public ColumnInfo<T> setMaxLength(Integer maxLength) {
+        this.maxLength = maxLength;
+        return this;
+    }
+
+    public IValueSelectorConfig<?> getValueSelectorConfig() {
+        return valueSelectorConfig;
+    }
+
+    public ColumnInfo<T> setValueSelectorConfig(IValueSelectorConfig<ObjectType> valueSelectorConfig) {
+        this.valueSelectorConfig = valueSelectorConfig;
         return this;
     }
 }

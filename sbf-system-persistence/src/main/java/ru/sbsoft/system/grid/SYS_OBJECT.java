@@ -91,9 +91,6 @@ public class SYS_OBJECT implements Serializable {
             return false;
         }
         final SYS_OBJECT other = (SYS_OBJECT) obj;
-        if (this.RECORD_ID != other.RECORD_ID) {
-            return false;
-        }
-        return true;
+        return this.RECORD_ID == other.RECORD_ID;
     }
 }

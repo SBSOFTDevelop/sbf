@@ -1,8 +1,44 @@
 package ru.sbsoft.system.dao.common;
 
-import ru.sbsoft.common.ServerConfig;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ru.sbsoft.common.ServerConfig;
+import ru.sbsoft.common.jdbc.NamedParameterStatement;
+import ru.sbsoft.dao.IApplicationDao;
+import ru.sbsoft.dao.IJdbcWorkExecutor;
+import ru.sbsoft.dao.JdbcWorkExecutor;
+import ru.sbsoft.dao.operations.IMultiOperationDao;
+import ru.sbsoft.processor.OperationLogger;
+import ru.sbsoft.session.SessionUtils;
+import ru.sbsoft.shared.FilterInfo;
+import ru.sbsoft.shared.Modifier;
+import ru.sbsoft.shared.OperationObject;
+import ru.sbsoft.shared.api.i18n.Ii18nDao;
+import ru.sbsoft.shared.api.i18n.consts.SBFGeneralStr;
+import ru.sbsoft.shared.interfaces.ObjectType;
+import ru.sbsoft.shared.interfaces.OperationType;
+import ru.sbsoft.shared.meta.Wrapper;
+import ru.sbsoft.shared.model.OperationEvent;
+import ru.sbsoft.shared.model.OperationEventType;
+import ru.sbsoft.shared.model.enums.MultiOperationStatus;
+import ru.sbsoft.shared.model.operation.*;
+import ru.sbsoft.shared.param.DTO;
+import ru.sbsoft.system.common.MultiOperationEntity;
+import ru.sbsoft.system.common.MultiOperationLogEntity;
+import ru.sbsoft.system.common.MultiOperationParameterEntity;
+import ru.sbsoft.system.dao.common.helpers.OperationLogDaoHelper;
+import ru.sbsoft.system.dao.common.json.EnumJsonAdapter;
+import ru.sbsoft.system.dao.common.json.FilterInfoAdapter;
+import ru.sbsoft.system.dao.common.json.ObjectTypeAdapter;
+import ru.sbsoft.system.dao.common.json.WrapperAdapter;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+import javax.ejb.*;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,53 +47,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
-import javax.ejb.EJB;
-import javax.ejb.EJBException;
-import javax.ejb.Remote;
-import javax.ejb.SessionContext;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-import javax.persistence.PersistenceContext;
-import ru.sbsoft.common.jdbc.NamedParameterStatement;
-import ru.sbsoft.dao.IApplicationDao;
-import ru.sbsoft.shared.api.i18n.Ii18nDao;
-import ru.sbsoft.dao.operations.IMultiOperationDao;
-import ru.sbsoft.processor.OperationLogger;
-import ru.sbsoft.session.SessionUtils;
-import ru.sbsoft.shared.FilterInfo;
-import ru.sbsoft.shared.Modifier;
-import ru.sbsoft.shared.OperationObject;
-import ru.sbsoft.shared.api.i18n.consts.SBFGeneralStr;
-import ru.sbsoft.shared.interfaces.ObjectType;
-import ru.sbsoft.shared.interfaces.OperationType;
-import ru.sbsoft.shared.meta.Wrapper;
-import ru.sbsoft.shared.model.operation.IllegalOperationStatusException;
-import ru.sbsoft.shared.model.operation.NoSuchOperationCodeException;
-import ru.sbsoft.shared.model.OperationEvent;
-import ru.sbsoft.shared.model.OperationEventType;
-import ru.sbsoft.shared.model.operation.OperationException;
-import ru.sbsoft.shared.model.enums.MultiOperationStatus;
-import static ru.sbsoft.shared.model.enums.MultiOperationStatus.*;
-import ru.sbsoft.shared.model.operation.OperationInfo;
-import ru.sbsoft.shared.model.operation.OperationsSelectFilter;
-import ru.sbsoft.shared.param.DTO;
-import ru.sbsoft.system.common.MultiOperationEntity;
-import ru.sbsoft.system.common.MultiOperationLogEntity;
-import ru.sbsoft.system.common.MultiOperationParameterEntity;
-import ru.sbsoft.system.dao.common.helpers.OperationLogDaoHelper;
-import ru.sbsoft.system.dao.common.json.WrapperAdapter;
-import ru.sbsoft.system.dao.common.json.EnumJsonAdapter;
-import ru.sbsoft.system.dao.common.json.FilterInfoAdapter;
-import ru.sbsoft.dao.IJdbcWorkExecutor;
-import ru.sbsoft.dao.JdbcWorkExecutor;
-import ru.sbsoft.system.dao.common.json.ObjectTypeAdapter;
+
 
 @Stateless
 @Remote(IMultiOperationDao.class)
@@ -112,7 +102,7 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
     }
 
     public void setJdbcExecutor(IJdbcWorkExecutor jdbcExecutor) {
-        if (jdbcExecutor != null) {
+        if (this.jdbcExecutor != null) {
             throw new EJBException("jdbcExecutor is managed by container");
         }
         this.jdbcExecutor = jdbcExecutor;
@@ -123,7 +113,7 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
     }
 
     @Override
-    public Long createOperation(OperationType operationType, String locale, String currentModuleCode, boolean isNeedNotify) throws OperationException, NoSuchOperationCodeException {
+    public Long createOperation(OperationType operationType, String locale, String currentModuleCode, boolean isNeedNotify) throws OperationException {
         String username = SessionUtils.getCurrentUserName(sc);
         long id = createOperation(operationType, locale, currentModuleCode, username);
         MultiOperationEntity e = em.find(MultiOperationEntity.class, id);
@@ -133,14 +123,14 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
     }
 
     @Override
-    public Long createOperation(OperationType operationType, String locale, String currentModuleCode) throws OperationException, NoSuchOperationCodeException {
+    public Long createOperation(OperationType operationType, String locale, String currentModuleCode) throws OperationException {
         String username = SessionUtils.getCurrentUserName(sc);
         return createOperation(operationType, locale, currentModuleCode, username);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Long createSynchOperation(OperationType operationType, String currentModuleCode, String username) throws OperationException, NoSuchOperationCodeException {
+    public Long createSynchOperation(OperationType operationType, String currentModuleCode, String username) throws OperationException {
         username = username == null ? SessionUtils.getCurrentUserName(sc) : username;
         String locale = "ru_RU";
         final MultiOperationEntity operation = new MultiOperationEntity();
@@ -173,7 +163,7 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
     }
 
     @Override
-    public Long createOperation(OperationType operationType, String locale, String currentModuleCode, String username) throws OperationException, NoSuchOperationCodeException {
+    public Long createOperation(OperationType operationType, String locale, String currentModuleCode, String username) throws OperationException {
         final MultiOperationEntity operation = new MultiOperationEntity();
 
         operation.setOPERATION_CODE(operationType.getCode());
@@ -261,7 +251,7 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
         return d != null ? new java.sql.Date(d.getTime()) : null;
     }
 
-//    @Override
+    //    @Override
 //    public List<OperationInfo> listCurrentUserOperations(OperationsSelectFilter filter) throws OperationException {
 //        List<OperationInfo> result = new ArrayList<>();
 //        final String username = SessionUtils.getCurrentUserName(sc);
@@ -366,7 +356,7 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
     private static final String LIST_OPERATOINS_SQL = "select RECORD_ID from SR_MULTI_OPERATION where APP_CODE = ? and STATUS = ?";
 
     @Override
-    public List<Long> listAllOpeartionsWithStatusJdbc(MultiOperationStatus status) throws OperationException {
+    public List<Long> listAllOpeartionsWithStatusJdbc(MultiOperationStatus status) {
 
         final String appCode = ServerConfig.getServerPrefix() + applicationDao.getAppCode();
         LOG.logSql(LIST_OPERATOINS_SQL, appCode, status.name());
@@ -482,15 +472,27 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void changeOperationStatus_SameTransaction(Long operationId, MultiOperationStatus oldStatus, MultiOperationStatus newStatus) throws OperationException, IllegalOperationStatusException {
+    public void changeOperationStatus_SameTransaction(Long operationId, MultiOperationStatus oldStatus,
+                                                      MultiOperationStatus newStatus) throws OperationException {
         changeOperationStatus(operationId, oldStatus, newStatus);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void changeOperationStatus(Long operationId, MultiOperationStatus oldStatus, MultiOperationStatus newStatus) throws OperationException, IllegalOperationStatusException {
+    public void changeOperationStatus(Long operationId, MultiOperationStatus oldStatus,
+                                      MultiOperationStatus newStatus) throws OperationException {
+
+
         try {
             MultiOperationEntity operation = get(operationId);
+
+            if (operation.getSTATUS() == MultiOperationStatus.STARTED
+                    && ((MultiOperationStatus.CANCEL != newStatus)
+                    && (MultiOperationStatus.DONE != newStatus)
+                    && (MultiOperationStatus.ERROR != newStatus))) {
+                return;
+            }
+
             /*
             if (isLock) {
                 em.lock(operation, LockModeType.PESSIMISTIC_READ);
@@ -521,7 +523,7 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
                 em.lock(operation, LockModeType.NONE);
             }
              */
-            if (oldStatus == CANCEL && newStatus != CANCELED) {
+            if (oldStatus == MultiOperationStatus.CANCEL && newStatus != MultiOperationStatus.CANCELED) {
                 OperationEvent event = new OperationEvent();
                 event.setType(OperationEventType.WARNING);
                 event.setCreateDate(new Date());
@@ -545,18 +547,40 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
         return get(operationId).getSTATUS();
     }
 
+    private static String text2SqlStr(String line) {
+        if (null == line || line.isEmpty()) return null;
+
+
+        String result = "";
+
+        // Convert to char array.
+        char[] chars = line.toCharArray();
+
+        // Add only chars that are not equal to '\u0000' to result
+        for (char aChar : chars) {
+            if (aChar == '\u0000') continue;
+            result += aChar;
+            if (aChar == '\'') result += aChar;
+
+
+        }
+
+
+        return result;
+    }
+
     @Override
     public void writeLog(Long opertationId, OperationEvent event) throws OperationException {
         try {
             final MultiOperationLogEntity log = new MultiOperationLogEntity();
             log.setCREATE_DATE(event.getCreateDate() == null ? new Date() : event.getCreateDate());
             log.setCREATE_USER(SessionUtils.getCurrentUserName(sc));
-            log.setMESSAGE(event.getMessage());
-            log.setTRACE(event.getTrace());
+            log.setMESSAGE(text2SqlStr(event.getMessage()));
+            log.setTRACE(text2SqlStr(event.getTrace()));
             log.setTYPE_VALUE(event.getType());
             log.setOPERATION(get(opertationId));
             em.persist(log);
-            em.flush();
+            //em.flush();
         } catch (Exception ex) {
             throw new OperationException("Error add operation log", ex);
         }
@@ -614,10 +638,12 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
     public void cancelOperation(Long operationId) throws OperationException {
         final MultiOperationEntity operation = get(operationId);
         final MultiOperationStatus currentStatus = operation.getSTATUS();
-        if (currentStatus != CREATED && currentStatus != READY_TO_START && currentStatus != STARTED) {
-            throw new OperationException(i18nDao.get(operation.getLOCALE(), SBFGeneralStr.msgOperNotCanceled, currentStatus.caption(i18nDao, operation.getLOCALE())));
+        if (currentStatus != MultiOperationStatus.CREATED && currentStatus != MultiOperationStatus.READY_TO_START
+                && currentStatus != MultiOperationStatus.STARTED) {
+            throw new OperationException(i18nDao.get(operation.getLOCALE(), SBFGeneralStr.msgOperNotCanceled,
+                    currentStatus.caption(i18nDao, operation.getLOCALE())));
         }
-        if (currentStatus == STARTED) {
+        if (currentStatus == MultiOperationStatus.STARTED) {
             //требуется обработка движком
             changeOperationStatus(operationId, currentStatus, MultiOperationStatus.CANCEL);
         } else {
@@ -672,11 +698,12 @@ public class MultiOperationDaoBean implements IMultiOperationDao {
 
         final MultiOperationEntity operation = get(operationId);
         final MultiOperationStatus currentStatus = operation.getSTATUS();
-        if (currentStatus != CREATED) {
-            throw new OperationException(i18nDao.get(operation.getLOCALE(), SBFGeneralStr.msgOperErrorStartStatus, currentStatus.caption(i18nDao, operation.getLOCALE())));
+        if (currentStatus != MultiOperationStatus.CREATED) {
+            throw new OperationException(i18nDao.get(operation.getLOCALE(), SBFGeneralStr.msgOperErrorStartStatus,
+                    currentStatus.caption(i18nDao, operation.getLOCALE())));
         }
-
-        changeOperationStatus(operationId, currentStatus, READY_TO_START);
+//1->>READY_TO_START
+        changeOperationStatus(operationId, currentStatus, MultiOperationStatus.READY_TO_START);
 
         OperationEvent event = new OperationEvent();
         event.setType(OperationEventType.INFO);

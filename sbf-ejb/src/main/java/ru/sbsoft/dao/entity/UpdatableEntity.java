@@ -4,7 +4,7 @@ import java.util.Date;
 
 public interface UpdatableEntity {
 
-    public void setUpdateUser(String updateUser);
+    void setUpdateUser(String updateUser);
 
-    public void setUpdateDate(Date updateDate);
+    void setUpdateDate(Date updateDate);
 }

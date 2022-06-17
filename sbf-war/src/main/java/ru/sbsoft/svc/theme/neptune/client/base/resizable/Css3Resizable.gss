@@ -1,0 +1,67 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def HANDLE_SIZE value('theme.resizable.handleSize', 'px');
+@def HANDLE_OFFSET value('theme.resizable.handleOffset', 'px');
+
+.handleNorth,
+.handleEast,
+.handleSouth,
+.handleWest {
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+.handleNorth {
+  top: HANDLE_OFFSET;
+  height: HANDLE_SIZE;
+}
+
+.handleWest {
+  width: HANDLE_SIZE;
+  left: HANDLE_OFFSET;
+}
+
+.handleSouth {
+  height: HANDLE_SIZE;
+  bottom: HANDLE_OFFSET;
+}
+
+.handleEast {
+  width: HANDLE_SIZE;
+  right: HANDLE_OFFSET;
+}
+
+
+.handleNorthwest,
+.handleNortheast,
+.handleSouthwest,
+.handleSoutheast {
+  width: HANDLE_SIZE;
+  height: HANDLE_SIZE;
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+.handleNorthwest {
+  left: HANDLE_OFFSET;
+  top: HANDLE_OFFSET;
+}
+
+.handleSouthwest {
+  left: HANDLE_OFFSET;
+  bottom: HANDLE_OFFSET;
+}
+
+.handleSoutheast {
+  right: HANDLE_OFFSET;
+  bottom: HANDLE_OFFSET;
+}
+
+.handleNortheast {
+  right: HANDLE_OFFSET;
+  top: HANDLE_OFFSET;
+}
+

@@ -26,7 +26,7 @@ import ru.sbsoft.common.Strings;
 public class ArchiveReader {
 
     private final String ACCESS_MODE = "r";
-    private RandomAccessFile accessFile;
+    private final RandomAccessFile accessFile;
     private ISevenZipInArchive archive;
     private HashMap<String, Integer> cache;
     
@@ -88,7 +88,7 @@ public class ArchiveReader {
         IO.close(accessFile);
     }
 
-    class Writer implements ISequentialOutStream {
+    static class Writer implements ISequentialOutStream {
 
         private final FileOutputStream outputStream;
 

@@ -1,0 +1,24 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BACKGROUND_COLOR value('theme.menu.bar.backgroundColor');
+@def BORDER_WIDTH value('theme.menu.bar.border.toString');
+@def BORDER_STYLE value('theme.menu.bar.border.style');
+@def BORDER_COLOR value('theme.menu.bar.border.color');
+@def GRADIENT value('theme.menu.bar.gradient');
+@def PADDING value('theme.menu.bar.padding.toString');
+
+.menuBar {
+  background: BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background: linear-gradient(to bottom, GRADIENT);
+  border-width: BORDER_WIDTH;
+  border-style: BORDER_STYLE;
+  border-color: BORDER_COLOR;
+  cursor: default;
+  padding: PADDING;
+  overflow: hidden;
+}

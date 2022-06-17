@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,23 +20,22 @@ public class SqlExecutor {
     private static final Logger log = LoggerFactory.getLogger(SqlExecutor.class);
 
     private final IJdbcWorkExecutor jdbcExecutor;
-    private final Connection conn;
     private final String sql;
-    private final Object[] param;
+    private final List<?> param;
     private int updateCount = -1;
 
-    public SqlExecutor(IJdbcWorkExecutor jdbcExecutor, String sql, Object... param) {
+    public SqlExecutor(IJdbcWorkExecutor jdbcExecutor, String sql, List<?> param) {
         this.jdbcExecutor = jdbcExecutor;
-        this.conn = null;
         this.sql = sql;
         this.param = param;
     }
+    
+    public SqlExecutor(IJdbcWorkExecutor jdbcExecutor, String sql, Object... param) {
+        this(jdbcExecutor, sql, (List<?>)(param != null && param.length > 0 ? Arrays.asList(param) : null));
+    }
 
-    public SqlExecutor(Connection conn, String sql, Object... param) {
-        this.jdbcExecutor = null;
-        this.conn = conn;
-        this.sql = sql;
-        this.param = param;
+    public SqlExecutor(final Connection conn, String sql, Object... param) {
+        this(new ConnectionWrapper(conn), sql, param);
     }
 
     public SqlExecutor exec() throws SQLException {
@@ -44,26 +44,25 @@ public class SqlExecutor {
     }
 
     public <R> R exec(RsConverter<R> f) throws SQLException {
-        if (jdbcExecutor != null) {
-            return jdbcExecutor.<R>executeJdbcWork(conn -> {
-                return exec(conn, f);
-            });
-        } else {
+        return jdbcExecutor.<R>executeJdbcWork(conn -> {
             return exec(conn, f);
-        }
+        });
     }
-    
-    public <R> List<R> collect(RsConverter<R> f) throws SQLException {
+
+    public <R, L extends List<R>> L collect(RsConverter<R> f, final L list) throws SQLException {
         return exec(rs -> {
-            List<R> res = new ArrayList<>();
-            while(rs.next()){
+            while (rs.next()) {
                 R r = f.apply(rs);
-                if(r != null){
-                    res.add(r);
+                if (r != null) {
+                    list.add(r);
                 }
             }
-            return res;
+            return list;
         });
+    }
+
+    public <R> List<R> collect(RsConverter<R> f) throws SQLException {
+        return collect(f, new ArrayList<R>());
     }
 
     public int getUpdateCount() {
@@ -84,20 +83,20 @@ public class SqlExecutor {
         }
     }
 
-    private static PreparedStatement prepareStatement(Connection conn, String sql, Object... param) throws SQLException {
+    private static PreparedStatement prepareStatement(Connection conn, String sql, List<?> param) throws SQLException {
         PreparedStatement stat = null;
         try {
             stat = conn.prepareStatement(sql);
-            int paramLength = param != null ? param.length : 0;
+            int paramLength = param != null ? param.size() : 0;
             if (paramLength != stat.getParameterMetaData().getParameterCount()) {
                 throw new SQLException("Parameter sizes do not match!");
             }
             if (param != null) {
-                for (int i = 0; i < param.length; i++) {
-                    if (param[i] == null) {
+                for (int i = 0; i < paramLength; i++) {
+                    if (param.get(i) == null) {
                         stat.setNull(i + 1, Types.NULL);
                     } else {
-                        stat.setObject(i + 1, param[i]);
+                        stat.setObject(i + 1, param.get(i));
                     }
                 }
             }
@@ -116,6 +115,20 @@ public class SqlExecutor {
 
     public interface RsConverter<R> {
 
-        public R apply(ResultSet t) throws SQLException;
+        R apply(ResultSet t) throws SQLException;
+    }
+
+    private static class ConnectionWrapper implements IJdbcWorkExecutor {
+
+        private final Connection conn;
+
+        public ConnectionWrapper(Connection conn) {
+            this.conn = conn;
+        }
+
+        @Override
+        public <T> T executeJdbcWork(IJdbcWork<T> work) throws SQLException {
+            return work.execute(conn);
+        }
     }
 }

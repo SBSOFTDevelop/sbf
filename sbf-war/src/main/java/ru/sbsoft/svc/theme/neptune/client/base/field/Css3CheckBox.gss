@@ -1,0 +1,40 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def TEXT_FAMILY value('theme.field.checkBox.boxLabel.family');
+@def TEXT_WEIGHT value('theme.field.checkBox.boxLabel.weight');
+@def TEXT_SIZE value('theme.field.checkBox.boxLabel.size');
+@def TEXT_COLOR value('theme.field.checkBox.boxLabel.color');
+@def PADDING value('theme.field.checkBox.padding.toString');
+
+.wrap {
+  border: none;
+  background-color: transparent;
+}
+
+@if (is("user.agent", "safari")) {
+  .wrap input:focus {
+    outline: auto !important;
+  }
+}
+
+@if (is("svc.user.agent", "chrome") || is("user.agent", "safari")) {
+  .wrap input {
+    margin-left: 1px;
+  }
+}
+
+.checkBoxLabel {
+  font-family: TEXT_FAMILY;
+  font-size: TEXT_SIZE;
+  font-weight: TEXT_WEIGHT;
+  color: TEXT_COLOR;
+  width: auto !important;
+  float: none !important;
+  clear: none !important;
+  display: inline !important;
+  margin-left: 4px;
+  padding-right: 10px;
+}

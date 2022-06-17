@@ -66,7 +66,7 @@ public class PlainDynamicGridType implements IDynamicGridType {
         if (this == obj) {
             return true;
         }
-        if (obj == null || !(obj instanceof IDynamicGridType)) {
+        if (!(obj instanceof IDynamicGridType)) {
             return false;
         }
         final IDynamicGridType other = (IDynamicGridType) obj;

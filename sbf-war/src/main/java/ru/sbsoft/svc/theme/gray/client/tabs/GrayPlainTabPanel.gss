@@ -1,0 +1,11 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.tabHeader .tabStripSpacer, 
+.tabFooter .tabStripSpacer {
+  border-color: #d0d0d0;
+  background-color: #eaeaea;
+}

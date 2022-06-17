@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+
 import ru.sbsoft.common.Strings;
 import ru.sbsoft.meta.columns.AddressColumnInfo;
 import ru.sbsoft.meta.columns.BooleanColumnInfo;
@@ -14,6 +15,7 @@ import ru.sbsoft.meta.columns.ColumnKind;
 import ru.sbsoft.meta.columns.CurrencyColumnInfo;
 import ru.sbsoft.meta.columns.DateColumnInfo;
 import ru.sbsoft.meta.columns.DateTimeColumnInfo;
+import ru.sbsoft.meta.columns.IdNameColumnInfo;
 import ru.sbsoft.meta.columns.IdentifierColumnInfo;
 import ru.sbsoft.meta.columns.IntegerColumnInfo;
 import ru.sbsoft.meta.columns.KeyColumnInfo;
@@ -29,9 +31,9 @@ import ru.sbsoft.shared.grid.condition.IGridCondition;
 import ru.sbsoft.shared.grid.style.CStyle;
 import ru.sbsoft.shared.grid.style.ConditionalCellStyle;
 import ru.sbsoft.shared.api.i18n.NonLocalizedString;
-import ru.sbsoft.shared.meta.Column;
 import ru.sbsoft.shared.meta.ColumnType;
 import ru.sbsoft.shared.meta.Columns;
+import ru.sbsoft.shared.meta.IColumn;
 import ru.sbsoft.shared.meta.IGridCustomInfo;
 import ru.sbsoft.shared.meta.Style;
 
@@ -62,7 +64,7 @@ import ru.sbsoft.shared.meta.Style;
 public class ColumnsInfo {
 
     private String selectModifier;
-    private ColumnInfoList items = new ColumnInfoList();
+    private final ColumnInfoList items = new ColumnInfoList();
     private List<Style> styles;
     private String templateName;
     private final List<ConditionalCellStyle> gridStyles = new ArrayList<>();
@@ -71,6 +73,11 @@ public class ColumnsInfo {
     //
     private IGridCustomInfo customInfo;
     //
+    private String updateTableName;
+    
+    private boolean signPositive = false;
+    
+    private boolean rowStyleDominate = true;
 
     static {
         ColumnType.KEY.setColumnClass(KeyColumnInfo.class);
@@ -84,6 +91,7 @@ public class ColumnsInfo {
         ColumnType.INTEGER.setColumnClass(IntegerColumnInfo.class);
         ColumnType.CURRENCY.setColumnClass(CurrencyColumnInfo.class);
         ColumnType.ADDRESS.setColumnClass(AddressColumnInfo.class);
+        ColumnType.ID_NAME.setColumnClass(IdNameColumnInfo.class);
         ColumnType.YMDAY.setColumnClass(YearMonthDayColumnInfo.class);
     }
 
@@ -109,7 +117,7 @@ public class ColumnsInfo {
     /**
      * Перегружаемый метод, добавляет новый столбец в коллекцию столбцов.
      *
-     * @param type тип столбца {@link ru.sbsoft.shared.meta.ColumnType}
+     * @param type   тип столбца {@link ru.sbsoft.shared.meta.ColumnType}
      * @param clause имя поля физической таблицы
      * @return экземпляр {@link ru.sbsoft.meta.columns.ColumnInfo}
      */
@@ -120,9 +128,9 @@ public class ColumnsInfo {
     /**
      * Перегружаемый метод, добавляет новый столбец в коллекцию столбцов.
      *
-     * @param type тип столбца {@link ru.sbsoft.shared.meta.ColumnType}
+     * @param type    тип столбца {@link ru.sbsoft.shared.meta.ColumnType}
      * @param caption заголовок столбца
-     * @param clause имя поля физической таблицы
+     * @param clause  имя поля физической таблицы
      * @return экземпляр {@link ru.sbsoft.meta.columns.ColumnInfo}
      */
     public <V, T extends ColumnInfo<V>> T add(ColumnKind<V, T> type, ILocalizedString caption, String clause) {
@@ -140,11 +148,11 @@ public class ColumnsInfo {
     /**
      * Перегружаемый метод, добавляет новый столбец в коллекцию столбцов.
      *
-     * @param type тип столбца {@link ru.sbsoft.shared.meta.ColumnType}
+     * @param type    тип столбца {@link ru.sbsoft.shared.meta.ColumnType}
      * @param caption заголовок столбца
-     * @param clause имя поля физической таблицы
-     * @param alias псевдоним поля-алиас (<i>select fname <b>AS</b> alias...
-     * </i>)
+     * @param clause  имя поля физической таблицы
+     * @param alias   псевдоним поля-алиас (<i>select fname <b>AS</b> alias...
+     *                </i>)
      * @return экземпляр {@link ru.sbsoft.meta.columns.ColumnInfo}
      */
     public <V, T extends ColumnInfo<V>> T add(ColumnKind<V, T> type, ILocalizedString caption, String clause, String alias) {
@@ -162,10 +170,10 @@ public class ColumnsInfo {
     /**
      * Перегружаемый метод, добавляет новый столбец в коллекцию столбцов.
      *
-     * @param type тип столбца {@link ru.sbsoft.shared.meta.ColumnType}
-     * @param width ширина столбца на экране
+     * @param type    тип столбца {@link ru.sbsoft.shared.meta.ColumnType}
+     * @param width   ширина столбца на экране
      * @param caption заголовок столбца
-     * @param clause имя поля физической таблицы
+     * @param clause  имя поля физической таблицы
      * @return экземпляр {@link ru.sbsoft.meta.columns.ColumnInfo}
      */
     public <V, T extends ColumnInfo<V>> T add(ColumnKind<V, T> type, int width, ILocalizedString caption, String clause) {
@@ -184,11 +192,11 @@ public class ColumnsInfo {
      * Перегружаемый метод, добавляет новый столбец в коллекцию столбцов.
      *
      * @param address массив элементов адреса
-     * @param width ширина столбца на экране
+     * @param width   ширина столбца на экране
      * @param caption заголовок столбца
-     * @param clause имя поля физической таблицы
-     * @param alias псевдоним поля-алиас (<i>select fname <b>AS</b> alias...
-     * </i>)
+     * @param clause  имя поля физической таблицы
+     * @param alias   псевдоним поля-алиас (<i>select fname <b>AS</b> alias...
+     *                </i>)
      * @return экземпляр {@link ru.sbsoft.meta.columns.ColumnInfo}
      */
     public AddressColumnInfo addAddr(String[] address, int width, ILocalizedString caption, String clause, String alias) {
@@ -208,12 +216,12 @@ public class ColumnsInfo {
     /**
      * Перегружаемый метод, добавляет новый столбец в коллекцию столбцов.
      *
-     * @param type тип столбца {@link ru.sbsoft.shared.meta.ColumnType}
-     * @param width ширина столбца на экране
+     * @param type    тип столбца {@link ru.sbsoft.shared.meta.ColumnType}
+     * @param width   ширина столбца на экране
      * @param caption заголовок столбца
-     * @param clause имя поля физической таблицы
-     * @param alias псевдоним поля-алиас (<i>select fname <b>AS</b> alias...
-     * </i>)
+     * @param clause  имя поля физической таблицы
+     * @param alias   псевдоним поля-алиас (<i>select fname <b>AS</b> alias...
+     *                </i>)
      * @return экземпляр {@link ru.sbsoft.meta.columns.ColumnInfo}
      */
     public <V, T extends ColumnInfo<V>> T add(ColumnKind<V, T> type, int width, ILocalizedString caption, String clause, String alias) {
@@ -231,7 +239,9 @@ public class ColumnsInfo {
     /**
      * Перегружаемый метод, добавляет новый столбец в коллекцию столбцов.
      *
-     * @param c {@link ru.sbsoft.meta.columns.ColumnInfo}
+     * @param <V> column value type
+     * @param <T> {@link ru.sbsoft.meta.columns.ColumnInfo}
+     * @param c column for add
      * @return экземпляр {@link ru.sbsoft.meta.columns.ColumnInfo}
      */
     public <V, T extends ColumnInfo<V>> T add(T c) {
@@ -269,7 +279,7 @@ public class ColumnsInfo {
         if (alias != null) {
             return alias;
         }
-        int n = clause.indexOf('.');
+        int n = clause.lastIndexOf('.');
         if (n == -1) {
             return clause;
         }
@@ -288,7 +298,7 @@ public class ColumnsInfo {
      * Добавляет стиль строки, применяемый в зависимости от условия.
      *
      * @param style оъект, содержащий строку стиля в формате css и строку
-     * условия на языке javascript
+     *              условия на языке javascript
      * @deprecated используйте
      * {@link #addStyle(ru.sbsoft.shared.grid.style.CStyle, ru.sbsoft.meta.columns.style.IColumnConditionFactory)}
      * или {@link #addStyle(ru.sbsoft.shared.grid.style.CStyle)}
@@ -334,7 +344,7 @@ public class ColumnsInfo {
      * внутренний, т.к. предполагается, что в прикладном смысле достаточно будет
      * {@link #addStyle(ru.sbsoft.shared.grid.style.CStyle, ru.sbsoft.meta.columns.style.IGridConditionFactory)}
      *
-     * @param style стиль
+     * @param style     стиль
      * @param condition условие
      * @return текущий объект
      */
@@ -352,7 +362,7 @@ public class ColumnsInfo {
      * {@link ru.sbsoft.meta.columns.style.condition.Eq}, {@link ru.sbsoft.meta.columns.style.condition.Gt}, {@link ru.sbsoft.meta.columns.style.condition.Substr}
      * и др. подобные.
      *
-     * @param style стиль
+     * @param style            стиль
      * @param conditionFactory генератор условия
      * @return текущий объект
      */
@@ -376,6 +386,15 @@ public class ColumnsInfo {
     public ColumnInfo get(String alias) {
         return items.getCache().get(alias);
     }
+    
+    public String findColumnAliasIgnoreCase(String aliasAnyCase){
+        for(String al : items.getCache().keySet()){
+            if(al.equalsIgnoreCase(aliasAnyCase)){
+                return al;
+            }
+        }
+        return null;
+    }
 
     public Columns getColumns() {
         return items.getColumns();
@@ -385,9 +404,29 @@ public class ColumnsInfo {
         return items.getKeyColumn();
     }
 
+    public void setUpdateTableName(String updateTableName) {
+        this.updateTableName = updateTableName;
+    }
+
+    public boolean isSignPositive() {
+        return signPositive;
+    }
+
+    public void setSignPositive(boolean signPositive) {
+        this.signPositive = signPositive;
+    }
+
+    public boolean isRowStyleDominate() {
+        return rowStyleDominate;
+    }
+
+    public void setRowStyleDominate(boolean rowStyleDominate) {
+        this.rowStyleDominate = rowStyleDominate;
+    }
+
     public class ColumnInfoList implements List<ColumnInfo> {
 
-        private List<ColumnInfo> delegate = new ArrayList<>();
+        private final List<ColumnInfo> delegate = new ArrayList<>();
 
         private transient HashMap<String, ColumnInfo> cache;
         private transient Columns columnsCache;
@@ -400,6 +439,9 @@ public class ColumnsInfo {
                 columnsCache.setGridStyles(gridStyles.isEmpty() ? null : gridStyles);
                 columnsCache.setEditCondition(editCondition);
                 columnsCache.setCustomInfo(customInfo);
+                columnsCache.setSignPositive(signPositive);
+                columnsCache.setUpdateTableName(updateTableName);
+                columnsCache.setRowStyleDominate(rowStyleDominate);
                 for (ColumnInfo c : items) {
                     addToColCache(c);
                 }
@@ -613,9 +655,9 @@ public class ColumnsInfo {
                     }
                 }
                 if (columnsCache != null) {
-                    List<Column> cols = columnsCache.getColumns();
+                    List<IColumn> cols = columnsCache.getColumns();
                     for (int i = cols.size() - 1; i >= 0; i--) {
-                        Column col = cols.get(i);
+                        IColumn col = cols.get(i);
                         if (infAlias.equals(col.getAlias())) {
                             cols.remove(i);
                         }
@@ -641,7 +683,8 @@ public class ColumnsInfo {
         }
 
         private void addToColCache(ColumnInfo c) {
-            columnsCache.add(c.getColumn(), c.isAutoExpand());
+            IColumn col = c.getColumn(columnsCache.getColumns().size());
+            columnsCache.add(col, c.isAutoExpand());
         }
 
         private void putToCache(ColumnInfo c) {

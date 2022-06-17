@@ -1,0 +1,37 @@
+#foreach  ($injection in $injections)    
+#if( $injection.resourceName != "" && $injection.annotation == "javax.annotation.Resource" )
+    @javax.annotation.Resource(name = "$injection.resourceName")
+#elseif( $injection.resourceName != "" && $injection.annotation == "javax.persistence.PersistenceContext" )
+    @javax.persistence.PersistenceContext(unitName = "$injection.resourceName")
+#elseif( $injection.annotation == "javax.persistence.PersistenceContext" )
+    @javax.persistence.PersistenceContext(unitName = ru.sbsoft.common.jdbc.Const.DEFAULT_PERSISTENCE_CTX)
+#else
+    @$injection.annotation
+#end
+    private $injection.className $injection.varName;
+#end
+
+#foreach  ($unit in $unitTemplates)    
+#foreach  ($injection in $injections)
+#if( "entityManager_$unit" == "$injection.varName" )
+#break($foreach.parent)
+#end
+#end   
+    @javax.persistence.PersistenceContext(unitName = "$unit")
+    private javax.persistence.EntityManager entityManager_$unit;
+#end
+
+#macro( setField $clazz $unitName )
+            final Field field = getDeclaredField(${clazz}.class, "$field.fieldName");
+            field.setAccessible(true);
+#if( $field.varName == "entityManager" )
+#if( $unitName )
+            field.set(processor, entityHolder.getEm("$unitName"));
+#else
+            field.set(processor, entityManager);
+#end
+#else
+            field.set(processor, $field.varName);
+#end        
+
+#end

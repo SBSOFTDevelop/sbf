@@ -1,51 +1,32 @@
 package ru.sbsoft.operation;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.zip.Deflater;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-import javax.persistence.EntityManager;
 import ru.sbsoft.common.IO;
-import ru.sbsoft.shared.exceptions.ApplicationException;
-import ru.sbsoft.shared.model.LookupInfoModel;
-import ru.sbsoft.shared.param.BigDecimalParamInfo;
-import ru.sbsoft.shared.param.BooleanParamInfo;
-import ru.sbsoft.shared.param.ListParamInfo;
-import ru.sbsoft.shared.param.LookUpParamInfo;
-import ru.sbsoft.shared.param.ParamInfo;
-import ru.sbsoft.shared.kladr.AddrUtil;
-import ru.sbsoft.dao.entity.BaseEntity;
 import ru.sbsoft.dao.IGridDao;
-import ru.sbsoft.dao.IStorageDao;
+import ru.sbsoft.dao.entity.BaseEntity;
 import ru.sbsoft.generator.api.Lookup;
 import ru.sbsoft.model.PageFilterInfo;
 import ru.sbsoft.sbf.app.model.YearMonthDay;
-import ru.sbsoft.shared.FilterInfo;
-import ru.sbsoft.shared.param.DateParamInfo;
-import ru.sbsoft.shared.param.IntegerParamInfo;
-import ru.sbsoft.shared.param.LongParamInfo;
-import ru.sbsoft.shared.param.StringParamInfo;
-import ru.sbsoft.shared.model.YearMonth;
-import ru.sbsoft.shared.model.YearQuarter;
 import ru.sbsoft.server.utils.SrvUtl;
+import ru.sbsoft.shared.FilterInfo;
 import ru.sbsoft.shared.GridContext;
 import ru.sbsoft.shared.api.i18n.consts.SBFExceptionStr;
 import ru.sbsoft.shared.api.i18n.consts.SBFGeneralStr;
+import ru.sbsoft.shared.exceptions.ApplicationException;
 import ru.sbsoft.shared.interfaces.GridType;
 import ru.sbsoft.shared.interfaces.NamedItem;
-import ru.sbsoft.shared.param.YearMonthDayParamInfo;
+import ru.sbsoft.shared.kladr.AddrUtil;
+import ru.sbsoft.shared.model.LookupInfoModel;
+import ru.sbsoft.shared.model.YearMonth;
+import ru.sbsoft.shared.model.YearQuarter;
+import ru.sbsoft.shared.param.*;
+
+import javax.persistence.EntityManager;
+import java.io.*;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  *
@@ -228,7 +209,10 @@ public abstract class BaseOperationRunner extends AbstractOperationRunner {
     }
 
     protected <T extends BaseEntity> T find(final Class<T> entityClass, final Object primaryKey, final String notFoundErrMsg, final Object... args) {
-        return notNull(em.find(entityClass, primaryKey), (notFoundErrMsg != null ? (args == null || args.length == 0 ? notFoundErrMsg : String.format(notFoundErrMsg, args)) : "Объект не найден в базе: " + (entityClass != null ? entityClass.getSimpleName() : "null")) + ". ID: " + String.valueOf(primaryKey));
+        return notNull(em.find(entityClass, primaryKey),
+                (notFoundErrMsg != null ?
+                        (args == null
+                                || args.length == 0 ? notFoundErrMsg : String.format(notFoundErrMsg, args)) : "Объект не найден в базе: " + (entityClass != null ? entityClass.getSimpleName() : "null")) + ". ID: " + primaryKey);
     }
 
     protected <V> V rq(V val, NamedItem p) {
@@ -466,7 +450,7 @@ public abstract class BaseOperationRunner extends AbstractOperationRunner {
     }
 
     protected Date getDateStart(int year) {
-        return new GregorianCalendar(year, 0, 1).getTime();
+        return new GregorianCalendar(year, Calendar.JANUARY, 1).getTime();
     }
 
     protected Date getDateEnd(int year, int quarter) {

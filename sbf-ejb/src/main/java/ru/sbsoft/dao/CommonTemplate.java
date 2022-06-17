@@ -1,14 +1,5 @@
 package ru.sbsoft.dao;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.sbsoft.common.Strings;
@@ -32,23 +23,12 @@ import ru.sbsoft.shared.api.i18n.i18nUtils;
 import ru.sbsoft.shared.consts.BrowserMode;
 import ru.sbsoft.shared.consts.Formats;
 import ru.sbsoft.shared.exceptions.FilterRequireException;
-import ru.sbsoft.shared.interfaces.FilterEditorType;
-import ru.sbsoft.shared.interfaces.GridType;
-import ru.sbsoft.shared.interfaces.LookupType;
-import ru.sbsoft.shared.interfaces.LookupTypeFake;
-import ru.sbsoft.shared.interfaces.NamedGridType;
-import ru.sbsoft.shared.interfaces.NamedItem;
-import ru.sbsoft.shared.interfaces.NumeratedItem;
-import ru.sbsoft.shared.meta.filter.EditorFilterDefinition;
-import ru.sbsoft.shared.meta.filter.FilterDefinition;
-import ru.sbsoft.shared.meta.filter.FilterDefinitions;
-import ru.sbsoft.shared.meta.filter.FilterTemplate;
-import ru.sbsoft.shared.meta.filter.FilterTemplateConfig;
-import ru.sbsoft.shared.meta.filter.FilterTemplateItem;
-import ru.sbsoft.shared.meta.filter.LookupFilterDefinition;
-import ru.sbsoft.shared.meta.filter.LookupKeyType;
+import ru.sbsoft.shared.interfaces.*;
+import ru.sbsoft.shared.meta.filter.*;
 import ru.sbsoft.shared.model.SortDirection;
 import ru.sbsoft.shared.model.SortingInfo;
+
+import java.util.*;
 
 /**
  * Общий темплейт для формирования метаинформации для грида
@@ -62,7 +42,7 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
     protected Set modifiers = Collections.EMPTY_SET;
     protected Map<String, Object> parameters;
-    private List<FilterInfo> parentFilters =  Collections.emptyList();
+    private List<FilterInfo> parentFilters = Collections.emptyList();
     //
     private final Properties properties = new Properties();
     //
@@ -70,7 +50,7 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
     protected FilterTemplate filterTemplate;
     protected FilterDefinitions filterDefinitions;
 
-    private Map<String, IFilterWrapper> filterWrappers = new HashMap<>();
+    private final Map<String, IFilterWrapper> filterWrappers = new HashMap<>();
 
     private List<SortingInfo> defaultSort = null;
     private boolean sortCleaned = false;
@@ -153,9 +133,11 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
     }
 
     public void setParentFilters(List<FilterInfo> parentFilters) {
-        this.parentFilters = parentFilters != null ? parentFilters : Collections.<FilterInfo>emptyList();
+        this.parentFilters = parentFilters != null ? parentFilters : Collections.emptyList();
+
     }
-    
+
+
     private static boolean same(List<FilterInfo> pf1, List<FilterInfo> pf2) {
         if (pf1.size() != pf2.size()) {
             return false;
@@ -238,7 +220,7 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
         sortCleaned = false;
     }
 
-    private class SQLNameParts {
+    private static class SQLNameParts {
 
         private final String table;
         private final String name;
@@ -330,12 +312,12 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
                     if (column.endsWith(" " + dir.name())) {
                         column = column.substring(0, column.length() - dir.name().length() - 1).trim();
                     }
-                    if (column != null) {
-                        column = column.trim();
-                        if (!column.isEmpty()) {
-                            res.add(new SortingInfo(column, dir));
-                        }
+
+                    column = column.trim();
+                    if (!column.isEmpty()) {
+                        res.add(new SortingInfo(column, dir));
                     }
+
                 }
             }
             return res;
@@ -419,8 +401,8 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
      * клиентском коде.
      *
      * @param filterEditorType предоставляет идентификатор и заголовок
-     * @param type тип фильтра
-     * @param clause SQL-выражение фильтра
+     * @param type             тип фильтра
+     * @param clause           SQL-выражение фильтра
      * @return объект предоставляющий возможность конфигурации определенного
      * фильтра
      * @see #defineFilter(java.lang.String, ru.sbsoft.shared.meta.ColumnType,
@@ -434,9 +416,9 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
      * Определение фильтра заданного типа. Не требует регистрации редактора в
      * клиентском коде.
      *
-     * @param alias идентификатор
-     * @param type тип фильтра
-     * @param clause SQL-выражение фильтра
+     * @param alias   идентификатор
+     * @param type    тип фильтра
+     * @param clause  SQL-выражение фильтра
      * @param caption заголовок
      * @return объект предоставляющий возможность конфигурации определенного
      * фильтра
@@ -454,9 +436,9 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
      * Определение фильтра заданного типа. Не требует регистрации редактора в
      * клиентском коде.
      *
-     * @param alias идентификатор
-     * @param type тип фильтра
-     * @param clause SQL-выражение фильтра
+     * @param alias   идентификатор
+     * @param type    тип фильтра
+     * @param clause  SQL-выражение фильтра
      * @param caption заголовок
      * @return объект предоставляющий возможность конфигурации определенного
      * фильтра
@@ -473,9 +455,9 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
      * Определение фильтра заданного типа. Не требует регистрации редактора в
      * клиентском коде.
      *
-     * @param alias идентификатор
-     * @param type тип фильтра
-     * @param clause SQL-выражение фильтра
+     * @param alias   идентификатор
+     * @param type    тип фильтра
+     * @param clause  SQL-выражение фильтра
      * @param caption заголовок
      * @return объект предоставляющий возможность конфигурации определенного
      * фильтра
@@ -488,16 +470,15 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
      * Определение фильтра. Требует регистрации редактора в клиентском коде.
      *
      * @param filterEditorType идентификатор фильтра для регистрации редактора.
-     * Предоставляет также заголовок.
-     * @param template SQL-выражение фильтра. Знак :? заменяется на параметр с
-     * именем идентификатора фильтра.
-     * @param additionArgs если заданы, то к {@code template} применяется
-     * {@link String#format(java.lang.String, java.lang.Object...)} с этими
-     * аргументами
+     *                         Предоставляет также заголовок.
+     * @param template         SQL-выражение фильтра. Знак :? заменяется на параметр с
+     *                         именем идентификатора фильтра.
+     * @param additionArgs     если заданы, то к {@code template} применяется
+     *                         {@link String#format(java.lang.String, java.lang.Object...)} с этими
+     *                         аргументами
      * @return объект предоставляющий возможность конфигурации определенного
      * фильтра
-     * @see
-     * ru.sbsoft.client.components.browser.filter.editor.FilterEditorFactory
+     * @see ru.sbsoft.client.components.browser.filter.editor.FilterEditorFactory
      */
     protected final FilterDefinitionConfig defineFilter(FilterEditorType filterEditorType, String template, Object... additionArgs) {
         final EditorFilterDefinition def = new EditorFilterDefinition();
@@ -530,11 +511,11 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
      * Определяет lookup-фильтр. Требует регистрации редактора в клиентском
      * коде.
      *
-     * @param lookupType идентификатор фильтра для регистрации редактора.
-     * Предоставляет также заголовок.
-     * @param clause выражение с которым сравниваются значения фильтра
+     * @param lookupType  идентификатор фильтра для регистрации редактора.
+     *                    Предоставляет также заголовок.
+     * @param clause      выражение с которым сравниваются значения фильтра
      * @param miltiselect true - множественный выбор значений, false - выбор
-     * одного значения
+     *                    одного значения
      * @return объект предоставляющий возможность конфигурации определенного
      * фильтра
      */
@@ -547,10 +528,10 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
      * коде.
      *
      * @param filterAlias идентификатор фильтра
-     * @param clause выражение с которым сравниваются значения фильтра
+     * @param clause      выражение с которым сравниваются значения фильтра
      * @param browserType идентификатор браузера. Предоставляет также заголовок.
      * @param miltiselect true - множественный выбор значений, false - выбор
-     * одного значения
+     *                    одного значения
      * @return объект предоставляющий возможность конфигурации определенного
      * фильтра
      */
@@ -564,10 +545,10 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
      *
      * @param filterAlias идентификатор фильтра
      * @param filterTitle заголовок фильтра
-     * @param clause выражение с которым сравниваются значения фильтра
+     * @param clause      выражение с которым сравниваются значения фильтра
      * @param browserType идентификатор браузера. Предоставляет также заголовок.
      * @param miltiselect true - множественный выбор значений, false - выбор
-     * одного значения
+     *                    одного значения
      * @return объект предоставляющий возможность конфигурации определенного
      * фильтра
      */
@@ -581,10 +562,10 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
      *
      * @param filterAlias идентификатор фильтра
      * @param filterTitle заголовок фильтра
-     * @param clause выражение с которым сравниваются значения фильтра
+     * @param clause      выражение с которым сравниваются значения фильтра
      * @param browserType идентификатор браузера. Предоставляет также заголовок.
      * @param miltiselect true - множественный выбор значений, false - выбор
-     * одного значения
+     *                    одного значения
      * @return объект предоставляющий возможность конфигурации определенного
      * фильтра
      */
@@ -596,11 +577,11 @@ public abstract class CommonTemplate implements Formats, ColumnDefinitions, IMet
      * Определяет lookup-фильтр. Не требует регистрации редактора в клиентском
      * коде.
      *
-     * @param lookupType идентификатор фильтра. Предоставляет также заголовок.
-     * @param clause выражение с которым сравниваются значения фильтра
+     * @param lookupType  идентификатор фильтра. Предоставляет также заголовок.
+     * @param clause      выражение с которым сравниваются значения фильтра
      * @param browserType идентификатор браузера. Предоставляет также заголовок.
      * @param miltiselect true - множественный выбор значений, false - выбор
-     * одного значения
+     *                    одного значения
      * @return объект предоставляющий возможность конфигурации определенного
      * фильтра
      */

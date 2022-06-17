@@ -1,0 +1,15 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.body {
+  border: 0;
+  background: none;
+}
+
+.ghost ul {
+  background-color: #cdd9e8;
+  border-color: #90a4c4;
+}

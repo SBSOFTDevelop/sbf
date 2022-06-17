@@ -12,7 +12,7 @@ public enum PropertiesEnum {
     //
     private final Class type;
 
-    private PropertiesEnum(Class type) {
+    PropertiesEnum(Class type) {
         this.type = type;
     }
 

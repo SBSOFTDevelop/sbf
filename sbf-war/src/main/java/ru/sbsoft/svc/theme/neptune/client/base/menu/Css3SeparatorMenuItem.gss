@@ -1,0 +1,19 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def HEIGHT value('theme.menu.separator.height', 'px');
+@def MARGIN value('theme.menu.separator.margin');
+@def COLOR value('theme.menu.separator.color');
+
+.menuSep {
+  display: block;
+  overflow: hidden;
+  line-height: HEIGHT;
+  margin: MARGIN;
+  background-color: COLOR;
+}
+
+.active {
+}

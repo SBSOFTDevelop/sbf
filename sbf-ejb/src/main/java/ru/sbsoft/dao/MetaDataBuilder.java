@@ -3,6 +3,7 @@ package ru.sbsoft.dao;
 import java.util.List;
 import ru.sbsoft.meta.columns.consts.PropertiesEnum;
 import ru.sbsoft.shared.meta.Columns;
+import ru.sbsoft.shared.meta.IColumns;
 import ru.sbsoft.shared.meta.filter.EditorFilterDefinition;
 import ru.sbsoft.shared.meta.filter.FilterDefinition;
 import ru.sbsoft.shared.meta.filter.FilterDefinitions;
@@ -15,7 +16,7 @@ import ru.sbsoft.shared.meta.filter.LookupFilterDefinition;
  */
 public class MetaDataBuilder {
 
-    public static Columns getMeta(IMetaTemplateInfo template) {
+    public static IColumns getMeta(IMetaTemplateInfo template) {
         Columns columns = template.getColumnsInfo().getColumns();
         columns.setSort(template.getDefaultSort());
         columns.setCaption(template.getProperties().get(String.class, PropertiesEnum.CAPTION));

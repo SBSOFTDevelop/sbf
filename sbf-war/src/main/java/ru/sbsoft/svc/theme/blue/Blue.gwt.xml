@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2022 SBSOFT.
+    All rights reserved.
+-->
+
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.7.0//EN"
+    "http://gwtproject.org/doctype/2.7.0/gwt-module.dtd">
+<module>
+  <inherits name="ru.sbsoft.svc.theme.base.Base" />
+
+  <extend-property name="svc.theme" values="blue" />
+  <set-property name="svc.theme" value="blue" />
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.BlueThemeAppearance">
+    <when-type-is class="ru.sbsoft.svc.core.client.resources.ThemeStyles.ThemeAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <!-- Buttons -->
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.button.BlueButtonGroupAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.button.ButtonGroup.ButtonGroupAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+  
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.grid.BlueGridAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.grid.GridView.GridAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+  
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.toolbar.BlueToolBarButtonAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.toolbar.ToolBarButton.ToolBarButtonAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.progress.BlueProgressBarAppearance">
+    <when-type-is class="ru.sbsoft.svc.cell.core.client.ProgressBarCell.ProgressBarAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.panel.BlueContentPanelAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.ContentPanel.ContentPanelAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.window.BlueWindowAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.Window.WindowAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.panel.BlueAccordionLayoutAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.container.AccordionLayoutContainer.AccordionLayoutAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <!-- Menu Bar -->
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.menu.BlueMenuBarAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.MenuBar.MenuBarAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.menu.BlueMenuBarItemAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.MenuBarItem.MenuBarItemAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.widget.BlueDatePickerAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.DatePicker.DatePickerAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.field.BlueFieldSetAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.form.FieldSet.FieldSetAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.tree.BlueTreeAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.tree.Tree.TreeAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.panel.BlueContentPanelAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.ContentPanel.ContentPanelAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.panel.BlueFramedPanelAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.FramedPanel.FramedPanelAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.panel.BluePanelHeaderAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.ContentPanel.PanelHeaderAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.toolbar.BlueToolBarAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.toolbar.ToolBar.ToolBarAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.tools.BlueTools">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.button.Tools" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <!-- Menu -->
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.menu.BlueMenuAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.Menu.MenuAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.menu.BlueItemAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.Item.ItemAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.menu.BlueMenuItemAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.MenuItem.MenuItemAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.menu.BlueHeaderMenuItemAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.HeaderMenuItem.HeaderMenuItemAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.menu.BlueSeparatorMenuItemAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.SeparatorMenuItem.SeparatorMenuItemAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.menu.BlueCheckMenuItemAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.menu.CheckMenuItem.CheckMenuItemAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <!-- Status -->
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.status.BlueBoxStatusAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.Status.BoxStatusAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <!-- Tab Panel -->
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.tabs.BlueTabPanelAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.TabPanel.TabPanelAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.tabs.BlueTabPanelBottomAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.TabPanel.TabPanelBottomAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.tabs.BluePlainTabPanelAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.PlainTabPanel.PlainTabPanelAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.tabs.BluePlainTabPanelBottomAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.PlainTabPanel.PlainTabPanelBottomAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <!-- Color Palette -->
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.colorpalette.BlueColorPaletteAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.ColorPaletteCell.ColorPaletteAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <!-- Slider -->
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.slider.BlueSliderHorizontalAppearance">
+    <any>
+      <when-type-is class="ru.sbsoft.svc.cell.core.client.SliderCell.SliderAppearance" />
+      <when-type-is class="ru.sbsoft.svc.cell.core.client.SliderCell.HorizontalSliderAppearance" />
+    </any>
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.slider.BlueSliderVerticalAppearance">
+    <when-type-is class="ru.sbsoft.svc.cell.core.client.SliderCell.VerticalSliderAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.container.BlueBorderLayoutAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.container.BorderLayoutContainer.BorderLayoutAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <replace-with class="ru.sbsoft.svc.theme.base.client.widget.BlueCollapsePanelAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.CollapsePanel.CollapsePanelAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <!-- Resizable -->
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.resizable.BlueResizableAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.Resizable.ResizableAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <!-- Status proxy -->
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.statusproxy.BlueStatusProxyAppearance">
+    <when-type-is class="ru.sbsoft.svc.dnd.core.client.StatusProxy.StatusProxyAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+  <!-- Paging tool bar -->
+  <replace-with class="ru.sbsoft.svc.theme.blue.client.toolbar.BluePagingToolBarAppearance">
+    <when-type-is class="ru.sbsoft.svc.widget.core.client.toolbar.PagingToolBar.PagingToolBarAppearance" />
+    <when-property-is name="svc.theme" value="blue" />
+  </replace-with>
+
+</module>

@@ -1,0 +1,158 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@external x-toolbar-mark;
+
+.x-toolbar-mark .content {
+  gwt-sprite: "toolBarBackground";
+  height: 100%;
+  width: 100%;
+}
+
+.x-toolbar-mark .topLeft {
+  gwt-sprite: "toolBarTopLeftBorder";
+}
+
+.x-toolbar-mark .top {
+  gwt-sprite: "toolBarTopBorder";
+}
+
+.x-toolbar-mark .topRight {
+  gwt-sprite: "toolBarTopRightBorder";
+}
+
+.x-toolbar-mark .bottomLeft {
+  gwt-sprite: "toolBarBottomLeftBorder";
+}
+
+.x-toolbar-mark .bottom {
+  gwt-sprite: "toolBarBottomBorder";
+}
+
+.x-toolbar-mark .right {
+  gwt-sprite: "toolBarRightBorder";
+}
+
+.x-toolbar-mark .bottomRight {
+  gwt-sprite: "toolBarBottomRightBorder";
+}
+
+.x-toolbar-mark .left {
+  gwt-sprite: "toolBarLeftBorder";
+}
+
+.x-toolbar-mark .over .content {
+  gwt-sprite: "toolBarBackgroundOverBorder";
+  height: 100%;
+  width: 100%;
+}
+
+.x-toolbar-mark .over .topLeft {
+  gwt-sprite: "toolBarTopLeftOverBorder";
+}
+
+.x-toolbar-mark .over .top {
+  gwt-sprite: "toolBarTopOverBorder";
+}
+
+.x-toolbar-mark .over .topRight {
+  gwt-sprite: "toolBarTopRightOverBorder";
+}
+
+.x-toolbar-mark .over .bottomLeft {
+  gwt-sprite: "toolBarBottomLeftOverBorder";
+}
+
+.x-toolbar-mark .over .bottom {
+  gwt-sprite: "toolBarBottomOverBorder";
+}
+
+.x-toolbar-mark .over .right {
+  gwt-sprite: "toolBarRightOverBorder";
+}
+
+.x-toolbar-mark .over .bottomRight {
+  gwt-sprite: "toolBarBottomRightOverBorder";
+}
+
+.x-toolbar-mark .over .left {
+  gwt-sprite: "toolBarLeftOverBorder";
+}
+
+.x-toolbar-mark .focus .content {
+  gwt-sprite: "toolBarBackgroundOverBorder";
+  height: 100%;
+  width: 100%;
+}
+
+.x-toolbar-mark .focus .topLeft {
+  gwt-sprite: "toolBarTopLeftOverBorder";
+}
+
+.x-toolbar-mark .focus .top {
+  gwt-sprite: "toolBarTopOverBorder";
+}
+
+.x-toolbar-mark .focus .topRight {
+  gwt-sprite: "toolBarTopRightOverBorder";
+}
+
+.x-toolbar-mark .focus .bottomLeft {
+  gwt-sprite: "toolBarBottomLeftOverBorder";
+}
+
+.x-toolbar-mark .focus .bottom {
+  gwt-sprite: "toolBarBottomOverBorder";
+}
+
+.x-toolbar-mark .focus .right {
+  gwt-sprite: "toolBarRightOverBorder";
+}
+
+.x-toolbar-mark .focus .bottomRight {
+  gwt-sprite: "toolBarBottomRightOverBorder";
+}
+
+.x-toolbar-mark .focus .left {
+  gwt-sprite: "toolBarLeftOverBorder";
+}
+
+.x-toolbar-mark .pressed .content {
+  gwt-sprite: "toolBarBackgroundPressedBorder";
+  height: 100%;
+  width: 100%;
+}
+
+.x-toolbar-mark .pressed .topLeft {
+  gwt-sprite: "toolBarTopLeftPressedBorder";
+}
+
+.x-toolbar-mark .pressed .top {
+  gwt-sprite: "toolBarTopPressedBorder";
+}
+
+.x-toolbar-mark .pressed .topRight {
+  gwt-sprite: "toolBarTopRightPressedBorder";
+}
+
+.x-toolbar-mark .pressed .bottomLeft {
+  gwt-sprite: "toolBarBottomLeftPressedBorder";
+}
+
+.x-toolbar-mark .pressed .bottom {
+  gwt-sprite: "toolBarBottomPressedBorder";
+}
+
+.x-toolbar-mark .pressed .right {
+  gwt-sprite: "toolBarRightPressedBorder";
+}
+
+.x-toolbar-mark .pressed .bottomRight {
+  gwt-sprite: "toolBarBottomRightPressedBorder";
+}
+
+.x-toolbar-mark .pressed .left {
+  gwt-sprite: "toolBarLeftPressedBorder";
+}

@@ -227,7 +227,7 @@ public class GeneratorUtils {
 
     }
 
-    public static interface AddProcessorCallback {
+    public interface AddProcessorCallback {
 
         void onAddProcessor(Element processor, ObjectType processorType, ProcessorInfo processorInfo);
     }

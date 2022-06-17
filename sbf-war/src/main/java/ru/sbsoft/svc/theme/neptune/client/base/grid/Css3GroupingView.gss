@@ -1,0 +1,47 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BORDER_WIDTH value('theme.grid.group.border.toString');
+@def BORDER_COLOR value('theme.grid.group.border.color');
+@def BORDER_STYLE value('theme.grid.group.border.style');
+@def BACKGROUND_COLOR value('theme.grid.group.backgroundColor');
+@def TEXT_FAMILY value('theme.grid.group.text.family');
+@def TEXT_SIZE value('theme.grid.group.text.size');
+@def TEXT_WEIGHT value('theme.grid.group.text.weight');
+@def TEXT_COLOR value('theme.grid.group.text.color');
+@def PADDING value('theme.grid.group.padding.toString');
+@def ICON_SPACING value('theme.grid.group.iconSpacing', 'px');
+
+.group .groupHead {
+  cursor: pointer;
+  padding: PADDING;
+  background-color: BACKGROUND_COLOR;
+  border-color: BORDER_COLOR;
+  border-width: BORDER_WIDTH;
+  border-style: BORDER_STYLE;
+}
+
+.bodyCollapsed {
+  display: none;
+}
+
+.group .grid-cell .grid-cellInner {
+  gwt-sprite: "collapse";
+  width: auto;
+  height: auto;
+  background-position: left center;
+  padding-left: ICON_SPACING;
+  font-family: TEXT_FAMILY;
+  font-size: TEXT_SIZE;
+  font-weight: TEXT_WEIGHT;
+  color: TEXT_COLOR;
+}
+
+.groupCollapsed .grid-cell .grid-cellInner {
+  gwt-sprite: "expand";
+  width: auto;
+  height: auto;
+  background-position: left center;
+}

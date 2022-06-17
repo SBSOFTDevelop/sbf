@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.sbsoft</groupId>
         <artifactId>SBF</artifactId>
-        <version>3.01.00-SNAPSHOT</version>
+        <version>3.20.00-SNAPSHOT</version>
     </parent>
 
     <artifactId>sbf-system-war</artifactId>
@@ -18,11 +18,11 @@
         </dependency>
         <dependency>
             <groupId>${sbf.groupId}</groupId>
-            <artifactId>sbf-gxt</artifactId>
+            <artifactId>sbf-war</artifactId>
         </dependency>
         <dependency>
             <groupId>${sbf.groupId}</groupId>
-            <artifactId>sbf-gxt-api</artifactId>
+            <artifactId>sbf-api</artifactId>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

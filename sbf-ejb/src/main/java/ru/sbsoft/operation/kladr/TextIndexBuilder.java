@@ -38,7 +38,7 @@ public class TextIndexBuilder {
     public static final String FIELD_ERRORS = "ERRORS";
     public static final String[] INTEGER_FIELDS = new String[]{FIELD_REGION_ID, FIELD_AREA_ID, FIELD_CITY_ID, FIELD_SETTLEMENT_ID, FIELD_STREET_ID, FIELD_ERRORS};
     //
-    private static String FIELD_INDEX_KEY = "INDEX_KEY";
+    private static final String FIELD_INDEX_KEY = "INDEX_KEY";
     private static String FIELD_ADDRESS = "ADDRESS";
     //
     private static final String REGIONS_SQL =
@@ -158,26 +158,25 @@ public class TextIndexBuilder {
         writerConfig.setOpenMode(OpenMode.CREATE);
         writerConfig.setRAMBufferSizeMB(128);
 
-        IndexWriter writer = new IndexWriter(directory, writerConfig);
-        try {
-            for (int blockIndex = 1; blockIndex <= 200; blockIndex++) {
-                final Query query = entityManager.createNativeQuery(SELECT_SQL);
-                query.setParameter(1, blockIndex);
-                for (Object[] record : (List<Object[]>) query.getResultList()) {
-                    Document document = new Document();
-                    for (int i = 0; i < INTEGER_FIELDS.length; i++) {
-                        final Integer aInt = getInt(record[i]);
-                        final IntField intField = new IntField(INTEGER_FIELDS[i], aInt, Field.Store.YES);
-                        document.add(intField);
+        try (IndexWriter writer = new IndexWriter(directory, writerConfig)) {
+
+                for (int blockIndex = 1; blockIndex <= 200; blockIndex++) {
+                    final Query query = entityManager.createNativeQuery(SELECT_SQL);
+                    query.setParameter(1, blockIndex);
+                    for (Object[] record : (List<Object[]>) query.getResultList()) {
+                        Document document = new Document();
+                        for (int i = 0; i < INTEGER_FIELDS.length; i++) {
+                            final Integer aInt = getInt(record[i]);
+                            final IntField intField = new IntField(INTEGER_FIELDS[i], aInt, Field.Store.YES);
+                            document.add(intField);
+                        }
+                        document.add(new StringField(FIELD_ADDRESS, (String) record[6], Field.Store.YES));
+                        document.add(new TextField(FIELD_INDEX_KEY, (String) record[7], Field.Store.NO));
+                        writer.addDocument(document);
+                        callback.work(writer.numDocs());
                     }
-                    document.add(new StringField(FIELD_ADDRESS, (String) record[6], Field.Store.YES));
-                    document.add(new TextField(FIELD_INDEX_KEY, (String) record[7], Field.Store.NO));
-                    writer.addDocument(document);
-                    callback.work(writer.numDocs());
                 }
-            }
-        } finally {
-            writer.close(true);
+
         }
     }
 

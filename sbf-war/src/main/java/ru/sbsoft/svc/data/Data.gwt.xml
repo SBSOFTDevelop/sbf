@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2022 SBSOFT.
+    All rights reserved.
+-->
+
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.7.0//EN"
+    "http://gwtproject.org/doctype/2.7.0/gwt-module.dtd">
+<module>
+  <inherits name="ru.sbsoft.svc.core.Core" />
+  <inherits name="com.google.gwt.http.HTTP" />
+  <inherits name="com.google.gwt.xml.XML" />
+  <inherits name="com.google.gwt.json.JSON" />
+  <inherits name='com.google.web.bindery.requestfactory.RequestFactory' />
+  <inherits name="com.google.gwt.user.RemoteService" />
+
+  <generate-with class="ru.sbsoft.svc.data.rebind.PropertyAccessGenerator">
+    <when-type-assignable class="ru.sbsoft.svc.data.shared.PropertyAccess" />
+  </generate-with>
+
+  <source path="client" />
+  <source path="shared" />
+</module>

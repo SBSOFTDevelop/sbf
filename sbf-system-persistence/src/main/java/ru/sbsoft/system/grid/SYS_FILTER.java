@@ -131,9 +131,6 @@ public class SYS_FILTER implements Serializable {
         if (this.SYS_OBJECT_STORAGE_RECORD_ID != other.SYS_OBJECT_STORAGE_RECORD_ID) {
             return false;
         }
-        if (this.NUM != other.NUM) {
-            return false;
-        }
-        return true;
+        return this.NUM == other.NUM;
     }
 }

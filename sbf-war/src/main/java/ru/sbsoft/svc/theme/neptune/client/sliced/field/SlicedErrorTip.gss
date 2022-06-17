@@ -1,0 +1,39 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def HEADER_COLOR value('theme.errortip.headerText.color');
+@def HEADER_SIZE value('theme.errortip.headerText.size');
+@def HEADER_WEIGHT value('theme.errortip.headerText.weight');
+@def HEADER_FAMILY value('theme.errortip.headerText.family');
+@def MESSAGE_COLOR value('theme.errortip.messageText.color');
+@def MESSAGE_SIZE value('theme.errortip.messageText.size');
+@def MESSAGE_WEIGHT value('theme.errortip.messageText.weight');
+@def MESSAGE_FAMILY value('theme.errortip.messageText.family');
+@def HEADER_PADDING value('theme.errortip.headerPadding.toString');
+@def MESSAGE_PADDING value('theme.errortip.messagePadding.toString');
+
+.heading {
+  color: HEADER_COLOR;
+  font-size: HEADER_SIZE;
+  font-weight: HEADER_WEIGHT;
+  font-family: HEADER_FAMILY;
+  padding: HEADER_PADDING;
+}
+
+.text {
+  color: MESSAGE_COLOR;
+  font-size: MESSAGE_SIZE;
+  font-weight: MESSAGE_WEIGHT;
+  font-family: MESSAGE_FAMILY;
+  padding: MESSAGE_PADDING;
+}
+
+.textWrap {
+  gwt-sprite: "errorIcon";
+  width: auto;
+  height: auto;
+  background-position: -1 4px;
+  padding-left: 20px;
+}

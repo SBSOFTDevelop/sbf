@@ -11,7 +11,7 @@ import ru.sbsoft.shared.model.LookupInfoModel;
  */
 public class EntityLookupValueProvider extends LookupValueProvider {
 
-    private Class<? extends ILookupEntity> entityClass;
+    private final Class<? extends ILookupEntity> entityClass;
 
     public EntityLookupValueProvider(String codeColumn, String nameColumn, Class<? extends ILookupEntity> entityClass) {
         this(codeColumn, nameColumn, null, entityClass);

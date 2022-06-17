@@ -1,44 +1,36 @@
 package ru.sbsoft.dao;
 
-import ru.sbsoft.meta.sql.SQLNativeMaker;
-import ru.sbsoft.meta.context.VelocityContextAdapter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.ejb.EJBException;
 import ru.sbsoft.common.DB;
 import ru.sbsoft.common.Defs;
 import ru.sbsoft.common.Strings;
-import ru.sbsoft.common.jdbc.QueryParamImpl;
-import ru.sbsoft.db.query.VelocityRender;
-import ru.sbsoft.meta.columns.ColumnInfo;
-import ru.sbsoft.meta.ColumnsInfo;
 import ru.sbsoft.common.jdbc.QueryContext;
+import ru.sbsoft.common.jdbc.QueryParamImpl;
 import ru.sbsoft.common.jdbc.SQLQuery;
+import ru.sbsoft.db.query.VelocityRender;
+import ru.sbsoft.meta.ColumnsInfo;
+import ru.sbsoft.meta.columns.ColumnInfo;
+import ru.sbsoft.meta.context.VelocityContextAdapter;
 import ru.sbsoft.meta.sql.SQLBuilder;
+import ru.sbsoft.meta.sql.SQLNativeMaker;
 import ru.sbsoft.model.PageFilterInfo;
-import ru.sbsoft.shared.model.SortingInfo;
 import ru.sbsoft.shared.FilterInfo;
 import ru.sbsoft.shared.FiltersBean;
 import ru.sbsoft.shared.PageList;
 import ru.sbsoft.shared.exceptions.FilterRequireException;
 import ru.sbsoft.shared.filter.StringFilterInfo;
 import ru.sbsoft.shared.meta.ColumnType;
-import ru.sbsoft.shared.meta.Columns;
-import ru.sbsoft.shared.meta.aggregate.IAggregateDef;
+import ru.sbsoft.shared.meta.IColumns;
 import ru.sbsoft.shared.meta.Row;
 import ru.sbsoft.shared.meta.Wrapper;
+import ru.sbsoft.shared.meta.aggregate.IAggregateDef;
+import ru.sbsoft.shared.model.SortingInfo;
+
+import javax.ejb.EJBException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.*;
+import java.util.Date;
+import java.util.*;
 
 /**
  * Построитель запросов для Grid, использующий для построения метаинформацию о
@@ -58,9 +50,9 @@ public abstract class AbstractBuilder implements BrowserDao<Row> {
     private static final int MARK_ROWS_MAX = 512;
 
     private ColumnsInfo columnsInfo;
-    private Columns columns;
+    private IColumns columns;
 
-    private IJdbcWorkExecutor jdbcExecutor;
+    private final IJdbcWorkExecutor jdbcExecutor;
 
     private SQLNativeMaker nativeSQL;
 
@@ -105,7 +97,7 @@ public abstract class AbstractBuilder implements BrowserDao<Row> {
      *
      * @return
      */
-    public Columns getColumns() {
+    public IColumns getColumns() {
         if (columns == null) {
             columns = getColumnsInfo().getColumns();
         }
@@ -118,7 +110,7 @@ public abstract class AbstractBuilder implements BrowserDao<Row> {
      * @return
      */
     @Override
-    public Columns getMeta() {
+    public IColumns getMeta() {
         return getColumns();
     }
 
@@ -172,22 +164,19 @@ public abstract class AbstractBuilder implements BrowserDao<Row> {
                         .add(" ORDER BY " + column.getClause())
                         .toString();
 
-                return jdbcExecutor.executeJdbcWork(new IJdbcWork<PageList<Row>>() {
-                    @Override
-                    public PageList<Row> execute(Connection conn) throws SQLException {
-                        final ResultSet resultSet = query.query(conn, parse(ctx, sql));
-                        final PageList<Row> result = new PageList<>();
+                return jdbcExecutor.executeJdbcWork(conn -> {
+                    final ResultSet resultSet = query.query(conn, parse(ctx, sql));
+                    final PageList<Row> result = new PageList<>();
 
-                        //ResultSetMetaData md= resultSet.getMetaData();
-                        while (resultSet.next()) {
-                            ArrayList<Object> tmp = new ArrayList<>();
-                            tmp.add(column.read(resultSet));
-                            final Row row = new Row();
-                            row.setValues(tmp);
-                            result.add(row);
-                        }
-                        return result;
+                    //ResultSetMetaData md= resultSet.getMetaData();
+                    while (resultSet.next()) {
+                        ArrayList<Object> tmp = new ArrayList<>();
+                        tmp.add(column.read(resultSet));
+                        final Row row = new Row();
+                        row.setValues(tmp);
+                        result.add(row);
                     }
+                    return result;
                 });
             }
             /////////////////////
@@ -268,9 +257,10 @@ public abstract class AbstractBuilder implements BrowserDao<Row> {
             for (int i = 2; i <= columnCount; i++) {
                 final Object value = resultSet.getObject(i);
                 if (value != null) {
-                    final String columnLabel = metaData.getColumnLabel(i).toUpperCase();
-                    //fix for postrgress columnLabel.toUpperCase()
-
+                    final String columnLabel = columnsInfo.findColumnAliasIgnoreCase(metaData.getColumnLabel(i));
+                    if(columnLabel == null){
+                        throw new AssertionError("Column with alias: " + metaData.getColumnLabel(i) + " is not found"); //almost impossible
+                    }
                     result.put(columnLabel, columnsInfo.get(columnLabel).getFooter().wrap(value));
                 }
             }

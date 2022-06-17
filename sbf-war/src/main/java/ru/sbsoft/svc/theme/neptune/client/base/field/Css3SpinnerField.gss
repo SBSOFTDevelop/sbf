@@ -1,0 +1,42 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.twinTriggerOver .twinTrigger {
+  gwt-sprite: "twinTriggerArrowOver";
+  background-position: center center;
+}
+
+.twinTriggerClick .twinTrigger {
+  gwt-sprite: "twinTriggerArrowClick";
+  background-position: center center;
+}
+
+.triggerOver .trigger {
+  gwt-sprite: "triggerArrowOver";
+  background-position: center center;
+}
+
+.triggerClick .trigger {
+  gwt-sprite: "triggerArrowClick";
+  background-position: center center;
+}
+
+.trigger {
+  position: relative;
+  top: inherit;
+}
+
+.twinTrigger {
+  gwt-sprite: "twinTriggerArrow";
+  background-position: center center;
+  cursor: pointer;
+}
+
+.triggerWrap {
+  position: absolute;
+  top: 50%;
+  right: 0;
+}

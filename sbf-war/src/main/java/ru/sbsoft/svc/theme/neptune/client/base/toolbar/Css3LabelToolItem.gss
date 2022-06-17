@@ -1,0 +1,22 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def TEXT_FAMILY value('theme.toolbar.labelItem.text.family');
+@def TEXT_SIZE value('theme.toolbar.labelItem.text.size');
+@def TEXT_WEIGHT value('theme.toolbar.labelItem.text.weight');
+@def TEXT_COLOR value('theme.toolbar.labelItem.text.color');
+@def LINE_HEIGHT value('theme.toolbar.labelItem.lineHeight');
+@def PADDING value('theme.toolbar.labelItem.padding');
+
+.item {
+  display: block;
+  line-height: LINE_HEIGHT;
+  padding: PADDING;
+  white-space: nowrap;
+  font-family: TEXT_FAMILY;
+  font-size: TEXT_SIZE;
+  font-weight: TEXT_WEIGHT;
+  color: TEXT_COLOR;
+}

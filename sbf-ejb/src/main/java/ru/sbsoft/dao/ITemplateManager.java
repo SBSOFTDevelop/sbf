@@ -8,5 +8,5 @@ import ru.sbsoft.shared.interfaces.GridType;
  */
 public interface ITemplateManager {
 
-    public AbstractTemplate initTemplate(GridType type) throws Exception;
+    AbstractTemplate initTemplate(GridType type) throws Exception;
 }

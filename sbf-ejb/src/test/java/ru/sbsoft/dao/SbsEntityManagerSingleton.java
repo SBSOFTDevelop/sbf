@@ -27,7 +27,7 @@ public class SbsEntityManagerSingleton {
             Date beginTime = new Date();
             EM = EMF.createEntityManager();
             Date endTime = new Date();
-            System.out.println(String.format("Create connect = %d msec", endTime.getTime() - beginTime.getTime()));
+            System.out.printf("Create connect = %d msec%n", endTime.getTime() - beginTime.getTime());
         }
         return EM;
     }
@@ -37,7 +37,7 @@ public class SbsEntityManagerSingleton {
             Date beginTime = new Date();
             EMF = Persistence.createEntityManagerFactory("TEST", createConnectionProperties());
             Date endTime = new Date();
-            System.out.println(String.format("Create factory = %d msec", endTime.getTime() - beginTime.getTime()));
+            System.out.printf("Create factory = %d msec%n", endTime.getTime() - beginTime.getTime());
         }
     }
 

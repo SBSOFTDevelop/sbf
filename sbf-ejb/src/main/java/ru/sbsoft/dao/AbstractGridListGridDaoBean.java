@@ -19,7 +19,7 @@ import ru.sbsoft.shared.interfaces.NamedItem;
 import ru.sbsoft.shared.interfaces.ObjectType;
 import ru.sbsoft.shared.interfaces.ReportableItem;
 import ru.sbsoft.shared.interfaces.SecureDynamicType;
-import ru.sbsoft.shared.meta.Columns;
+import ru.sbsoft.shared.meta.IColumns;
 import ru.sbsoft.shared.meta.Row;
 import ru.sbsoft.shared.model.MarkModel;
 
@@ -40,20 +40,22 @@ public abstract class AbstractGridListGridDaoBean implements IGridListGridDao {
 
     private final Map<BigDecimal, ObjectType> gridItems = new HashMap<>();
 
-    private Columns cashedColumns;
+    private IColumns cashedColumns;
 
     @Override
-    public Columns getMeta(GridContext context) {
+    public IColumns getMeta(GridContext context) {
         cashedColumns = MetaDataBuilder.getMeta(new GridListBrowserTemplate());
         return cashedColumns;
     }
 
     @Override
-    public PageList<? extends MarkModel> getDataForBrowser(GridContext context, PageFilterInfo pageFilterInfo) throws FilterRequireException {
+    public PageList<? extends MarkModel> getDataForBrowser(GridContext context, PageFilterInfo pageFilterInfo) throws FilterRequireException{
         String locale = getLocale(pageFilterInfo);
         PageList<Row> pageList = new PageList<>();
         List<Row> rows = getListRow(context, pageFilterInfo, locale);
-        rows.forEach(row -> pageList.add(row));
+        pageList.addAll(rows);
+        //
+        //rows.forEach(row -> pageList.add(row));
         pageList.setTotalSize(rows.size());
         return pageList;
     }
@@ -91,14 +93,14 @@ public abstract class AbstractGridListGridDaoBean implements IGridListGridDao {
         gridItems.forEach((id, gridType) -> list.add(getDataRow(context, locale, id, gridType)));
         if (Dict.CGRID_CODE.equals(getSortColumn(pageFilterInfo))) {
             list.sort((row1, row2) -> {
-                String code1 = (String) row1.getString(Dict.CGRID_CODE);
-                String code2 = (String) row2.getString(Dict.CGRID_CODE);
+                String code1 =  row1.getString(Dict.CGRID_CODE);
+                String code2 =  row2.getString(Dict.CGRID_CODE);
                 return code1.compareTo(code2);
             });
         } else {
             list.sort((row1, row2) -> {
-                String title1 = (String) row1.getString(Dict.CGRID_NAME);
-                String title2 = (String) row2.getString(Dict.CGRID_NAME);
+                String title1 =  row1.getString(Dict.CGRID_NAME);
+                String title2 =  row2.getString(Dict.CGRID_NAME);
                 return title1.compareTo(title2);
             });
         }

@@ -1,7 +1,9 @@
 package ru.sbsoft.meta.columns.consts;
 
 import ru.sbsoft.meta.columns.ColumnKind;
+import ru.sbsoft.meta.columns.IdNameColumnInfo;
 import ru.sbsoft.shared.Condition;
+import ru.sbsoft.shared.util.IdNameLong;
 
 /**
  * Интерфейс определяет константы для типов колонок сетки и условий.
@@ -11,32 +13,33 @@ import ru.sbsoft.shared.Condition;
  */
 public interface ColumnDefinitions {
 
-    public static final String DISTINCT = "DISTINCT";
+    String DISTINCT = "DISTINCT";
 
-    public static final ColumnKind KEY = ColumnKind.KEY;
-    public static final ColumnKind TEMPORAL_KEY = ColumnKind.TEMPORAL_KEY;
-    public static final ColumnKind IDENTIFIER = ColumnKind.IDENTIFIER;
-    public static final ColumnKind DATE = ColumnKind.DATE;
-    public static final ColumnKind DATE_TIME = ColumnKind.DATE_TIME;
-    public static final ColumnKind TIMESTAMP = ColumnKind.TIMESTAMP;
-    public static final ColumnKind VCHAR = ColumnKind.VCHAR;
-    public static final ColumnKind BOOL = ColumnKind.BOOL;
-    public static final ColumnKind INTEGER = ColumnKind.INTEGER;
-    public static final ColumnKind ADDRESS = ColumnKind.ADDRESS;
-    public static final ColumnKind CURRENCY = ColumnKind.CURRENCY;
-    public static final ColumnKind YMDAY = ColumnKind.YMDAY;
+    ColumnKind KEY = ColumnKind.KEY;
+    ColumnKind TEMPORAL_KEY = ColumnKind.TEMPORAL_KEY;
+    ColumnKind IDENTIFIER = ColumnKind.IDENTIFIER;
+    ColumnKind DATE = ColumnKind.DATE;
+    ColumnKind DATE_TIME = ColumnKind.DATE_TIME;
+    ColumnKind TIMESTAMP = ColumnKind.TIMESTAMP;
+    ColumnKind VCHAR = ColumnKind.VCHAR;
+    ColumnKind BOOL = ColumnKind.BOOL;
+    ColumnKind INTEGER = ColumnKind.INTEGER;
+    ColumnKind ADDRESS = ColumnKind.ADDRESS;
+    ColumnKind CURRENCY = ColumnKind.CURRENCY;
+    ColumnKind YMDAY = ColumnKind.YMDAY;
+    ColumnKind<IdNameLong, IdNameColumnInfo> ID_NAME = ColumnKind.ID_NAME;
 
 // alias
-    public static final ColumnKind NUMBER = ColumnKind.CURRENCY;
-    public static final ColumnKind TEXT = ColumnKind.VCHAR;
+    ColumnKind NUMBER = ColumnKind.CURRENCY;
+    ColumnKind TEXT = ColumnKind.VCHAR;
     //
-    public static final Condition EQ = Condition.EQUAL;
-    public static final Condition GT = Condition.GREATER;
-    public static final Condition LT = Condition.LESS;
-    public static final Condition GE = Condition.GREATER_OR_EQUAL;
-    public static final Condition LE = Condition.LESS_OR_EQUAL;
-    public static final Condition CONTAINS = Condition.CONTAINS;
-    public static final Condition STARTS_WITH = Condition.STARTS_WITH;
-    public static final Condition IN_RANGE = Condition.IN_RANGE;
-    public static final Condition LIKE = Condition.LIKE;
+    Condition EQ = Condition.EQUAL;
+    Condition GT = Condition.GREATER;
+    Condition LT = Condition.LESS;
+    Condition GE = Condition.GREATER_OR_EQUAL;
+    Condition LE = Condition.LESS_OR_EQUAL;
+    Condition CONTAINS = Condition.CONTAINS;
+    Condition STARTS_WITH = Condition.STARTS_WITH;
+    Condition IN_RANGE = Condition.IN_RANGE;
+    Condition LIKE = Condition.LIKE;
 }

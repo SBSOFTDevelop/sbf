@@ -1,33 +1,7 @@
 package ru.sbsoft.operation;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -40,6 +14,21 @@ import ru.sbsoft.shared.meta.ColumnType;
 import ru.sbsoft.shared.renderer.Renderer;
 import ru.sbsoft.shared.renderer.RendererManager;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.function.BiFunction;
+import ru.sbsoft.shared.util.IdName;
+import ru.sbsoft.shared.util.IdNameLong;
+
 /**
  * Класс реализует выгрузку табличных данных в Excel.
  *
@@ -47,7 +36,7 @@ import ru.sbsoft.shared.renderer.RendererManager;
  */
 public class XLSBuilder {
 
-    private final int MAX_WIDTH = 65280;
+    private final static int MAX_WIDTH = 65280;
 
     protected final RendererManager rendererManager;
     private HashMap<String, DateFormat> cache;
@@ -56,19 +45,26 @@ public class XLSBuilder {
 
     private final Workbook workbook;
     private Sheet sheet;
-    protected int rownum = 1;
+    protected int rowNum = 1;
 
     // private int bRow;
-    private int bCol;
+    protected int colNum;
 
     private final Map<Integer, CellStyle> styles = new HashMap<>();
     protected CellStyle[] cellStyles;
 
     private final CellStyle headerStyle;
 
+
     public XLSBuilder(RendererManager rendererManager, File file, I18nResource i18nResource) {
 
         this(new XSSFWorkbook(), rendererManager, file, i18nResource);
+
+    }
+
+    public XLSBuilder(Workbook workbook, RendererManager rendererManager, I18nResource i18nResource) {
+
+        this(workbook, rendererManager, null, i18nResource);
 
     }
 
@@ -77,15 +73,20 @@ public class XLSBuilder {
         this.workbook = workbook;
         this.file = file;
         this.i18nResource = i18nResource;
-        //this.sheet = workbook.createSheet();
+
         headerStyle = workbook.createCellStyle();
-        setBorder(headerStyle);
+        // diagonalStyle = XlsUtils.getDiagonalBorder(workbook);
         headerStyle.setAlignment(HorizontalAlignment.CENTER);
         headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         headerStyle.setWrapText(true);
         headerStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
         headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        headerStyle.setLocked(true);
+        setBorder(headerStyle);
+
+
     }
+
 
     public Sheet getSheet() {
         return sheet;
@@ -93,17 +94,20 @@ public class XLSBuilder {
 
     public XLSBuilder setBeginData(String cellRef) {
         CellReference cr = new CellReference(cellRef);
-        setSheet(cr.getSheetName());
-        rownum = cr.getRow();
-        bCol = cr.getCol();
+        if (this.sheet == null) {
+            setSheet(cr.getSheetName());
+        }
+        rowNum = cr.getRow();
+        colNum = cr.getCol();
         return this;
     }
 
-    public XLSBuilder setTitle(String title, String cellRef) {
+
+    public XLSBuilder setTitle(String title, String cellRef, String defaultSheetName) {
 
         CellReference titleRef = new CellReference(cellRef);
 
-        setSheet(titleRef.getSheetName());
+        setSheet(titleRef.getSheetName() == null ? defaultSheetName : titleRef.getSheetName());
         Row r = getRow(titleRef.getRow());
         Cell t = r.createCell(titleRef.getCol());
         t.setCellValue(title);
@@ -112,22 +116,51 @@ public class XLSBuilder {
 
     }
 
+
+    public XLSBuilder setTitle(String title) {
+
+        Row r = getRow(rowNum);
+        Cell t = r.createCell(colNum);
+        t.setCellValue(title);
+
+        return this;
+
+    }
+
+    public XLSBuilder nextRow() {
+        this.rowNum++;
+        return this;
+    }
+
+    public XLSBuilder nextCol() {
+        this.colNum++;
+        return this;
+    }
+
+
+
+
     public XLSBuilder setRow(int row) {
-        this.rownum = row;
+        this.rowNum = row;
         return this;
     }
 
     public XLSBuilder setCol(int col) {
 
-        this.bCol = col;
+        this.colNum = col;
         return this;
     }
 
     public XLSBuilder setSheet(String name) {
-        if (name != null) {
-            this.sheet = workbook.getSheet(name);
-        } else {
-            this.sheet = workbook.getSheetAt(0);
+
+        if (name == null) {
+            name = "Лист1";
+        }
+
+        this.sheet = workbook.getSheet(name);
+
+        if (this.sheet == null) {
+            this.sheet = workbook.createSheet(name);
 
         }
         return this;
@@ -144,28 +177,28 @@ public class XLSBuilder {
 //заголовки
         List<HeadItem> level;
         while ((level = hb.getNextLevel()) != null) {
-            HeaderCellBuilder rb = new HeaderCellBuilder(getRow(rownum++));
+            HeaderCellBuilder rb = new HeaderCellBuilder(getRow(rowNum++));
 
             for (HeadItem it : level) {
 
-                rb.move(it.getColNum() + bCol)
+                rb.move(it.getColNum() + colNum)
                         .headC(it.getName()).merge(it.getRowSpan(), it.getColSpan());
 
             }
 
         }
-        setStyles(meta);
+
 
     }
 
-    private void setStyles(List<ColumnInfo> meta) {
+    protected void initStyles(List<ColumnInfo> meta) {
         if (cellStyles != null) {
             return;
         }
         cellStyles = new CellStyle[meta.size()];
         for (int i = 0; i < meta.size(); i++) {
-            cellStyles[i] = getStyle(meta.get(i));
-            sheet.setColumnWidth(i + bCol, (getWidth(meta.get(i))));
+            cellStyles[i] = getStyle(meta.get(i), false);
+            sheet.setColumnWidth(i + colNum, (getWidth(meta.get(i))));
         }
 
     }
@@ -184,11 +217,13 @@ public class XLSBuilder {
 
     }
 
-    private CellStyle getStyle(ColumnInfo ci) {
+    private CellStyle getStyle(ColumnInfo ci, boolean isLocked) {
         String format = getFormat(ci);
         HorizontalAlignment ha = getColumnAlign(ci);
 
-        int key = (format + ha.name()).hashCode();
+        int key = (format + ha.name() + (isLocked ? 1 : 0)).hashCode();
+
+
         CellStyle style = styles.get(key);
         if (style == null) {
             CreationHelper creationHelper = workbook.getCreationHelper();
@@ -197,7 +232,7 @@ public class XLSBuilder {
             style.setDataFormat(creationHelper.createDataFormat().getFormat(format));
             setBorder(style);
             style.setVerticalAlignment(VerticalAlignment.CENTER);
-
+            style.setLocked(isLocked);
             styles.put(key, style);
         }
 
@@ -265,6 +300,8 @@ public class XLSBuilder {
         public HeaderCellBuilder headC(String val) {
             nextCell();
             cell.setCellType(CellType.STRING);
+           // cell.setCellComment();
+
             cell.setCellStyle(headerStyle);
             if (val != null) {
                 cell.setCellValue(val);
@@ -353,8 +390,7 @@ public class XLSBuilder {
             headItems = new ArrayList<>(meta.size());
             int i = 0;
             for (ColumnInfo col : meta) {
-               
-                
+
                 HeadItem item = new HeadItem(col.getCaption().getDefaultName());
                 item.setColSpan(1);
                 item.setColNum(i++);
@@ -456,26 +492,46 @@ public class XLSBuilder {
                     }
                 }
             }
-            Collections.sort(res, (it1, it2) -> Integer.compare(it1.getColNum(), it2.getColNum()));
+            res.sort(Comparator.comparingInt(HeadItem::getColNum));
             return res;
         }
 
     }
 
-    public void row(List<ColumnInfo> meta, ResultSet resultSet) throws SQLException {
-        setStyles(meta);
+    public void row(List<ColumnInfo> meta, ResultSet resultSet, BiFunction<Integer, CellStyle, CellStyle> cellStyle) throws SQLException {
+        initStyles(meta);
 
-        Row row = getRow(rownum++);
+        Row row = getRow(rowNum++);
         for (int i = 0; i < meta.size(); i++) {
-            Cell cell = getCell(i + bCol, row);
-            cell.setCellStyle(cellStyles[i]);
+            Cell cell = getCell(i + colNum, row);
+            CellStyle style;
+
+            if (cellStyle != null && (style = cellStyle.apply(i, cellStyles[i])) != null) {
+                cell.setCellStyle(style);
+            } else {
+
+                cell.setCellStyle(cellStyles[i]);
+            }
             cell.setCellValue(read(resultSet, meta.get(i)));
+
+
         }
     }
 
+
+    public void row(List<ColumnInfo> meta, ResultSet resultSet) throws SQLException {
+        row(meta, resultSet, null);
+    }
+
     public void close() throws IOException {
-        try (FileOutputStream fileOut = new FileOutputStream(file)) {
-            workbook.write(fileOut);
+
+        if (file == null) {
+            return;
+        }
+        try (FileOutputStream fs = new FileOutputStream(file)) {
+            workbook.write(fs);
+            // workbook.close();
+
         }
     }
 
@@ -496,6 +552,7 @@ public class XLSBuilder {
             case BOOL:
             case VCHAR:
             case ADDRESS:
+            case ID_NAME:
             case YMDAY:
         }
 
@@ -513,10 +570,7 @@ public class XLSBuilder {
             int floor = (int) (Math.floor(((double) width) / 15));
             int factor = (30 * floor);
             int value = 450 + factor + ((width - 1) * 36);
-            if (value > MAX_WIDTH) {
-                return MAX_WIDTH;
-            }
-            return value;
+            return Math.min(value, MAX_WIDTH);
         } else {
             return 450; // default to column size 1 if zero, one or negative number is passed.
         }
@@ -530,7 +584,7 @@ public class XLSBuilder {
             case INTEGER:
             case TEMPORAL_KEY:
             case IDENTIFIER:
-                final Renderer renderer = rendererManager.getRenderer(format);
+                final Renderer<?> renderer = rendererManager.getRenderer(format);
                 if (renderer != null) {
                     break;
                 }
@@ -545,6 +599,7 @@ public class XLSBuilder {
                 return getDateTimeFormat(format, "dd.MM.yyyy HH.mm.ss");
             case VCHAR:
             case ADDRESS:
+            case ID_NAME:
             case BOOL:
 
         }
@@ -585,6 +640,7 @@ public class XLSBuilder {
             case VCHAR:
 
             case ADDRESS:
+            case ID_NAME:
         }
         return HorizontalAlignment.LEFT;
     }
@@ -638,15 +694,18 @@ public class XLSBuilder {
             case VCHAR:
 
                 if (column.getFormat() != null) {
-                    Renderer vcharrenderer = rendererManager.getRenderer(column.getFormat());
-                    if (vcharrenderer != null) {
-                        return i18nResource.i18n(vcharrenderer.render(resultSet.getString(column.getAlias())));
+                    Renderer vcharRenderer = rendererManager.getRenderer(column.getFormat());
+                    if (vcharRenderer != null) {
+                        return i18nResource.i18n(vcharRenderer.render(resultSet.getString(column.getAlias())));
 
                     }
                 }
                 return resultSet.getString(column.getAlias());
             case ADDRESS:
                 return column.read(resultSet).toString();
+            case ID_NAME:
+                IdNameLong idName = (IdNameLong)column.read(resultSet);
+                return idName != null ? idName.getName() : null;
         }
         return null;
     }

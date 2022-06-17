@@ -2,12 +2,11 @@ package ru.sbsoft.dao;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 import ru.sbsoft.meta.ColumnsInfo;
 import ru.sbsoft.model.PageFilterInfo;
 import ru.sbsoft.shared.PageList;
 import ru.sbsoft.shared.exceptions.FilterRequireException;
-import ru.sbsoft.shared.meta.Columns;
+import ru.sbsoft.shared.meta.IColumns;
 import ru.sbsoft.shared.model.LookupInfoModel;
 import ru.sbsoft.shared.model.MarkModel;
 
@@ -19,7 +18,7 @@ import ru.sbsoft.shared.model.MarkModel;
  */
 public interface BrowserDao<M extends MarkModel> {
 
-    Columns getMeta();
+    IColumns getMeta();
 
     ColumnsInfo getColumnsInfo();
 

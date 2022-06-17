@@ -1,0 +1,32 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def TEXT_COLOR value('theme.messagebox.text.color');
+@def TEXT_FAMILY value('theme.messagebox.text.family');
+@def TEXT_WEIGHT value('theme.messagebox.text.weight');
+@def TEXT_SIZE value('theme.messagebox.text.size');
+@def MESSAGE_PADDING value('theme.messagebox.messagePadding');
+@def BODY_PADDING value('theme.messagebox.bodyPadding');
+@def ICON_PADDING value('theme.messagebox.iconPadding');
+
+.icon {
+  float: left;
+  width: 47px;
+  height: 32px;
+  display: none;
+  padding: ICON_PADDING;
+}
+
+.message {
+  color: TEXT_COLOR;
+  font-family: TEXT_FAMILY;
+  font-size: TEXT_SIZE;
+  font-weight: TEXT_WEIGHT;
+  padding: MESSAGE_PADDING;
+}
+
+.content {
+  padding: BODY_PADDING;
+}

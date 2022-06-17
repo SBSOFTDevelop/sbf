@@ -1,0 +1,53 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+@def BACKGROUND_COLOR value('theme.accordionLayout.backgroundColor');
+@def BORDER_COLOR value('theme.accordionLayout.border.color');
+@def BORDER_STYLE value('theme.accordionLayout.border.style');
+@def BORDER_WIDTH value('theme.accordionLayout.border.toString');
+@def TEXT_COLOR value('theme.accordionLayout.textColor');
+@def HEADER_BACKGROUND_COLOR value('theme.accordionLayout.headerBackgroundColor');
+@def HEADER_GRADIENT value('theme.accordionLayout.headerGradient');
+@def BODY_PADDING value('theme.accordionLayout.padding.toString');
+@def HEADER_PADDING value('theme.accordionLayout.headerPadding.toString');
+@def PANEL_PADDING value('theme.accordionLayout.panelPadding.toString');
+@def FIRST_PANEL_PADDING value('theme.accordionLayout.firstPanelPadding.toString');
+
+.panel {
+  outline: 0 none;
+  border-style: BORDER_STYLE;
+  border-width: BORDER_WIDTH;
+  border-color: BORDER_COLOR;
+  padding: PANEL_PADDING;
+  width: auto;
+}
+
+.panel:first-child {
+  padding: FIRST_PANEL_PADDING;
+}
+
+.body {
+  background-color: BACKGROUND_COLOR;
+  border: none;
+  overflow: hidden;
+  position: relative;
+  width: auto;
+}
+
+.header {
+  background: HEADER_BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(top, HEADER_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(top, HEADER_GRADIENT);
+  /* @alternate */ background: linear-gradient(to bottom, HEADER_GRADIENT);
+  padding: HEADER_PADDING;
+}
+
+.footer {
+  position: relative;
+}
+
+.bodyWrap {
+  padding: BODY_PADDING;
+}

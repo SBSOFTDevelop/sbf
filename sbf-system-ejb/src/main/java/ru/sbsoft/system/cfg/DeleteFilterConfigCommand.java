@@ -23,8 +23,6 @@ import ru.sbsoft.system.grid.SYS_OBJ_STORAGE;
  */
 public class DeleteFilterConfigCommand extends ComplexFilterCommand {
 
-    private long storageRecordID;
-
     public DeleteFilterConfigCommand(IConfigCommandContext context, String applicationPrefix, GridContext gridContext) {
         super(context, applicationPrefix, gridContext);
     }
@@ -59,7 +57,7 @@ public class DeleteFilterConfigCommand extends ComplexFilterCommand {
     private void deleteFilterGroup(final SYS_OBJECT sysObject, StorageObjectType type, StoreKey filterKey) {
         SYS_OBJ_STORAGE sysObjStorage = getSysObjStore(sysObject, type, filterKey);
         if (sysObjStorage != null) {
-            storageRecordID = sysObjStorage.getRECORD_ID();
+            long storageRecordID = sysObjStorage.getRECORD_ID();
             delete(SYS_FILTER_LOOKUP.class, storageRecordID);
             delete(SYS_FILTER.class, storageRecordID);
             context.getEm().remove(sysObjStorage);

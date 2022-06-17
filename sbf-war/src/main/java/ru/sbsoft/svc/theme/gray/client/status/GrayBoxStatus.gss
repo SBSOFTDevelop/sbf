@@ -1,0 +1,10 @@
+/**
+ * Copyright (c) 2022 SBSOFT.
+ * All rights reserved.
+ */
+
+
+.statusBox {
+  border: 1px solid;
+  border-color: #d0d0d0 #fff #fff #d0d0d0;
+}

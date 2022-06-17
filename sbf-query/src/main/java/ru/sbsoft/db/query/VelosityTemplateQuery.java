@@ -117,7 +117,7 @@ public class VelosityTemplateQuery {
         return this;
     }
 
-    public <T extends Object> Query createQuery(Class<T> type) {
+    public <T> Query createQuery(Class<T> type) {
         return setParmas(em.createQuery(getQueryString(true), type));
     }
 
@@ -129,7 +129,7 @@ public class VelosityTemplateQuery {
         return query;
     }
 
-    public <T extends Object> Query createNativeQuery(Class<T> type) {
+    public <T> Query createNativeQuery(Class<T> type) {
         // em.unwrap(type)
         return setNativeParams(em.createNativeQuery(getNativeQueryString(true), type));
     }

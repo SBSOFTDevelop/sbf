@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import ru.sbsoft.sbf.app.model.YearMonthDay;
 import ru.sbsoft.shared.kladr.AddressModel;
 import ru.sbsoft.shared.meta.ColumnType;
+import ru.sbsoft.shared.util.IdNameLong;
 
 /**
  *
@@ -30,11 +31,7 @@ public class ColumnKind<V, T extends ColumnInfo<V>> {
     public static final ColumnKind<BigDecimal, CurrencyColumnInfo> CURRENCY = new ColumnKind<>(CurrencyColumnInfo.class, ColumnType.CURRENCY);
     
     public static final ColumnKind<AddressModel, AddressColumnInfo> ADDRESS = new ColumnKind<>(AddressColumnInfo.class, ColumnType.ADDRESS);
-    
-    
-    
-    
-    
+    public static final ColumnKind<IdNameLong, IdNameColumnInfo> ID_NAME = new ColumnKind<>(IdNameColumnInfo.class, ColumnType.ID_NAME);
     
     
     private final Class<T> clazz;
@@ -57,5 +54,4 @@ public class ColumnKind<V, T extends ColumnInfo<V>> {
     public ColumnType getType() {
         return type;
     }
-
 }

@@ -81,7 +81,7 @@ public abstract class BaseReportRunner extends BaseOperationRunner {
         }
 
         public ParamCollector(Map<String, Object> params) {
-            res.putAll(res);
+            res.putAll(params);
         }
 
         public void put(Enum e, Object o) {

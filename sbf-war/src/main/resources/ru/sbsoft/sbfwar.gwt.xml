@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="sbfsvc">
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
+    <inherits name="com.google.gwt.logging.Logging"/>
+    <inherits name="ru.sbsoft.svc.ui.SVC"/>
+    <stylesheet src="reset.css" />
+    <inherits name="ru.sbsoft.svc.theme.neptune.Theme" />
+    <inherits name="ru.sbsoft.sbfcommon"/>
+    <set-property name="svc.device" value="desktop" />
+
+    <source path="client"/>
+    <source path="shared"/>
+    <source path="sbf/app"/>
+    <source path="sbf/svc"/>
+    <source includes="model/PageFilterInfo.java" />
+
+</module>

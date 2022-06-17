@@ -28,7 +28,7 @@ import ru.sbsoft.shared.consts.TemplateStateMode;
 import ru.sbsoft.shared.exceptions.ApplicationException;
 import ru.sbsoft.shared.exceptions.FilterRequireException;
 import ru.sbsoft.shared.filter.StringFilterInfo;
-import ru.sbsoft.shared.meta.Columns;
+import ru.sbsoft.shared.meta.IColumns;
 import ru.sbsoft.shared.meta.Row;
 import ru.sbsoft.shared.model.LookupInfoModel;
 
@@ -98,12 +98,12 @@ public class DefaultTemplateBuilder extends AbstractBuilder {
 
     @Override
     protected ColumnsInfo createColumns() {
-        // Do not use caches of ColumnsInfo and Columns from AbstractTemplate because of already cached
+        // Do not use caches of ColumnsInfo and IColumns from AbstractTemplate because of already cached
         return null;
     }
 
     @Override
-    public Columns getColumns() {
+    public IColumns getColumns() {
         return getColumnsInfo().getColumns();
     }
 
@@ -113,7 +113,7 @@ public class DefaultTemplateBuilder extends AbstractBuilder {
     }
 
     @Override
-    public Columns getMeta() {
+    public IColumns getMeta() {
         return MetaDataBuilder.getMeta(template);
     }
 
@@ -126,7 +126,7 @@ public class DefaultTemplateBuilder extends AbstractBuilder {
     }
     
     public void setTemplateState(TemplateStateMode stateMode) {
-        template.addMode(stateMode);
+        template.addSysMode(stateMode);
     }
     
     @Override
@@ -139,7 +139,7 @@ public class DefaultTemplateBuilder extends AbstractBuilder {
             lookupProvider = template.createLookupProvider();
 
             if (lookupProvider == null) {
-                final Columns c = getColumns();
+                final IColumns c = getColumns();
                 if (c.getColumnForAlias(LookupValueProvider.CODE_VALUE) != null && c.getColumnForAlias(LookupValueProvider.NAME_VALUE) != null) {
                     lookupProvider = LookupValueProvider.DEFAULT;
                 }
@@ -163,7 +163,7 @@ public class DefaultTemplateBuilder extends AbstractBuilder {
         final List<Row> rows = getRows(filterInfo, recordsUQs);
         List<LookupInfoModel> res = new ArrayList<>();
         if (!rows.isEmpty()) {
-            Columns columns = getColumns();
+            IColumns columns = getColumns();
             LookupValueProvider pro = getLookupProvider();
             EntityManager em = templateContext.getEntityManager();
             for (Row r : rows) {
@@ -179,7 +179,7 @@ public class DefaultTemplateBuilder extends AbstractBuilder {
         log.debug("begin trace getDataForBrowser====\n"
                 + "PageFilterInfo\n"
                 + "colName=" + filterInfo.getColumnName() + "\n"
-                + "Values=" + filterInfo.toString()
+                + "Values=" + filterInfo
         );
         if (filterInfo.getFilters() != null) {
             log.debug("system filters:\n");

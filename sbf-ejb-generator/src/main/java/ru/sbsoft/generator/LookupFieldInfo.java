@@ -71,10 +71,7 @@ public class LookupFieldInfo implements Comparable<LookupFieldInfo> {
         if (!Objects.equals(this.varName, other.varName)) {
             return false;
         }
-        if (!Objects.equals(this.className, other.className)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.className, other.className);
     }
 
     @Override
